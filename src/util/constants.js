@@ -1,0 +1,1 @@
+export const ERRO_SERVIDOR = 'Erro na comunicação com o servidor!';
