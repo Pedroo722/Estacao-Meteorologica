@@ -3,9 +3,11 @@ import BrasilMap from '../components/BrasilMap';
 
 const Home = () => {
   return (
-    <div>
-      <h1>Mapa Brasileiro</h1>
-      <BrasilMap />
+    <div className="container">
+      <h1 className="title">Mapa Brasileiro</h1>
+      <div className="map-container">
+        <BrasilMap />
+      </div>
     </div>
   );
 };

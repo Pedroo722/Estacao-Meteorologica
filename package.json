@@ -42,5 +42,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-simple-maps": "^3.0.6",
+    "@types/topojson-client": "^3.1.4"
   }
 }
