@@ -85,7 +85,6 @@ const statesWithAnnotations = {
   }
 };
 
-
 const geographyStyle = {
   fill: "#ECEFF1",
   stroke: "#607D8B",
@@ -96,18 +95,23 @@ const geographyStyle = {
 };
 
 const BrasilMap = () => {
+  const handleGeographyClick = (geoId) => {
+    console.log(`Estado clicado: ${geoId}`);
+  };
+
   const renderGeograph = (dataSource, countryId, countryColor) => {
     return (
       <Geographies geography={dataSource}>
         {({ geographies }) => (
           <>
             {geographies.map((geo) => {
+              const stateName = geo.properties.name;
               return (
                 <Geography
                   key={geo.rsmKey + "-Geography"}
                   stroke="#FFF"
                   geography={geo}
-                  onClick={() => console.log({ geo })}
+                  onClick={() => handleGeographyClick(stateName)}
                   style={{
                     default: {
                       ...geographyStyle,
@@ -119,7 +123,7 @@ const BrasilMap = () => {
                     },
                     pressed: {
                       ...geographyStyle,
-                      fill: "lightgreen"
+                      fill: "lightgreen",
                     }
                   }}
                 />
