@@ -1,0 +1,12 @@
+.headerContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+.title {
+    flex-grow: 1;
+    text-align: center;
+    margin: 0;
+}

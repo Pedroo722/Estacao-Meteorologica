@@ -1,5 +1,5 @@
 {
-  "name": "metereologia",
+  "name": "Estacao-Meteorologica",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -7,6 +7,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/d3-geo": "^3.1.0",
+    "antd": "^5.20.1",
     "d3": "^7.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

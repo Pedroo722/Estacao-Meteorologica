@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { geoCentroid } from "d3-geo";
 import {
   ComposableMap,
@@ -9,6 +9,7 @@ import {
 } from "react-simple-maps";
 
 import brTopoJson from "../data/Brazilian_States-topo.json";
+import SideBar from './SideBar';
 
 const statesWithAnnotations = {
   BR_DF: {
@@ -95,8 +96,13 @@ const geographyStyle = {
 };
 
 const BrasilMap = () => {
-  const handleGeographyClick = (geoId) => {
-    console.log(`Estado clicado: ${geoId}`);
+  const [selectedState, setSelectedState] = useState(null);
+
+  const handleGeographyClick = (geo) => {
+    const { id, name, latitude, longitude } = geo.properties;
+    if (id && name && latitude && longitude) {
+      setSelectedState({ id, name, latitude, longitude });
+    }
   };
 
   const renderGeograph = (dataSource, countryId, countryColor) => {
@@ -105,13 +111,12 @@ const BrasilMap = () => {
         {({ geographies }) => (
           <>
             {geographies.map((geo) => {
-              const stateName = geo.properties.name;
               return (
                 <Geography
                   key={geo.rsmKey + "-Geography"}
                   stroke="#FFF"
                   geography={geo}
-                  onClick={() => handleGeographyClick(stateName)}
+                  onClick={() => handleGeographyClick(geo)}
                   style={{
                     default: {
                       ...geographyStyle,
@@ -206,6 +211,15 @@ const BrasilMap = () => {
       >
         {renderGeograph(brTopoJson, "BR", "green")}
       </ComposableMap>
+      {selectedState && (
+        <SideBar 
+          id={selectedState.id}
+          name={selectedState.name} 
+          latitude={selectedState.latitude} 
+          longitude={selectedState.longitude}
+          onClose={() => setSelectedState(null)}
+        />
+      )}
     </div>
   );
 };
