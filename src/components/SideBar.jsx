@@ -7,7 +7,7 @@ const SideBar = ({ id, name, latitude, longitude, onClose }) => {
       <h2>{name}</h2>
       <p><strong>Latitude:</strong> {latitude}</p>
       <p><strong>Longitude:</strong> {longitude}</p>
-      <a href={`Estacao-Meteorologica/#/stations/${name}`}>Lista de Estações Meteorológicas</a>
+      <a href={`/#/stations/${name}`}>Lista de Estações Meteorológicas</a>
     </div>
   );
 };

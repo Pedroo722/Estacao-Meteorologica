@@ -23,7 +23,7 @@ const StationList = () => {
         <Button onClick={() => navigate('/')}>
           <LeftOutlined /> Voltar
         </Button>
-        <h1 className="title">Estações Meteorológicas no {stateId}</h1>
+        <h1 className="title">Estações Meteorológicas em {stateId}</h1>
       </div>
       <Table columns={columns} dataSource={data} rowKey="city" />
     </div>
