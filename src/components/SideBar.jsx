@@ -1,13 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Papa from 'papaparse';
 
 const SideBar = ({ id, name, latitude, longitude, onClose }) => {
+  const navigate = useNavigate();
+  const [stationNumber, setStationNumber] = useState(0);
+
+  useEffect(() => {
+    Papa.parse('/data/CatalogoEstacoesAutomaticas.csv', {
+      download: true,
+      header: true,
+      delimiter: ';',
+      complete: (result) => {
+        const count = result.data.filter(station => station.SG_ESTADO?.trim() === id?.trim().toUpperCase()).length;
+        setStationNumber(count);
+      },
+      error: (error) => {
+        console.error('Error parsing CSV:', error);
+      }
+    });
+  }, [id]);
+
+  const handleNavigate = () => {
+    navigate(`/stations/${id}`, { state: { stateId: id, name: name } });
+  };
+
   return (
     <div style={styles.sidebar}>
       <button style={styles.closeButton} onClick={onClose}>X</button>
       <h2>{name}</h2>
+      <p><strong>Estações Meteorológicas:</strong> {stationNumber}</p>
       <p><strong>Latitude:</strong> {latitude}</p>
       <p><strong>Longitude:</strong> {longitude}</p>
-      <a href={`/#/stations/${name}`}>Lista de Estações Meteorológicas</a>
+      <button style={styles.link} onClick={handleNavigate}>
+        Lista de Estações Meteorológicas
+      </button>
     </div>
   );
 };
@@ -35,6 +62,10 @@ const styles = {
     color: 'blue',
     textDecoration: 'underline',
     cursor: 'pointer',
+    background: 'none',
+    border: 'none',
+    fontSize: '16px',
+    padding: 0,
   }
 };
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { geoMercator, geoPath } from 'd3-geo';
 import { feature } from 'topojson-client';
-import paraibaData from '../data/25-topo.json'; 
+import paraibaData from '../data/Paraiba-topo.json'; 
 
 const ParaibaMap = () => {
   const [geoData, setGeoData] = useState(null);
