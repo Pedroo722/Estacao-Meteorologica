@@ -4,6 +4,7 @@ import './App.css'
 
 import './styles/Home.css';
 import './styles/StationList.css';
+import './styles/Station.css';
 
 import Home from './pages/Home';
 import StationList from './pages/StationList.jsx';
