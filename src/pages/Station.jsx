@@ -23,12 +23,10 @@ const Station = () => {
       const response = await fetch('data/PB_CG_22082024.csv');
       const text = await response.text();
 
-      // Parse do CSV
       Papa.parse(text, {
         header: true,
         delimiter: ";",
         complete: (results) => {
-          // Armazena os dados no estado
           setWeatherData(results.data);
         },
       });
@@ -61,7 +59,6 @@ const Station = () => {
         </div>
 
         <div className="station-content">
-          {/* Renderize os dados do CSV aqui */}
           {weatherData.length > 0 ? (
             <table>
               <thead>
