@@ -7,9 +7,7 @@ import {
   Marker,
   Annotation
 } from "react-simple-maps";
-
 import brTopoJson from "../data/Brazilian_States-topo.json";
-import SideBar from './SideBar';
 
 const statesWithAnnotations = {
   BR_DF: {
@@ -95,22 +93,25 @@ const geographyStyle = {
   transition: "all .2s"
 };
 
-const BrasilMap = () => {
-  const [selectedState, setSelectedState] = useState(null);
+
+const BrasilMap = ({ onStateClick }) => {
+  const [selectedStateId, setSelectedStateId] = useState(null);
 
   const handleGeographyClick = (geo) => {
     const { id, name, latitude, longitude } = geo.properties;
     if (id && name && latitude && longitude) {
-      setSelectedState({ id, name, latitude, longitude });
+      setSelectedStateId(id);
+      onStateClick({ id, name, latitude, longitude });
     }
   };
 
-  const renderGeograph = (dataSource, countryId, countryColor) => {
+  const renderGeograph = (dataSource) => {
     return (
       <Geographies geography={dataSource}>
         {({ geographies }) => (
           <>
             {geographies.map((geo) => {
+              const isSelected = geo.properties.id === selectedStateId;
               return (
                 <Geography
                   key={geo.rsmKey + "-Geography"}
@@ -120,7 +121,7 @@ const BrasilMap = () => {
                   style={{
                     default: {
                       ...geographyStyle,
-                      fill: countryColor
+                      fill: isSelected ? "lightgreen" : "#ECEFF1"
                     },
                     hover: {
                       ...geographyStyle,
@@ -134,49 +135,47 @@ const BrasilMap = () => {
                 />
               );
             })}
-
             {geographies.map((geo) => {
               const centroid = geoCentroid(geo);
-              const geoId = geo.properties.id;
-              const annotationOffset =
-                statesWithAnnotations[`${countryId}_${geoId}`];
-              const tagPosition = annotationOffset?.tag || {
-                x: 2,
-                y: 0,
-                fontSize: 12
-              };
+              const stateId = geo.properties.id;
+
               return (
-                <g
-                  key={`${geo.rsmKey}-Marker`}
-                  style={{ pointerEvents: "none" }}
-                >
-                  {annotationOffset ? (
+                <g key={geo.rsmKey + "-name"}>
+                  {statesWithAnnotations[stateId] ? (
                     <Annotation
-                      connectorProps={{
-                        stroke: "rgb(239,171,11)"
-                      }}
                       subject={centroid}
-                      dx={annotationOffset.annotation.x}
-                      dy={annotationOffset.annotation.y}
+                      dx={statesWithAnnotations[stateId].annotation.x}
+                      dy={statesWithAnnotations[stateId].annotation.y}
+                      connectorProps={{
+                        stroke: "#607D8B",
+                        strokeWidth: 1,
+                        strokeLinecap: "round"
+                      }}
                     >
                       <text
-                        x={tagPosition.x}
-                        y={tagPosition.y}
-                        fontSize={tagPosition.fontSize}
+                        x={statesWithAnnotations[stateId].tag.x}
+                        y={statesWithAnnotations[stateId].tag.y}
+                        textAnchor="middle"
                         alignmentBaseline="middle"
+                        style={{
+                          fontSize: statesWithAnnotations[stateId].tag.fontSize,
+                          fill: "#607D8B"
+                        }}
                       >
-                        {geoId}
+                        {stateId.replace("BR_", "")}
                       </text>
                     </Annotation>
                   ) : (
                     <Marker coordinates={centroid}>
                       <text
-                        x={tagPosition.x}
-                        y={tagPosition.y}
-                        fontSize={tagPosition.fontSize}
                         textAnchor="middle"
+                        alignmentBaseline="middle"
+                        style={{
+                          fontSize: 20,
+                          fill: "#000000"
+                        }}
                       >
-                        {geoId}
+                        {stateId.replace("BR_", "")}
                       </text>
                     </Marker>
                   )}
@@ -194,32 +193,24 @@ const BrasilMap = () => {
       width: '100%',
       height: '100%',
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
-      justifyContent: 'center',
       overflow: 'hidden',
-      backgroundColor: '#e0f7fa'
+      backgroundColor: '#e0f7fa',
+      position: 'relative'
     }}>
+      <h2 style={{ textAlign: 'center', margin: '20px 0', fontSize: '27px' }}>Mapa Brasileiro</h2>
       <ComposableMap
         projection="geoMercator"
         projectionConfig={{
-          scale: 800,
+          scale: 1200,
           center: [-54, -15]
         }}
         width={1000}
         height={1000}
-        style={{ margin: '-200px'}}
       >
-        {renderGeograph(brTopoJson, "BR", "green")}
+        {renderGeograph(brTopoJson)}
       </ComposableMap>
-      {selectedState && (
-        <SideBar 
-          id={selectedState.id}
-          name={selectedState.name} 
-          latitude={selectedState.latitude} 
-          longitude={selectedState.longitude}
-          onClose={() => setSelectedState(null)}
-        />
-      )}
     </div>
   );
 };
