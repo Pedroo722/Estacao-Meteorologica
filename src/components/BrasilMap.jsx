@@ -93,7 +93,6 @@ const geographyStyle = {
   transition: "all .2s"
 };
 
-
 const BrasilMap = ({ onStateClick }) => {
   const [selectedStateId, setSelectedStateId] = useState(null);
 

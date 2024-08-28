@@ -1,6 +1,7 @@
 import React from 'react';
+import { Button } from 'antd';
 
-const DashBar = ({ states, onSelectState, selectedState }) => {
+const DashBar = ({ states, onSelectState, selectedState, stations }) => {
   return (
     <aside style={{
       width: '300px',
@@ -9,7 +10,7 @@ const DashBar = ({ states, onSelectState, selectedState }) => {
       borderRight: '1px solid #ccc'
     }}>
       <h2>Dashboard</h2>
-      <div style={{ marginBottom: '20px' }}>
+      <div className="dashbar_selector" style={{ marginBottom: '20px' }}>
         <label htmlFor="state-select">Estado</label>
         <select 
           id="state-select" 
@@ -25,11 +26,21 @@ const DashBar = ({ states, onSelectState, selectedState }) => {
           ))}
         </select>
       </div>
-      <div>
+      <div className="dashbar_selector">
         <label htmlFor="station-select">Estação</label>
         <select id="station-select" style={{ width: '100%', padding: '8px', marginTop: '8px' }}>
-          {/* Opções estação */}
+          <option value="">Selecione uma estação</option>
+          {stations.map((station) => (
+            <option key={station.code} value={station.code}>
+              {station.city} ({station.code})
+            </option>
+          ))}
         </select>
+      </div>
+      <div className="dashbar_button">
+        <Button type="primary" style={{ width: '100%', padding: '8px', marginTop: '30px' }}>
+          Visualizar a Estação
+        </Button>
       </div>
     </aside>
   );
