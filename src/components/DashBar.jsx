@@ -1,7 +1,19 @@
 import React from 'react';
 import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const DashBar = ({ states, onSelectState, selectedState, stations }) => {
+  const navigate = useNavigate();
+  const [selectedStation, setSelectedStation] = React.useState('');
+
+  const handleViewStation = () => {
+    if (selectedStation) {
+      navigate(`/stations/${selectedStation}`);
+    } else {
+      alert('Selecione uma estação para visualizar.');
+    }
+  };
+
   return (
     <aside style={{
       width: '300px',
@@ -28,7 +40,12 @@ const DashBar = ({ states, onSelectState, selectedState, stations }) => {
       </div>
       <div className="dashbar_selector">
         <label htmlFor="station-select">Estação</label>
-        <select id="station-select" style={{ width: '100%', padding: '8px', marginTop: '8px' }}>
+        <select 
+          id="station-select" 
+          style={{ width: '100%', padding: '8px', marginTop: '8px' }}
+          onChange={(e) => setSelectedStation(e.target.value)}
+          value={selectedStation}
+        >
           <option value="">Selecione uma estação</option>
           {stations.map((station) => (
             <option key={station.code} value={station.code}>
@@ -38,7 +55,11 @@ const DashBar = ({ states, onSelectState, selectedState, stations }) => {
         </select>
       </div>
       <div className="dashbar_button">
-        <Button type="primary" style={{ width: '100%', padding: '8px', marginTop: '30px' }}>
+        <Button 
+          type="primary" 
+          style={{ width: '100%', padding: '8px', marginTop: '30px' }}
+          onClick={handleViewStation}
+        >
           Visualizar a Estação
         </Button>
       </div>
