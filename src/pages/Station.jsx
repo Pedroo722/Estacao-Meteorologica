@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { DatePicker, Table } from 'antd'; 
+import { Button, DatePicker, Table, Tabs } from 'antd'; 
 import StationDetails from '../components/StationDetails'; 
 import dayjs from 'dayjs';
 import Papa from 'papaparse';
-import '../styles/Station.css'; // Importa o arquivo de estilo
+import '../styles/Station.css';
+
+const { TabPane } = Tabs;
 
 const Station = () => {
   const stationDetails = {
@@ -58,44 +60,64 @@ const Station = () => {
     { title: 'Chuva (mm)', dataIndex: 'Chuva (mm)', key: 'chuva' },
   ];
 
+  const filterViewTable = () => {
+    console.log("Em implementação");
+  };
+
   return (
     <div className="station-container">
       <StationDetails details={stationDetails} />
-    
-      <div className="data-container">
-        <div className="datapicker-container">
-          <h2>Selecione um Intervalo de Datas</h2>
-          <div className="datapicker">
-            <label>
-              Data de Início:
-              <DatePicker 
-                value={startDate ? dayjs(startDate) : null} 
-                onChange={(date) => setStartDate(date)} 
-              />
-            </label>
-            <label>
-              Data de Fim:
-              <DatePicker 
-                value={endDate ? dayjs(endDate) : null} 
-                onChange={(date) => setEndDate(date)} 
-              />
-            </label>  
-          </div>
-        </div>
 
-        <div className="station-content">
-          {weatherData.length > 0 ? (
-            <Table 
-              dataSource={weatherData} 
-              columns={columns} 
-              rowKey={(record, index) => index}
-              pagination={{ pageSize: 10 }}
+      <div className="datapicker-container">
+        <h2>Selecione um Intervalo de Datas</h2>
+        <div className="datapicker">
+          <label>
+            Data de Início:
+            <DatePicker 
+              style={{ marginLeft: '10px' }}
+              value={startDate ? dayjs(startDate) : null} 
+              onChange={(date) => setStartDate(date)} 
             />
-          ) : (
-            <p>Carregando dados...</p>
-          )}
+          </label>
+          <label>
+            Data de Fim:
+            <DatePicker 
+              style={{ marginLeft: '10px' }}
+              value={endDate ? dayjs(endDate) : null} 
+              onChange={(date) => setEndDate(date)} 
+            />
+          </label>  
+            <Button 
+            type="primary" 
+            style={{ marginLeft: '30px' }}
+            onClick={filterViewTable}
+          >
+            Filtrar
+          </Button>
         </div>
       </div>
+    
+      <Tabs defaultActiveKey="1" type="card" style={{ marginTop: '30px' }}>
+        <TabPane tab="Tabela" key="1">
+          <div className="data-container">
+            <div className="station-content">
+              {weatherData.length > 0 ? (
+                <Table 
+                  dataSource={weatherData} 
+                  columns={columns} 
+                  rowKey={(record, index) => index}
+                  pagination={{ pageSize: 24 }}
+                />
+              ) : (
+                <p>Carregando dados...</p>
+              )}
+            </div>
+          </div>
+        </TabPane>
+        <TabPane tab="Gráficos" key="2">
+          <p>Placeholder.</p>
+        </TabPane>
+      </Tabs>
     </div>
   );
 };
