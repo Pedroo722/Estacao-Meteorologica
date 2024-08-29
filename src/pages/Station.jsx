@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { DatePicker } from 'antd'; 
+import { DatePicker, Table } from 'antd'; 
 import StationDetails from '../components/StationDetails'; 
 import dayjs from 'dayjs';
 import Papa from 'papaparse';
+import '../styles/Station.css'; // Importa o arquivo de estilo
 
 const Station = () => {
   const stationDetails = {
@@ -35,81 +36,61 @@ const Station = () => {
     loadCSV();
   }, []);
 
+  const columns = [
+    { title: 'Data', dataIndex: 'Data', key: 'data' },
+    { title: 'Hora (UTC)', dataIndex: 'Hora (UTC)', key: 'hora' },
+    { title: 'Temp. Ins. (C)', dataIndex: 'Temp. Ins. (C)', key: 'tempIns' },
+    { title: 'Temp. Max. (C)', dataIndex: 'Temp. Max. (C)', key: 'tempMax' },
+    { title: 'Temp. Min. (C)', dataIndex: 'Temp. Min. (C)', key: 'tempMin' },
+    { title: 'Umi. Ins. (%)', dataIndex: 'Umi. Ins. (%)', key: 'umiIns' },
+    { title: 'Umi. Max. (%)', dataIndex: 'Umi. Max. (%)', key: 'umiMax' },
+    { title: 'Umi. Min. (%)', dataIndex: 'Umi. Min. (%)', key: 'umiMin' },
+    { title: 'Pto Orvalho Ins. (C)', dataIndex: 'Pto Orvalho Ins. (C)', key: 'ptoOrvalhoIns' },
+    { title: 'Pto Orvalho Max. (C)', dataIndex: 'Pto Orvalho Max. (C)', key: 'ptoOrvalhoMax' },
+    { title: 'Pto Orvalho Min. (C)', dataIndex: 'Pto Orvalho Min. (C)', key: 'ptoOrvalhoMin' },
+    { title: 'Pressao Ins. (hPa)', dataIndex: 'Pressao Ins. (hPa)', key: 'pressaoIns' },
+    { title: 'Pressao Max. (hPa)', dataIndex: 'Pressao Max. (hPa)', key: 'pressaoMax' },
+    { title: 'Pressao Min. (hPa)', dataIndex: 'Pressao Min. (hPa)', key: 'pressaoMin' },
+    { title: 'Vel. Vento (m/s)', dataIndex: 'Vel. Vento (m/s)', key: 'velVento' },
+    { title: 'Dir. Vento (m/s)', dataIndex: 'Dir. Vento (m/s)', key: 'dirVento' },
+    { title: 'Raj. Vento (m/s)', dataIndex: 'Raj. Vento (m/s)', key: 'rajVento' },
+    { title: 'Radiacao (KJ/m²)', dataIndex: 'Radiacao (KJ/m²)', key: 'radiacao' },
+    { title: 'Chuva (mm)', dataIndex: 'Chuva (mm)', key: 'chuva' },
+  ];
+
   return (
-    <div>
+    <div className="station-container">
       <StationDetails details={stationDetails} />
     
       <div className="data-container">
-        <div className="datapicker">
+        <div className="datapicker-container">
           <h2>Selecione um Intervalo de Datas</h2>
-          <label>
-            Data de Início:
-            <DatePicker 
-              value={startDate ? dayjs(startDate) : null} 
-              onChange={(date) => setStartDate(date)} 
-            />
-          </label>
-          <label>
-            Data de Fim:
-            <DatePicker 
-              value={endDate ? dayjs(endDate) : null} 
-              onChange={(date) => setEndDate(date)} 
-            />
-          </label>      
+          <div className="datapicker">
+            <label>
+              Data de Início:
+              <DatePicker 
+                value={startDate ? dayjs(startDate) : null} 
+                onChange={(date) => setStartDate(date)} 
+              />
+            </label>
+            <label>
+              Data de Fim:
+              <DatePicker 
+                value={endDate ? dayjs(endDate) : null} 
+                onChange={(date) => setEndDate(date)} 
+              />
+            </label>  
+          </div>
         </div>
 
         <div className="station-content">
           {weatherData.length > 0 ? (
-            <table>
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Hora (UTC)</th>
-                  <th>Temp. Ins. (C)</th>
-                  <th>Temp. Max. (C)</th>
-                  <th>Temp. Min. (C)</th>
-                  <th>Umi. Ins. (%)</th>
-                  <th>Umi. Max. (%)</th>
-                  <th>Umi. Min. (%)</th>
-                  <th>Pto Orvalho Ins. (C)</th>
-                  <th>Pto Orvalho Max. (C)</th>
-                  <th>Pto Orvalho Min. (C)</th>
-                  <th>Pressao Ins. (hPa)</th>
-                  <th>Pressao Max. (hPa)</th>
-                  <th>Pressao Min. (hPa)</th>
-                  <th>Vel. Vento (m/s)</th>
-                  <th>Dir. Vento (m/s)</th>
-                  <th>Raj. Vento (m/s)</th>
-                  <th>Radiacao (KJ/m²)</th>
-                  <th>Chuva (mm)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {weatherData.map((row, index) => (
-                  <tr key={index}>
-                    <td>{row.Data}</td>
-                    <td>{row["Hora (UTC)"]}</td>
-                    <td>{row["Temp. Ins. (C)"]}</td>
-                    <td>{row["Temp. Max. (C)"]}</td>
-                    <td>{row["Temp. Min. (C)"]}</td>
-                    <td>{row["Umi. Ins. (%)"]}</td>
-                    <td>{row["Umi. Max. (%)"]}</td>
-                    <td>{row["Umi. Min. (%)"]}</td>
-                    <td>{row["Pto Orvalho Ins. (C)"]}</td>
-                    <td>{row["Pto Orvalho Max. (C)"]}</td>
-                    <td>{row["Pto Orvalho Min. (C)"]}</td>
-                    <td>{row["Pressao Ins. (hPa)"]}</td>
-                    <td>{row["Pressao Max. (hPa)"]}</td>
-                    <td>{row["Pressao Min. (hPa)"]}</td>
-                    <td>{row["Vel. Vento (m/s)"]}</td>
-                    <td>{row["Dir. Vento (m/s)"]}</td>
-                    <td>{row["Raj. Vento (m/s)"]}</td>
-                    <td>{row["Radiacao (KJ/m²)"]}</td>
-                    <td>{row["Chuva (mm)"]}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <Table 
+              dataSource={weatherData} 
+              columns={columns} 
+              rowKey={(record, index) => index}
+              pagination={{ pageSize: 10 }}
+            />
           ) : (
             <p>Carregando dados...</p>
           )}
