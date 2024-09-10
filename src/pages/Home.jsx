@@ -1,103 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import Papa from 'papaparse';
-import BrasilMap from '../components/BrasilMap';
-import DashBar from '../components/DashBar';
-import DashInfo from '../components/DashInfo';
+import React, { useState } from 'react';
+import ParaibaMap from '../components/ParaibaMap';
+import DashBar from '../components/DashBar'; 
 
 const Home = () => {
-  const [selectedState, setSelectedState] = useState(null);
-  const [states] = useState([
-    { id: 'AC', name: 'Acre' },
-    { id: 'AL', name: 'Alagoas' },
-    { id: 'AM', name: 'Amazonas' },
-    { id: 'AP', name: 'Amapá' },
-    { id: 'BA', name: 'Bahia' },
-    { id: 'CE', name: 'Ceará' },
-    { id: 'DF', name: 'Distrito Federal' },
-    { id: 'ES', name: 'Espírito Santo' },
-    { id: 'GO', name: 'Goiás' },
-    { id: 'MA', name: 'Maranhão' },
-    { id: 'MG', name: 'Minas Gerais' },
-    { id: 'MS', name: 'Mato Grosso do Sul' },
-    { id: 'MT', name: 'Mato Grosso' },
-    { id: 'PA', name: 'Pará' },
-    { id: 'PB', name: 'Paraíba' },
-    { id: 'PE', name: 'Pernambuco' },
-    { id: 'PI', name: 'Piauí' },
-    { id: 'PR', name: 'Paraná' },
-    { id: 'RJ', name: 'Rio de Janeiro' },
-    { id: 'RN', name: 'Rio Grande do Norte' },
-    { id: 'RO', name: 'Rondônia' },
-    { id: 'RR', name: 'Roraima' },
-    { id: 'RS', name: 'Rio Grande do Sul' },
-    { id: 'SC', name: 'Santa Catarina' },
-    { id: 'SE', name: 'Sergipe' },
-    { id: 'SP', name: 'São Paulo' },
-    { id: 'TO', name: 'Tocantins' },
+  const [selectedStation, setSelectedStation] = useState(null);
+  const [stations] = useState([
+    { id: 'A310', name: 'Areia' },
+    { id: 'A348', name: 'Cabaceiras' },
+    { id: 'A352', name: 'Camatuba' },
+    { id: 'A313', name: 'Campina Grande' },
+    { id: 'A373', name: 'Itaporanga' },
+    { id: 'A320', name: 'João Pessoa' },
+    { id: 'A334', name: 'Monteiro' },
+    { id: 'A321', name: 'Patos' },
+    { id: 'A333', name: 'São Gonçalo' }
   ]);
-  
-
-  const [stations, setStations] = useState([]);
-  const [filteredStations, setFilteredStations] = useState([]);
-
-  useEffect(() => {
-    Papa.parse('/data/CatalogoEstacoesAutomaticas.csv', {
-      download: true,
-      header: true,
-      delimiter: ';',
-      complete: (result) => {
-        console.log('Parsed Data:', result.data);
-        const stations = result.data.map((station) => ({
-          city: station.DC_NOME,
-          code: station.CD_ESTACAO,
-          state: station.SG_ESTADO,  
-        }));
-        console.log('Stations:', stations);
-        setStations(stations);
-      },
-      error: (error) => {
-        console.error('Error parsing CSV:', error);
-      },
-    });
-  }, []);
-
-  useEffect(() => {
-    if (selectedState) {
-      const filtered = stations.filter((station) => station.state === selectedState);
-      setFilteredStations(filtered);
-    } else {
-      setFilteredStations([]);
-    }
-  }, [selectedState, stations]);
-
-  const handleStateClick = (state) => {
-    setSelectedState(state.id);
-  };
-
-  const handleStateSelect = (stateId) => {
-    const selectedState = states.find((state) => state.id === stateId);
-    if (selectedState) {
-      setSelectedState(selectedState.id);
-    }
-  };
 
   return (
     <div className="container" style={{ display: 'flex', height: '100vh', width: '100%' }}>
-      <DashBar 
-        states={states} 
-        onSelectState={handleStateSelect} 
-        selectedState={selectedState}
-        stations={filteredStations} 
-      />
-      <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginLeft: '50px', marginRight: '50px' }}>
-        <BrasilMap onStateClick={handleStateClick} selectedStateId={selectedState} />
-      </div>
-      {selectedState && (
-        <DashInfo 
-          id={selectedState}
-          name={states.find((state) => state.id === selectedState)?.name} 
-        />
-      )}
+        <DashBar />
+        <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginLeft: '310px', marginRight: '5px' }}>
+            <ParaibaMap />
+        </div>
     </div>
   );
 };

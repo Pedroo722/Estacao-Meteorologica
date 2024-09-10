@@ -13,7 +13,7 @@ const ParaibaMap = () => {
       backgroundColor: '#e0f7fa',
       position: 'relative'
     }}>
-      <h2 style={{ textAlign: 'center', margin: '20px 0', fontSize: '27px' }}>Mapa Barasileiro</h2>
+      <h2 style={{ textAlign: 'center', margin: '20px 0', fontSize: '27px' }}>Mapa Paraibano</h2>
       <ParaibaSVG />
     </div>
   );

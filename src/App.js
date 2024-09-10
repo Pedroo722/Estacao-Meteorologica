@@ -6,8 +6,9 @@ import './styles/Home.css';
 import './styles/StationList.css';
 import './styles/Station.css';
 
-import Home from './pages/Home';
 import Station from './pages/Station.jsx';
+import Home from './pages/Home.jsx';
+
 
 export default function App() {  
   return ( 
