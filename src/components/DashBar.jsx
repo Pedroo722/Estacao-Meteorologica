@@ -1,52 +1,56 @@
-import React from 'react';
-import { HomeOutlined, LineChartOutlined, InfoCircleOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { HomeOutlined, LineChartOutlined, InfoCircleOutlined } from '@ant-design/icons';
 
 const DashBar = () => {
-  const navigate = useNavigate();
+  const [isMinimized, setIsMinimized] = useState(false);
 
-  const handleGoBack = () => {
-    navigate(-1);
+  const handleToggleDashBar = () => {
+    setIsMinimized(!isMinimized);
   };
 
   return (
     <aside style={{
-        width: '300px',
+        width: isMinimized ? '50px' : '300px',  // Tamanho reduzido quando minimizado
         backgroundColor: '#a6a6a6',
         height: '100vh',
         position: 'fixed',
         left: 0,
         top: 0,
-        padding: '20px',
-        boxSizing: 'border-box'
+        padding: isMinimized ? '10px' : '20px', // Ajusta o padding ao minimizar
+        boxSizing: 'border-box',
+        transition: 'width 0.3s ease' // Animação suave para minimizar/maximizar
       }}>
       <div style={{ 
         display: 'flex', 
-        justifyContent: 'space-between', 
+        justifyContent: isMinimized ? 'center' : 'space-between', 
         alignItems: 'center',
-        marginBottom: '50px'
+        marginBottom: isMinimized ? '0' : '50px'
       }}>
-        <h2>DashBoard</h2>
-        <ArrowLeftOutlined 
+        {!isMinimized && <h2>DashBoard</h2>}
+        <div 
           style={{ fontSize: '20px', cursor: 'pointer' }} 
-          onClick={handleGoBack} 
-        />
+          onClick={handleToggleDashBar}
+        >
+          &#9776; {/* Ícone de menu que sempre estará visível */}
+        </div>
       </div>
 
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-          <HomeOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
-          <span>Inicial</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-          <LineChartOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
-          <span>Gráficos</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-          <InfoCircleOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
-          <span>Informações</span>
-        </div>
-      </nav>
+      {!isMinimized && (  // Condicional para mostrar/esconder o conteúdo da barra
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <HomeOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
+            <span>Inicial</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <LineChartOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
+            <span>Gráficos</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+            <InfoCircleOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
+            <span>Informações</span>
+          </div>
+        </nav>
+      )}
     </aside>
   );
 };
