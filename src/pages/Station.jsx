@@ -1,25 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Button, DatePicker, Table, Tabs } from 'antd'; 
+import { Button, DatePicker, Table, Tabs, Select } from 'antd'; 
 import StationDetails from '../components/StationDetails'; 
 import dayjs from 'dayjs';
 import Papa from 'papaparse';
 import '../styles/Station.css';
+import DashBar from '../components/DashBar';
 
 const { TabPane } = Tabs;
 
 const Station = () => {
-  const stationDetails = {
-    city: "Campina Grande",
-    state: "PB",
-    creationDate: "01/01/2000",
-    code: "A313",
-    latitude: "-23.5505",
-    longitude: "-46.6333",
-  };
+  const [stations] = useState([
+    { id: 'A310', name: 'Areia' },
+    { id: 'A348', name: 'Cabaceiras' },
+    { id: 'A352', name: 'Camatuba' },
+    { id: 'A313', name: 'Campina Grande' },
+    { id: 'A373', name: 'Itaporanga' },
+    { id: 'A320', name: 'João Pessoa' },
+    { id: 'A334', name: 'Monteiro' },
+    { id: 'A321', name: 'Patos' },
+    { id: 'A333', name: 'São Gonçalo' }
+  ]);
 
+  const [selectedStation, setSelectedStation] = useState(null);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [weatherData, setWeatherData] = useState([]);
+
+  const handleStationChange = (value) => {
+    setSelectedStation(value);
+  };
 
   useEffect(() => {
     const loadCSV = async () => {
@@ -66,15 +75,30 @@ const Station = () => {
 
   return (
     <div className="station-container">
-      <StationDetails details={stationDetails} />
+      <DashBar />
 
       <div className="datapicker-container">
         <h2>Selecione um Intervalo de Datas</h2>
         <div className="datapicker">
+        <label>
+            Estação Metereólogica:
+            <Select
+              style={{ width: 200, marginLeft: '10px', marginRight: '10px' }} 
+              placeholder="Selecione uma estação"
+              onChange={handleStationChange} 
+              value={selectedStation}
+            >
+              {stations.map((station) => (
+                <Select.Option key={station.id} value={station.id}>
+                  {station.name} ({station.id})
+                </Select.Option>
+              ))}
+            </Select>
+          </label>
           <label>
             Data de Início:
             <DatePicker 
-              style={{ marginLeft: '10px' }}
+              style={{ marginLeft: '10px', marginRight: '10px' }}
               value={startDate ? dayjs(startDate) : null} 
               onChange={(date) => setStartDate(date)} 
             />
