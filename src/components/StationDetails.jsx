@@ -4,17 +4,15 @@ const StationDetails = ({ details }) => {
   return (
     <div className="details-container">
       <h1 className="details-title">Detalhes da Estação {details.code}</h1>
-      <div className="details-columns">
-        <div className="details-column">
-          <p><strong>Cidade:</strong> {details.city}</p>
-          <p><strong>Estado:</strong> {details.state}</p>
-          <p><strong>Data de Criação:</strong> {details.creationDate}</p>
-        </div>
-        <div className="details-column">
-          <p><strong>Código (WMO):</strong> {details.code}</p>
-          <p><strong>Latitude:</strong> {details.latitude}</p>
-          <p><strong>Longitude:</strong> {details.longitude}</p>
-        </div>
+      <div className="details-grid">
+        <div className="details-item"><strong>Cidade:</strong> {details.city}</div>
+        <div className="details-item"><strong>Código (WMO):</strong> {details.code}</div>
+        
+        <div className="details-item"><strong>Estado:</strong> {details.state}</div>
+        <div className="details-item"><strong>Latitude:</strong> {details.latitude}</div>
+        
+        <div className="details-item"><strong>Data de Criação:</strong> {details.creationDate}</div>
+        <div className="details-item"><strong>Longitude:</strong> {details.longitude}</div>
       </div>
     </div>
   );

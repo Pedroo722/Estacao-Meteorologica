@@ -10,15 +10,16 @@ const DashBar = () => {
 
   return (
     <aside style={{
-        width: isMinimized ? '50px' : '300px',  // Tamanho reduzido quando minimizado
+        width: isMinimized ? '50px' : '300px',  
         backgroundColor: '#a6a6a6',
         height: '100vh',
         position: 'fixed',
         left: 0,
         top: 0,
-        padding: isMinimized ? '10px' : '20px', // Ajusta o padding ao minimizar
+        padding: isMinimized ? '10px' : '20px',
         boxSizing: 'border-box',
-        transition: 'width 0.3s ease' // Animação suave para minimizar/maximizar
+        transition: 'width 0.3s ease',
+        zIndex: 1,
       }}>
       <div style={{ 
         display: 'flex', 
@@ -31,23 +32,23 @@ const DashBar = () => {
           style={{ fontSize: '20px', cursor: 'pointer' }} 
           onClick={handleToggleDashBar}
         >
-          &#9776; {/* Ícone de menu que sempre estará visível */}
+          &#9776; {/* Ícone de menu */}
         </div>
       </div>
 
-      {!isMinimized && (  // Condicional para mostrar/esconder o conteúdo da barra
+      {!isMinimized && ( 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <HomeOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
-            <span>Inicial</span>
+            <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>Inicial</a>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <LineChartOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
-            <span>Gráficos</span>
+            <a href="#/graphs" style={{ textDecoration: 'none', color: 'inherit' }}>Gráficos</a>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
             <InfoCircleOutlined style={{ fontSize: '20px', marginRight: '10px' }} />
-            <span>Informações</span>
+            <a href="#/info" style={{ textDecoration: 'none', color: 'inherit' }}>Informações</a>
           </div>
         </nav>
       )}
