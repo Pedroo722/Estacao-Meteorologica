@@ -6,8 +6,9 @@ import './styles/Home.css';
 import './styles/StationList.css';
 import './styles/Station.css';
 
-import Station from './pages/Station.jsx';
 import Home from './pages/Home.jsx';
+import Station from './pages/Station.jsx';
+import Info from './pages/Info.jsx';
 
 
 export default function App() {  
@@ -15,6 +16,8 @@ export default function App() {
         <HashRouter>
           <Routes>
             <Route path='/' element={<Home />} />
+            <Route path='graphs' element={<Station />} />
+            <Route path='info' element={<Info />} />
             <Route path="/stations/:stationCode" element={<Station />} /> 
           </Routes>
         </HashRouter>
