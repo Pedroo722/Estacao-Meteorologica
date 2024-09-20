@@ -7,7 +7,7 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
 
     if (target.id) {
       console.log(`Clicked on station ID: ${target.id}`);
-      
+
       const stations = {
         'Areia': { id: 'A310', name: 'Areia' },
         'Cabaceiras': { id: 'A348', name: 'Cabaceiras' },
@@ -22,34 +22,14 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
 
       const stationData = stations[target.id];
       if (stationData) {
+        console.log(stationData);
         setSelectedStation(stationData);
       }
     }
   };
 
-  const stationInfo = selectedStation ? (
-    <div style={{ 
-      backgroundColor: '#2a6e4b',
-      color: '#fff',
-      padding: '10px',
-      borderRadius: '8px',
-      position: 'absolute',
-      bottom: '20px',
-      right: '20px',
-      fontSize: '16px'
-    }}>
-      <h4>{selectedStation.name} ({selectedStation.id})</h4>
-      <p><strong>Cidade:</strong> {selectedStation.name}</p>
-      <p><strong>Código:</strong> {selectedStation.id}</p>
-      <p><strong>Estado:</strong> Paraíba</p>
-      <p><strong>Latitude:</strong> -7.12</p>
-      <p><strong>Longitude:</strong> -34.86</p>
-      <p><strong>Data de criação:</strong> 10/09/2020</p>
-    </div>
-  ) : null;
-
   return (
-    <div style={{ 
+    <div style={{
       width: '100%',
       height: '100%',
       display: 'flex',
@@ -60,7 +40,7 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
       backgroundColor: '#161616',
       position: 'relative'
     }}>
-      <div style={{ 
+      <div style={{
         display: 'flex',
         justifyContent: 'space-around',
         width: '80%',
@@ -69,27 +49,26 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
       }}>
         <div>
           <p>TEMPERATURA</p>
-          <p>ICONE TEMP</p>
+          <p>ICONE TEMPERATURA</p>
           <h3>30º</h3>
         </div>
         <div>
           <p>PRESSÃO</p>
-          <p>ICONE PRE</p>
+          <p>ICONE PRESSÃO</p>
           <h3>10</h3>
         </div>
         <div>
           <p>UMIDADE</p>
-          <p>ICONE UMI</p>
+          <p>ICONE UMIDADE</p>
           <h3>10</h3>
         </div>
         <div>
           <p>CHUVA</p>
-          <p>ICONE CHU</p>
+          <p>ICONE CHUVA</p>
           <h3>10</h3>
         </div>
       </div>
       <ParaibaSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />
-      {stationInfo}
     </div>
   );
 };
