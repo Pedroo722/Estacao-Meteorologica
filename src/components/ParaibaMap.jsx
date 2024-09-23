@@ -1,5 +1,14 @@
 import React from 'react';
 import { ReactComponent as ParaibaSVG } from '../data/ParaibaMap.svg';
+import { ReactComponent as ParaibaAreiaSVG } from '../data/Paraiba_map_Areia.svg';
+import { ReactComponent as ParaibaCabaceirasSVG } from '../data/Paraiba_map_Cabaceiras.svg';
+import { ReactComponent as ParaibaCamaratubaSVG } from '../data/Paraiba_map_Camaratuba.svg';
+import { ReactComponent as ParaibaCGSVG } from '../data/Paraiba_map_CG.svg';
+import { ReactComponent as ParaibaItaporangaSVG } from '../data/Paraiba_map_Itaporanga.svg';
+import { ReactComponent as ParaibaJPSVG } from '../data/Paraiba_map_JP.svg';
+import { ReactComponent as ParaibaMonteiroSVG } from '../data/Paraiba_map_Monteiro.svg';
+import { ReactComponent as ParaibaPatosSVG } from '../data/Paraiba_map_Patos.svg';
+import { ReactComponent as ParaibaSaoGoncaloSVG } from '../data/Paraiba_map_SaoGoncalo.svg';
 
 const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
   const handleStationClick = (e) => {
@@ -11,7 +20,7 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
       const stations = {
         'Areia': { id: 'A310', name: 'Areia' },
         'Cabaceiras': { id: 'A348', name: 'Cabaceiras' },
-        'Camatuba': { id: 'A352', name: 'Camatuba' },
+        'Camaratuba': { id: 'A352', name: 'Camaratuba' },
         'Campina Grande': { id: 'A313', name: 'Campina Grande' },
         'Itaporanga': { id: 'A373', name: 'Itaporanga' },
         'João Pessoa': { id: 'A320', name: 'João Pessoa' },
@@ -25,6 +34,32 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
         console.log(stationData);
         setSelectedStation(stationData);
       }
+    }
+  };
+
+  // Seleciona o SVG correto baseado na estação selecionada
+  const renderMap = () => {
+    switch (selectedStation?.name) {
+      case 'Areia':
+        return <ParaibaAreiaSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      case 'Cabaceiras':
+        return <ParaibaCabaceirasSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      case 'Camaratuba':
+        return <ParaibaCamaratubaSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      case 'Campina Grande':
+        return <ParaibaCGSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      case 'Itaporanga':
+        return <ParaibaItaporangaSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      case 'João Pessoa':
+        return <ParaibaJPSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      case 'Monteiro':
+        return <ParaibaMonteiroSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      case 'Patos':
+        return <ParaibaPatosSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      case 'São Gonçalo':
+        return <ParaibaSaoGoncaloSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
+      default:
+        return <ParaibaSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />;
     }
   };
 
@@ -68,7 +103,7 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
           <h3>10</h3>
         </div>
       </div>
-      <ParaibaSVG style={{ width: '80%', height: 'auto' }} onClick={handleStationClick} />
+      {renderMap()}
     </div>
   );
 };
