@@ -82,7 +82,7 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
         marginBottom: '20px',
         color: '#fff'
       }}>
-        <div>
+        {/* <div>
           <p>TEMPERATURA</p>
           <p>ICONE TEMPERATURA</p>
           <h3>30º</h3>
@@ -101,7 +101,8 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
           <p>CHUVA</p>
           <p>ICONE CHUVA</p>
           <h3>10</h3>
-        </div>
+        </div> */} 
+        {/* Seria melhor separado? */}
       </div>
       {renderMap()}
     </div>
