@@ -72,16 +72,17 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
       alignItems: 'center',
       justifyContent: 'center',
       overflow: 'hidden',
-      backgroundColor: '#161616',
+      backgroundColor: '#042222',
+      borderRadius: '20px',
       position: 'relative'
     }}>
-      <div style={{
+      {/* <div style={{
         display: 'flex',
         justifyContent: 'space-around',
         width: '80%',
         marginBottom: '20px',
         color: '#fff'
-      }}>
+      }}> */}
         {/* <div>
           <p>TEMPERATURA</p>
           <p>ICONE TEMPERATURA</p>
@@ -103,7 +104,7 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
           <h3>10</h3>
         </div> */} 
         {/* Seria melhor separado? */}
-      </div>
+      {/* </div> */}
       {renderMap()}
     </div>
   );

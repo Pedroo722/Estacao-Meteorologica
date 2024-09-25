@@ -3,7 +3,7 @@
 }
 
 [data-theme='dark'] {
-  --body-background: #030F0F;
+  --body-background: #021A1A;
 }
 
 body {
@@ -29,14 +29,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 5px solid rgb(70, 67, 67);
   box-sizing: border-box;
   background-color: white;
   margin-bottom: 20px;
 }
 
 .details-section {
-  margin-left: 310px;
+  /* margin-left: 310px; */ 
+  /* página com rolagem horizontal */
+  margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;

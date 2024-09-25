@@ -1,67 +1,10 @@
-// import React from "react";
-// import { FaTemperatureHalf } from "react-icons/fa6";
-
-
-// const ComponentDados = ({ title, Icon, value }) => {
-//     const componentDadosStyle = {
-//         display: 'flex',
-//         justifyContent: 'space-around',
-//         width: '80%',
-//         marginBottom: '20px',
-//         color: '#fff'
-//     };
-
-//     const boxStyle = {
-//         textAlign: 'center',
-//     };
-
-//     const icon = {
-//         backgroundColor: '#03624C',
-//         width: '130px',
-//         height: '130px',
-//         display: 'flex',
-//         flexDirection: 'column', 
-//         justifyContent: 'space-evenly',
-//         alignItems: 'center', // Alinhar ícone e texto no centro
-//         borderRadius: '50px', 
-//         color: 'white',
-//         fontWeight: 'bold',
-//         margin: '20px auto',
-//     };
-
-//     const textStyle = {
-//         margin: '5px 0',
-//         fontSize: '14px',
-//         color: '#555',
-//     };
-
-//     const numberStyle = {
-//         margin: '5px 0',
-//         fontSize: '30px',
-//         color: '#FFFFFF',
-//     };
-
-//     const iconStyle = { 
-//         fontSize: '100px',    
-//         margin: '20px 0',      // Margem ao redor do ícone
-//         transition: 'transform 0.2s', // Efeito de transição
-//     };
-
-//     return (
-//         <div style={{ textAlign: 'center' }}>
-//         <p style={textStyle}>{title}</p>
-//         <div style={iconStyle}>
-//             <Icon style={{ fontSize: '50px' }} />
-//             <h3 style={numberStyle}>{value}</h3>
-//         </div>
-//     </div>
-//     );
-// }
-
-import React from "react";
+import React, { useState } from "react";
 
 // Componente para cada item da barra de status
-const ComponentDadosItem = ({ title, Icon, value }) => {
+const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, maxIcon: MaxIcon }) => {
+    const [isExpanded, setIsExpanded] = useState(false); // Estado para controlar se o item foi clicado
+
+    // Estilos base
     const iconStyle = {
         backgroundColor: '#03624C',
         width: '130px',
@@ -69,31 +12,101 @@ const ComponentDadosItem = ({ title, Icon, value }) => {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
-        alignItems: 'center',
-        borderRadius: '50px',
+        // alignItems: 'center',
+        borderRadius: '20px',
         color: 'white',
         fontWeight: 'bold',
         margin: '20px auto',
+        transition: 'height 0.5s ease, width 0.5s ease', // Animação para aumentar tamanho
+        cursor: 'pointer',
     };
+
+    const expandedStyle = {
+        height: '150px', // Aumenta ao clicar
+    };
+
+    // const expandedStyle3 = {
+    //     display: 'flex',
+    //     flexDirection: 'column',
+    //     justifyContent: 'space-evenly',
+    //     alignItems: 'center',
+        
+    // };
+
+    // const expandedStyle2 = {
+    //     flexDirection: 'row', // Altera a direção do flex para horizontal quando expandido
+    //     justifyContent: 'space-between',
+        
+    // };
 
     const textStyle = {
         margin: '5px 0',
         fontSize: '14px',
-        color: '#555',
+        color: '#03624C',
+        fontWeight: 'bold',
     };
 
     const numberStyle = {
         margin: '5px 0',
-        fontSize: '30px',
+        fontSize: '25px',
         color: '#FFFFFF',
     };
 
+    const minMaxStyle = {
+        fontSize: '14px',
+        color: '#FFFFFF',
+        marginTop: '5px',
+        transition: 'height 1s ease, width 1s ease'
+        
+    };
+
+    const extraStyle = {
+        display: 'flex', // Flexbox para alinhar o ícone com o valor
+        justifyContent: 'flex-start', 
+        alignItems: 'center',
+        margin: '10px'
+    }
+
+    // Alterna entre expandido e colapsado
+    const handleClick = () => {
+        setIsExpanded(!isExpanded);
+    };
+
     return (
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center' }} onClick={handleClick}>
+
             <p style={textStyle}>{title}</p>
-            <div style={iconStyle}>
-                <Icon style={{ fontSize: '50px' }} />
-                <h3 style={numberStyle}>{value}</h3>
+
+            <div style={{ ...iconStyle, ...(isExpanded ? expandedStyle : {}) }}>
+                    {isExpanded ? (
+                        <div>
+                            <Icon style={{ fontSize: '20px', transition: 'height 1s ease, width 1s ease', }} />
+                            <h3 style={numberStyle}>{value}</h3>
+                        </div>
+                    ) : (
+                        <div>
+                            <Icon style={{ fontSize: '50px', transition: 'height 1s ease, width 1s ease', }} />
+                            <h3 style={numberStyle}>{value}</h3>
+                        </div>
+                    )}
+                    {isExpanded && ( 
+                        <div style={minMaxStyle}>
+                            <div style={extraStyle} >
+                                <MinIcon style={{ fontSize: '20px' }} />
+                                <p p style={{margin: '0px', paddingLeft: '10px'}} >Min: {min}</p> 
+                                
+                            </div>
+
+                            <div style={extraStyle} >
+                                <MaxIcon style={{ fontSize: '20px' }} />
+                                <p style={{margin: '0px', paddingLeft: '10px'}} >Max: {max}</p> 
+                                
+                            </div>
+                            
+                        </div>
+                        
+                    )}
+                
             </div>
         </div>
     );
@@ -104,7 +117,16 @@ const ComponentDados = ({ items }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-around', width: '80%', marginBottom: '20px', color: '#fff' }}>
             {items.map((item, index) => (
-                <ComponentDadosItem key={index} title={item.title} Icon={item.icon} value={item.value} />
+                <ComponentDadosItem 
+                    key={index} 
+                    title={item.title} 
+                    Icon={item.icon} 
+                    value={item.value} 
+                    min={item.min} 
+                    max={item.max} 
+                    minIcon={item.minIcon}
+                    maxIcon={item.maxIcon}
+                />
             ))}
         </div>
     );
