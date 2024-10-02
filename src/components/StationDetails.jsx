@@ -1,4 +1,6 @@
 import React from 'react';
+import './StationDetails.css';
+
 
 const StationDetails = ({ details }) => {
   return (
