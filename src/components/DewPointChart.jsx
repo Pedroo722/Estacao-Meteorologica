@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 
-const TemperatureChart = ({ data }) => {
+const DewPointChart = ({ data }) => {
   useEffect(() => {
     if (!data || data.length === 0) return;
 
     // Limpar os gráficos existentes no dom
     // se não criará instância repetidas no local
-    d3.select('#min-temp-chart').selectAll('*').remove();
-    d3.select('#max-temp-chart').selectAll('*').remove();
-    d3.select('#inst-temp-chart').selectAll('*').remove();
-    d3.select('#all-temp-chart').selectAll('*').remove();
+    d3.select('#min-dew-chart').selectAll('*').remove();
+    d3.select('#max-dew-chart').selectAll('*').remove();
+    d3.select('#inst-dew-chart').selectAll('*').remove();
+    d3.select('#all-dew-chart').selectAll('*').remove();
 
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
     const width = 800 - margin.left - margin.right;
@@ -22,9 +22,9 @@ const TemperatureChart = ({ data }) => {
     data.forEach(d => {
       const time = parseTime(`${d.Data} ${d["Hora (UTC)"]}`);
       const hour = time.getUTCHours();
-      if (!isNaN(d["Temp. Ins. (C)"])) hourValues[hour].instant.push(d["Temp. Ins. (C)"]);
-      if (!isNaN(d["Temp. Max. (C)"])) hourValues[hour].max.push(d["Temp. Max. (C)"]);
-      if (!isNaN(d["Temp. Min. (C)"])) hourValues[hour].min.push(d["Temp. Min. (C)"]);
+      if (!isNaN(d["Pto Orvalho Ins. (C)"])) hourValues[hour].instant.push(d["Pto Orvalho Ins. (C)"]);
+      if (!isNaN(d["Pto Orvalho Max. (C)"])) hourValues[hour].max.push(d["Pto Orvalho Max. (C)"]);
+      if (!isNaN(d["Pto Orvalho Min. (C)"])) hourValues[hour].min.push(d["Pto Orvalho Min. (C)"]);
     });
 
     const hourAverages = hourValues.map(values => ({
@@ -83,17 +83,17 @@ const TemperatureChart = ({ data }) => {
         });
     };
 
-    // Gráfico para a temperatura mínima
-    createConnectedScatterplot('#min-temp-chart', hourAverages.map(d => d.min), 'green', 'Temperatura Mínima');
+    // Gráfico para a Ponto de Orvalho mínima
+    createConnectedScatterplot('#min-dew-chart', hourAverages.map(d => d.min), 'green', 'Ponto de Orvalho Mínima');
 
-    // Gráfico para a temperatura máxima
-    createConnectedScatterplot('#max-temp-chart', hourAverages.map(d => d.max), 'red', 'Temperatura Máxima');
+    // Gráfico para a Ponto de Orvalho máxima
+    createConnectedScatterplot('#max-dew-chart', hourAverages.map(d => d.max), 'red', 'Ponto de Orvalho Máxima');
 
-    // Gráfico para a temperatura instantânea
-    createConnectedScatterplot('#inst-temp-chart', hourAverages.map(d => d.instant), 'steelblue', 'Temperatura Instante');
+    // Gráfico para a Ponto de Orvalho inst
+    createConnectedScatterplot('#inst-dew-chart', hourAverages.map(d => d.instant), 'steelblue', 'Ponto de Orvalho Instante');
 
     // Gráfico com todas as séries
-    const svgAll = d3.select('#all-temp-chart')
+    const svgAll = d3.select('#all-dew-chart')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -159,7 +159,7 @@ const TemperatureChart = ({ data }) => {
     legend.append('text')
       .attr('x', 15)
       .attr('y', 10)
-      .text('Temperatura Instante');
+      .text('Ponto de Orvalho Instante');
 
     legend.append('rect')
       .attr('y', 15)
@@ -169,7 +169,7 @@ const TemperatureChart = ({ data }) => {
     legend.append('text')
       .attr('x', 15)
       .attr('y', 25)
-      .text('Temperatura Máxima');
+      .text('Ponto de Orvalho Máxima');
 
     legend.append('rect')
       .attr('y', 30)
@@ -179,22 +179,22 @@ const TemperatureChart = ({ data }) => {
     legend.append('text')
       .attr('x', 15)
       .attr('y', 40)
-      .text('Temperatura Mínima');
+      .text('Ponto de Orvalho Mínima');
 
   }, [data]);
 
   return (
     <div>
-      <h2>Gráficos de Temperaturas</h2>
-      <div id="all-temp-chart"></div>
-      <h3>Temperatura Mínima</h3>
-      <div id="min-temp-chart"></div>
-      <h3>Temperatura Máxima</h3>
-      <div id="max-temp-chart"></div>
-      <h3>Temperatura Instante</h3>
-      <div id="inst-temp-chart"></div>
+      <h2>Gráficos de Ponto de Orvalho</h2>
+      <div id="all-dew-chart"></div>
+      <h3>Ponto de Orvalho Mínima</h3>
+      <div id="min-dew-chart"></div>
+      <h3>Ponto de Orvalho Máxima</h3>
+      <div id="max-dew-chart"></div>
+      <h3>Ponto de Orvalho Instante</h3>
+      <div id="inst-dew-chart"></div>
     </div>
   );
 };
 
-export default TemperatureChart;
+export default DewPointChart;

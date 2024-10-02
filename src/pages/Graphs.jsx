@@ -3,10 +3,15 @@ import { Button, DatePicker, Table, Tabs, Select } from 'antd';
 import dayjs from 'dayjs';
 import TemperatureChart from '../components/TemperaturaChart';
 import '../styles/Graphs.css';
+import HumidityChart from '../components/HumidityChart';
+import DewPointChart from '../components/DewPointChart';
 
 const { TabPane } = Tabs;
 
-// dados de exemplo para preencher a tabela
+const { MonthPicker } = DatePicker;
+
+// dados de exemplo para preencher a tabela,
+// apenas para testes
 const exampleData = [
   {
     "Data": "2024-08-01",
@@ -135,7 +140,7 @@ const exampleData = [
     "Chuva (mm)": 0
   },
   {
-    "Data": "2024-08-01",
+    "Data": "2024-08-02",
     "Hora (UTC)": "18:00",
     "Temp. Ins. (C)": 24.2,
     "Temp. Max. (C)": 25.0,
@@ -156,7 +161,7 @@ const exampleData = [
     "Chuva (mm)": 0
   },
   {
-    "Data": "2024-08-01",
+    "Data": "2024-08-02",
     "Hora (UTC)": "21:00",
     "Temp. Ins. (C)": 22.0,
     "Temp. Max. (C)": 23.0,
@@ -177,7 +182,7 @@ const exampleData = [
     "Chuva (mm)": 0
   },
   {
-    "Data": "2024-08-02",
+    "Data": "2024-08-03",
     "Hora (UTC)": "00:00",
     "Temp. Ins. (C)": 21.0,
     "Temp. Max. (C)": 21.8,
@@ -198,7 +203,7 @@ const exampleData = [
     "Chuva (mm)": 0
   },
   {
-    "Data": "2024-08-02",
+    "Data": "2024-08-03",
     "Hora (UTC)": "03:00",
     "Temp. Ins. (C)": 20.0,
     "Temp. Max. (C)": 20.5,
@@ -234,17 +239,22 @@ const Graphs = () => {
   ]);
 
   const [selectedStation, setSelectedStation] = useState(null);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [dateType, setDateType] = useState('dia'); 
+  const [dateValue, setDateValue] = useState(null); 
   const [weatherData, setWeatherData] = useState([]);
+
+  useEffect(() => {
+    setWeatherData(exampleData);
+  }, []);
 
   const handleStationChange = (value) => {
     setSelectedStation(value);
   };
 
-  useEffect(() => {
-    setWeatherData(exampleData);
-  }, []);
+  const handleDateTypeChange = (value) => {
+    setDateType(value);
+    setDateValue(null);
+  };
 
   const columns = [
     { title: 'Data', dataIndex: 'Data', key: 'data' },
@@ -268,17 +278,51 @@ const Graphs = () => {
     { title: 'Chuva (mm)', dataIndex: 'Chuva (mm)', key: 'chuva' },
   ];
 
-  const filterViewTable = () => {
-    console.log("Em implementação");
+  const generateDateOptions = () => {
+    if (dateType === 'dia') {
+      return <DatePicker style={{ width: 200, marginLeft: '10px', marginRight: '10px' }} onChange={(_, dateString) => setDateValue(dateString)} />;
+    } else if (dateType === 'mes') {
+      return (
+        <MonthPicker
+          placeholder="Selecione um mês"
+          format="YYYY-MM"
+          style={{ width: 200, marginLeft: '10px', marginRight: '10px' }}
+          onChange={(_, dateString) => setDateValue(dateString)}
+          value={dateValue ? dayjs(dateValue, 'YYYY-MM') : null}
+        />
+      );
+    }
   };
+
+  const filterViewTable = () => {
+    if (!dateValue) {
+      console.log("Selecione uma data");
+      return;
+    }
+  
+    let filteredData = [];
+  
+    if (dateType === 'dia') {
+      filteredData = exampleData.filter(item => item.Data === dateValue);
+    } else if (dateType === 'mes') {
+      const selectedMonth = dayjs(dateValue).format('YYYY-MM');
+      filteredData = exampleData.filter(item => {
+        const itemMonth = dayjs(item.Data).format('YYYY-MM');
+        return itemMonth === selectedMonth;
+      });
+    }
+  
+    setWeatherData(filteredData);
+  };
+  
 
   return (
     <div className="station-container">
       <div className="datapicker-container">
-        <h2>Selecione um Intervalo de Datas</h2>
+        <h2>Selecione um Tipo de Data</h2>
         <div className="datapicker">
-        <label>
-            Estação Metereólogica:
+          <label>
+            Estação Metereológica:
             <Select
               style={{ width: 200, marginLeft: '10px', marginRight: '10px' }} 
               placeholder="Selecione uma estação"
@@ -293,22 +337,21 @@ const Graphs = () => {
             </Select>
           </label>
           <label>
-            Data de Início:
-            <DatePicker 
-              style={{ marginLeft: '10px', marginRight: '10px' }}
-              value={startDate ? dayjs(startDate) : null} 
-              onChange={(date) => setStartDate(date)} 
-            />
+            Tipo de Data:
+            <Select
+              style={{ width: 150, marginLeft: '10px', marginRight: '10px' }}
+              onChange={handleDateTypeChange}
+              value={dateType}
+            >
+              <Select.Option value="dia">Dia</Select.Option>
+              <Select.Option value="mes">Mês</Select.Option>
+            </Select>
           </label>
           <label>
-            Data de Fim:
-            <DatePicker 
-              style={{ marginLeft: '10px' }}
-              value={endDate ? dayjs(endDate) : null} 
-              onChange={(date) => setEndDate(date)} 
-            />
-          </label>  
-            <Button 
+            Valor:
+            {generateDateOptions()}
+          </label>
+          <Button 
             type="primary" 
             style={{ marginLeft: '30px' }}
             onClick={filterViewTable}
@@ -317,6 +360,7 @@ const Graphs = () => {
           </Button>
         </div>
       </div>
+
     
       <Tabs defaultActiveKey="1" type="card" style={{ marginTop: '30px' }}>
         <TabPane tab="Tabela Geral" key="1">
@@ -338,6 +382,25 @@ const Graphs = () => {
         <TabPane tab="Temperatura" key="2">
           <TemperatureChart data={weatherData} />
         </TabPane>
+        <TabPane tab="Umidade" key="3">
+          <HumidityChart data={weatherData} />
+        </TabPane>
+        <TabPane tab="Ponto de Orvalho" key="4">
+          <DewPointChart data={weatherData} />
+        </TabPane>
+        <TabPane tab="Pressão" key="5">
+          {/* <PressaoChart data={weatherData} /> */}
+        </TabPane>
+        <TabPane tab="Vento" key="6">
+          {/* <VentoChart data={weatherData} /> */}
+        </TabPane>
+        <TabPane tab="Pluviosidade" key="7">
+          {/* <PluviosidadeChart data={weatherData} /> */}
+        </TabPane>
+        <TabPane tab="Radiação" key="8">
+          {/* <RadiacaoChart data={weatherData} /> */}
+        </TabPane>
+
       </Tabs>
     </div>
   );

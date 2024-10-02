@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 
-const TemperatureChart = ({ data }) => {
+const HumidityChart = ({ data }) => {
   useEffect(() => {
     if (!data || data.length === 0) return;
 
     // Limpar os gráficos existentes no dom
     // se não criará instância repetidas no local
-    d3.select('#min-temp-chart').selectAll('*').remove();
-    d3.select('#max-temp-chart').selectAll('*').remove();
-    d3.select('#inst-temp-chart').selectAll('*').remove();
-    d3.select('#all-temp-chart').selectAll('*').remove();
+    d3.select('#min-umi-chart').selectAll('*').remove();
+    d3.select('#max-umi-chart').selectAll('*').remove();
+    d3.select('#inst-umi-chart').selectAll('*').remove();
+    d3.select('#all-umi-chart').selectAll('*').remove();
 
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
     const width = 800 - margin.left - margin.right;
@@ -22,9 +22,9 @@ const TemperatureChart = ({ data }) => {
     data.forEach(d => {
       const time = parseTime(`${d.Data} ${d["Hora (UTC)"]}`);
       const hour = time.getUTCHours();
-      if (!isNaN(d["Temp. Ins. (C)"])) hourValues[hour].instant.push(d["Temp. Ins. (C)"]);
-      if (!isNaN(d["Temp. Max. (C)"])) hourValues[hour].max.push(d["Temp. Max. (C)"]);
-      if (!isNaN(d["Temp. Min. (C)"])) hourValues[hour].min.push(d["Temp. Min. (C)"]);
+      if (!isNaN(d["Umi. Ins. (%)"])) hourValues[hour].instant.push(d["Umi. Ins. (%)"]);
+      if (!isNaN(d["Umi. Max. (%)"])) hourValues[hour].max.push(d["Umi. Max. (%)"]);
+      if (!isNaN(d["Umi. Min. (%)"])) hourValues[hour].min.push(d["Umi. Min. (%)"]);
     });
 
     const hourAverages = hourValues.map(values => ({
@@ -46,7 +46,7 @@ const TemperatureChart = ({ data }) => {
         .range([0, width]);
 
       const y = d3.scaleLinear()
-        .domain([0, 45])
+        .domain([0, 100]) 
         .range([height, 0]);
 
       // Eixos
@@ -55,7 +55,7 @@ const TemperatureChart = ({ data }) => {
         .call(d3.axisBottom(x).ticks(24).tickFormat(d => `${d}:00`));
 
       svg.append('g')
-        .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} °C`));
+        .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)}%`));
 
       // Linha conectando os pontos
       const line = d3.line()
@@ -79,21 +79,21 @@ const TemperatureChart = ({ data }) => {
         .attr("r", 4)
         .attr("fill", color)
         .on("click", function (event, d) {
-          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'} °C`);
+          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'}%`);
         });
     };
 
-    // Gráfico para a temperatura mínima
-    createConnectedScatterplot('#min-temp-chart', hourAverages.map(d => d.min), 'green', 'Temperatura Mínima');
+    // Gráfico para a umidade mínima
+    createConnectedScatterplot('#min-umi-chart', hourAverages.map(d => d.min), 'green', 'Umidade Mínima');
 
-    // Gráfico para a temperatura máxima
-    createConnectedScatterplot('#max-temp-chart', hourAverages.map(d => d.max), 'red', 'Temperatura Máxima');
+    // Gráfico para a umidade máxima
+    createConnectedScatterplot('#max-umi-chart', hourAverages.map(d => d.max), 'red', 'Umidade Máxima');
 
-    // Gráfico para a temperatura instantânea
-    createConnectedScatterplot('#inst-temp-chart', hourAverages.map(d => d.instant), 'steelblue', 'Temperatura Instante');
+    // Gráfico para a umidade instantânea
+    createConnectedScatterplot('#inst-umi-chart', hourAverages.map(d => d.instant), 'steelblue', 'Umidade Instantânea');
 
     // Gráfico com todas as séries
-    const svgAll = d3.select('#all-temp-chart')
+    const svgAll = d3.select('#all-umi-chart')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -105,7 +105,7 @@ const TemperatureChart = ({ data }) => {
       .range([0, width]);
 
     const yAll = d3.scaleLinear()
-      .domain([0, 45])
+      .domain([0, 100]) 
       .range([height, 0]);
 
     // Eixos
@@ -114,14 +114,14 @@ const TemperatureChart = ({ data }) => {
       .call(d3.axisBottom(xAll).ticks(24).tickFormat(d => `${d}:00`));
 
     svgAll.append('g')
-      .call(d3.axisLeft(yAll).ticks(10).tickFormat(d => `${d.toFixed(1)} °C`));
+      .call(d3.axisLeft(yAll).ticks(10).tickFormat(d => `${d.toFixed(1)}%`));
 
     const addLineAndDots = (dataset, color) => {
       const line = d3.line()
         .x((d, i) => xAll(i))
         .y(d => d !== null ? yAll(d) : height);
 
-      // linhas
+      // Adiciona as linhas
       svgAll.append("path")
         .datum(dataset)
         .attr("fill", "none")
@@ -139,7 +139,7 @@ const TemperatureChart = ({ data }) => {
         .attr("r", 4)
         .attr("fill", color)
         .on("click", function (event, d) {
-          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'} °C`);
+          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'}%`);
         });
     };
 
@@ -159,7 +159,7 @@ const TemperatureChart = ({ data }) => {
     legend.append('text')
       .attr('x', 15)
       .attr('y', 10)
-      .text('Temperatura Instante');
+      .text('Umidade Instantânea');
 
     legend.append('rect')
       .attr('y', 15)
@@ -169,7 +169,7 @@ const TemperatureChart = ({ data }) => {
     legend.append('text')
       .attr('x', 15)
       .attr('y', 25)
-      .text('Temperatura Máxima');
+      .text('Umidade Máxima');
 
     legend.append('rect')
       .attr('y', 30)
@@ -179,22 +179,21 @@ const TemperatureChart = ({ data }) => {
     legend.append('text')
       .attr('x', 15)
       .attr('y', 40)
-      .text('Temperatura Mínima');
-
+      .text('Umidade Mínima');
   }, [data]);
 
   return (
     <div>
-      <h2>Gráficos de Temperaturas</h2>
-      <div id="all-temp-chart"></div>
-      <h3>Temperatura Mínima</h3>
-      <div id="min-temp-chart"></div>
-      <h3>Temperatura Máxima</h3>
-      <div id="max-temp-chart"></div>
-      <h3>Temperatura Instante</h3>
-      <div id="inst-temp-chart"></div>
+      <h2>Gráficos de Umidade</h2>
+      <div id="all-umi-chart"></div>
+      <h3>Umidade Mínima</h3>
+      <div id="min-umi-chart"></div>
+      <h3>Umidade Máxima</h3>
+      <div id="max-umi-chart"></div>
+      <h3>Umidade Instantânea</h3>
+      <div id="inst-umi-chart"></div>
     </div>
   );
 };
 
-export default TemperatureChart;
+export default HumidityChart;
