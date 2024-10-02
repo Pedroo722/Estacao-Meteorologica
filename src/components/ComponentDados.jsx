@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 
-// Componente para cada item da barra de status
 const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, maxIcon: MaxIcon }) => {
     const [isExpanded, setIsExpanded] = useState(false); // Estado para controlar se o item foi clicado
 
-    // Estilos base
     const iconStyle = {
         backgroundColor: '#03624C',
         width: '130px',
@@ -12,7 +10,6 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
-        // alignItems: 'center',
         borderRadius: '20px',
         color: 'white',
         fontWeight: 'bold',
@@ -24,20 +21,6 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
     const expandedStyle = {
         height: '150px', // Aumenta ao clicar
     };
-
-    // const expandedStyle3 = {
-    //     display: 'flex',
-    //     flexDirection: 'column',
-    //     justifyContent: 'space-evenly',
-    //     alignItems: 'center',
-        
-    // };
-
-    // const expandedStyle2 = {
-    //     flexDirection: 'row', // Altera a direção do flex para horizontal quando expandido
-    //     justifyContent: 'space-between',
-        
-    // };
 
     const textStyle = {
         margin: '5px 0',
@@ -67,16 +50,13 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
         margin: '10px'
     }
 
-    // Alterna entre expandido e colapsado
     const handleClick = () => {
         setIsExpanded(!isExpanded);
     };
 
     return (
         <div style={{ textAlign: 'center' }} onClick={handleClick}>
-
             <p style={textStyle}>{title}</p>
-
             <div style={{ ...iconStyle, ...(isExpanded ? expandedStyle : {}) }}>
                     {isExpanded ? (
                         <div>
@@ -93,20 +73,15 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
                         <div style={minMaxStyle}>
                             <div style={extraStyle} >
                                 <MinIcon style={{ fontSize: '20px' }} />
-                                <p p style={{margin: '0px', paddingLeft: '10px'}} >Min: {min}</p> 
-                                
+                                <p p style={{margin: '0px', paddingLeft: '10px'}} >Min: {min}</p>                                
                             </div>
-
                             <div style={extraStyle} >
                                 <MaxIcon style={{ fontSize: '20px' }} />
                                 <p style={{margin: '0px', paddingLeft: '10px'}} >Max: {max}</p> 
                                 
-                            </div>
-                            
-                        </div>
-                        
-                    )}
-                
+                            </div>                            
+                        </div>                       
+                    )}                
             </div>
         </div>
     );

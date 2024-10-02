@@ -10,11 +10,11 @@ import { TbWorld, TbWorldDown, TbWorldUp } from "react-icons/tb";
 
 const StatusBar = () => {
     const StatusBarStyle = {
-                display: 'flex',
-                justifyContent: 'space-around',
-                width: '80%',
-                marginBottom: '20px',
-                color: '#fff'
+        display: 'flex',
+        justifyContent: 'space-around',
+        width: '80%',
+        marginBottom: '20px',
+        color: '#fff'
     };
 
     const statusItems = [
