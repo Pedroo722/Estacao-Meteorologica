@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button, DatePicker, Table, Tabs, Select } from 'antd'; 
 import dayjs from 'dayjs';
-import TemperatureChart from '../components/TemperaturaChart';
 import '../styles/Graphs.css';
+import TemperatureChart from '../components/TemperaturaChart';
 import HumidityChart from '../components/HumidityChart';
 import DewPointChart from '../components/DewPointChart';
+import PluviosityChart from '../components/PluviosityChart';
+import WindChart from '../components/WindChart';
 
 const { TabPane } = Tabs;
 
@@ -32,7 +34,7 @@ const exampleData = [
     "Dir. Vento (m/s)": 180,
     "Raj. Vento (m/s)": 4.5,
     "Radiacao (KJ/m²)": 350,
-    "Chuva (mm)": 0
+    "Chuva (mm)": 10
   },
   {
     "Data": "2024-08-01",
@@ -53,7 +55,7 @@ const exampleData = [
     "Dir. Vento (m/s)": 200,
     "Raj. Vento (m/s)": 3.9,
     "Radiacao (KJ/m²)": 340,
-    "Chuva (mm)": 0
+    "Chuva (mm)": 14
   },
   {
     "Data": "2024-08-01",
@@ -74,7 +76,7 @@ const exampleData = [
     "Dir. Vento (m/s)": 190,
     "Raj. Vento (m/s)": 3.0,
     "Radiacao (KJ/m²)": 360,
-    "Chuva (mm)": 0
+    "Chuva (mm)": 15
   },
   {
     "Data": "2024-08-01",
@@ -95,7 +97,7 @@ const exampleData = [
     "Dir. Vento (m/s)": 210,
     "Raj. Vento (m/s)": 5.2,
     "Radiacao (KJ/m²)": 370,
-    "Chuva (mm)": 0
+    "Chuva (mm)": 17
   },
   {
     "Data": "2024-08-01",
@@ -116,7 +118,7 @@ const exampleData = [
     "Dir. Vento (m/s)": 220,
     "Raj. Vento (m/s)": 6.0,
     "Radiacao (KJ/m²)": 400,
-    "Chuva (mm)": 0
+    "Chuva (mm)": 21
   },
   {
     "Data": "2024-08-01",
@@ -392,10 +394,10 @@ const Graphs = () => {
           {/* <PressaoChart data={weatherData} /> */}
         </TabPane>
         <TabPane tab="Vento" key="6">
-          {/* <VentoChart data={weatherData} /> */}
+          <WindChart data={weatherData} />
         </TabPane>
         <TabPane tab="Pluviosidade" key="7">
-          {/* <PluviosidadeChart data={weatherData} /> */}
+          <PluviosityChart data={weatherData} />
         </TabPane>
         <TabPane tab="Radiação" key="8">
           {/* <RadiacaoChart data={weatherData} /> */}
