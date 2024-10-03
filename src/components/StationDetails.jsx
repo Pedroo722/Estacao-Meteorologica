@@ -1,5 +1,5 @@
 import React from 'react';
-import './StationDetails.css';
+import '../styles/StationDetails.css';
 
 
 const StationDetails = ({ details }) => {
