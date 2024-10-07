@@ -3,8 +3,9 @@ import StatusBar from '../components/StatusBar';
 import ParaibaMap from '../components/ParaibaMap';
 import DashBar from '../components/DashBar';
 import StationDetails from '../components/StationDetails';
-
+import { baseUrlStationDetails } from '../util/constants';
 import { Select } from 'antd';
+import axios from 'axios';
 
 const Home = () => {
   const [selectedStation, setSelectedStation] = useState(null);
@@ -20,37 +21,51 @@ const Home = () => {
     { id: 'A333', name: 'São Gonçalo' }
   ]);
 
-  // Dados de exemplo
   const [stationDetails, setStationDetails] = useState({
-    city: "Campina Grande",
-    state: "PB",
-    creationDate: "01/01/2000",
-    code: "A313",
-    latitude: "-23.5505",
-    longitude: "-46.6333",
+    city: '',
+    state: '',
+    creationDate: '',
+    code: '',
+    latitude: '',
+    longitude: ''
   });
 
-
-  const handleSelectChange = (value) => {
+  const handleSelectChange = async (value) => {
     const selected = stations.find(station => station.id === value);
     if (selected) {
+      setSelectedStation(selected);
+
       setStationDetails(prevDetails => ({
         ...prevDetails,
         city: selected.name,
-        code: selected.id,
+        code: selected.id    
       }));
-      setSelectedStation(selected);
+
+      try {
+        const response = await axios.get(baseUrlStationDetails + `${selected.id}`);
+        const { estado, latitude, longitude, dataFundacao } = response.data;
+
+        setStationDetails(prevDetails => ({
+          ...prevDetails,
+          state: estado,
+          creationDate: dataFundacao,
+          latitude: parseFloat(latitude).toFixed(2),
+          longitude: parseFloat(longitude).toFixed(2)
+        }));
+      } catch (error) {
+        console.error('Error fetching station details:', error);
+      }
     }
   };
 
   return (
     <div className="container" style={{ display: 'flex', height: '100vh', width: '100%' }}>
       <DashBar />
-      <StatusBar />      
-      <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginRight: '5px', backgroundColor: '#042222', borderRadius: '20px'}}>
+      <StatusBar />
+      <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginRight: '5px', backgroundColor: '#042222', borderRadius: '20px' }}>
         <ParaibaMap selectedStation={selectedStation} setSelectedStation={setSelectedStation} />
       </div>
-      
+
       <div className="details-section">
         <Select
           showSearch
@@ -63,7 +78,7 @@ const Home = () => {
           }
           options={stations.map(station => ({
             value: station.id,
-            label: station.name,
+            label: station.name
           }))}
         />
         <StationDetails details={stationDetails} />
