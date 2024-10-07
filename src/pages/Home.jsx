@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import StatusBar from '../components/StatusBar';
 import ParaibaMap from '../components/ParaibaMap';
-import DashBar from '../components/DashBar';
 import StationDetails from '../components/StationDetails';
 import { baseUrlStationDetails } from '../util/constants';
 import { Select } from 'antd';
@@ -60,7 +59,6 @@ const Home = () => {
 
   return (
     <div className="container" style={{ display: 'flex', height: '100vh', width: '100%' }}>
-      <DashBar />
       <StatusBar selectedStationCode={selectedStation?.id} />
       <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginRight: '5px', backgroundColor: '#042222', borderRadius: '20px' }}>
         <ParaibaMap selectedStation={selectedStation} setSelectedStation={setSelectedStation} />
