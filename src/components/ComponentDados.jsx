@@ -19,7 +19,7 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
     };
 
     const expandedStyle = {
-        height: '150px', // Aumenta ao clicar
+        height: '180px', // Aumenta ao clicar
     };
 
     const textStyle = {
@@ -87,7 +87,6 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
     );
 };
 
-// Componente principal StatusBar que aceita props
 const ComponentDados = ({ items }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-around', width: '80%', marginBottom: '20px', color: '#fff' }}>
