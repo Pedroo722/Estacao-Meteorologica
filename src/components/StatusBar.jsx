@@ -22,7 +22,7 @@ const StatusBar = ({ selectedStationCode }) => {
 
     useEffect(() => {
         const fetchData = async () => {
-            const today = new Date().toISOString().split('T')[0]; // Formata a data como YYYY-MM-DD
+            const today = new Date().toISOString().split('T')[0]; // Formata a ata como YYYY-MM-DD
             console.log(today);
             console.log(selectedStationCode);
             const url = `${baseUrlIcons}${selectedStationCode}?date=${today}`;
@@ -38,7 +38,7 @@ const StatusBar = ({ selectedStationCode }) => {
                         { 
                             title: "TEMPERATURA", 
                             icon: FaTemperatureHalf, 
-                            value: (latestData.tempBulboSeco !== null && latestData.tempBulboSeco !== "NaN") ? `${latestData.tempBulboSeco}º` : "Dado Omisso",
+                            value: (latestData.tempBulboSeco !== null && latestData.tempBulboSeco !== "NaN") ? `${latestData.tempBulboSeco}º` : "Dado Ausente",
                             min: (latestData.tempMin !== null && latestData.tempMin !== "NaN") ? `${latestData.tempMin}º` : "Null",
                             max: (latestData.tempMax !== null && latestData.tempMax !== "NaN") ? `${latestData.tempMax}º` : "Null",                            
                             minIcon: FaTemperatureArrowDown, 
@@ -47,7 +47,7 @@ const StatusBar = ({ selectedStationCode }) => {
                         { 
                             title: "PRESSÃO", 
                             icon: TbWorld, 
-                            value: (latestData.pressaoAtmosfericaNivelEstacao !== null && latestData.pressaoAtmosfericaNivelEstacao !== "NaN") ? `${latestData.pressaoAtmosfericaNivelEstacao} hPa` : "Dado Omisso",
+                            value: (latestData.pressaoAtmosfericaNivelEstacao !== null && latestData.pressaoAtmosfericaNivelEstacao !== "NaN") ? `${latestData.pressaoAtmosfericaNivelEstacao} hPa` : "Dado Ausente",
                             min: (latestData.pressaoAtmosfericaMin !== null && latestData.pressaoAtmosfericaMin !== "NaN") ? `${latestData.pressaoAtmosfericaMin} hPa` : "Null",
                             max: (latestData.pressaoAtmosfericaMax !== null && latestData.pressaoAtmosfericaMax !== "NaN") ? `${latestData.pressaoAtmosfericaMax} hPa` : "Null",
                             minIcon: TbWorldDown, 
@@ -56,7 +56,7 @@ const StatusBar = ({ selectedStationCode }) => {
                         { 
                             title: "UMIDADE", 
                             icon: RiWaterPercentFill, 
-                            value: (latestData.umidadeRelativa !== null && latestData.umidadeRelativa !== "NaN") ? `${latestData.umidadeRelativa}%` : "Dado Omisso",
+                            value: (latestData.umidadeRelativa !== null && latestData.umidadeRelativa !== "NaN") ? `${latestData.umidadeRelativa}%` : "Dado Ausente",
                             min: (latestData.umidadeRelativaMin !== null && latestData.umidadeRelativaMin !== "NaN") ? `${latestData.umidadeRelativaMin}%` : "Null",
                             max: (latestData.umidadeRelativaMax !== null && latestData.umidadeRelativaMax !== "NaN") ? `${latestData.umidadeRelativaMax}%` : "Null",
                             minIcon: FaArrowDownShortWide, 
@@ -65,7 +65,7 @@ const StatusBar = ({ selectedStationCode }) => {
                         { 
                             title: "CHUVA", 
                             icon: TiWeatherShower, 
-                            value: (latestData.precipitacaoTotal !== null && latestData.precipitacaoTotal !== "NaN") ? `${latestData.precipitacaoTotal} mm` : "Dado Omisso",
+                            value: (latestData.precipitacaoTotal !== null && latestData.precipitacaoTotal !== "NaN") ? `${latestData.precipitacaoTotal} mm` : "Dado Ausente",
                             min: '0 mm', 
                             max: '100 mm', 
                             minIcon: IoIosWater, 
@@ -77,34 +77,34 @@ const StatusBar = ({ selectedStationCode }) => {
                         { 
                             title: "TEMPERATURA", 
                             icon: FaTemperatureHalf, 
-                            value: "Dado Omisso", 
-                            min: "N/A", 
-                            max: "N/A", 
+                            value: "Dado Ausente", 
+                            min: "--", 
+                            max: "--", 
                             minIcon: FaTemperatureArrowDown, 
                             maxIcon: FaTemperatureArrowUp 
                         },
                         { 
                             title: "PRESSÃO", 
                             icon: TbWorld, 
-                            value: "Dado Omisso", 
-                            min: "N/A", 
-                            max: "N/A", 
+                            value: "Dado Ausente", 
+                            min: "--", 
+                            max: "--", 
                             minIcon: TbWorldDown, 
                             maxIcon: TbWorldUp 
                         },
                         { 
                             title: "UMIDADE", 
                             icon: RiWaterPercentFill, 
-                            value: "Dado Omisso", 
-                            min: "N/A", 
-                            max: "N/A", 
+                            value: "Dado Ausente", 
+                            min: "--", 
+                            max: "--", 
                             minIcon: FaArrowDownShortWide, 
                             maxIcon: FaArrowUpShortWide 
                         },
                         { 
                             title: "CHUVA", 
                             icon: TiWeatherShower, 
-                            value: "Dado Omisso", 
+                            value: "Dado Ausente", 
                             min: '0 mm', 
                             max: '100 mm', 
                             minIcon: IoIosWater, 
