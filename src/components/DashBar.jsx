@@ -82,10 +82,6 @@ const DashBar = () => {
           <Theme />
         </div>
       )}
-
-      
-
-      
     </aside>
   );
 };
