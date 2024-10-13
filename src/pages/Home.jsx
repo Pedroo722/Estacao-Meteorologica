@@ -60,13 +60,13 @@ const Home = () => {
 
   return (
     <div className="container" style={{ display: 'flex', height: '100vh', width: '100%' }}>
+      <StatusBar selectedStationCode={selectedStation?.id} />
+      
+      {/* <DashBar /> */}
+      {/* <StatusBar />       */}
+      
 
       
-      <DashBar />
-      <StatusBar />      
-      <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginRight: '5px', backgroundColor: '#042222', borderRadius: '20px'}}>
-
-      <StatusBar selectedStationCode={selectedStation?.id} />
       <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginRight: '5px', backgroundColor: '#042222', borderRadius: '20px' }}>
 
         <ParaibaMap selectedStation={selectedStation} setSelectedStation={setSelectedStation} />
