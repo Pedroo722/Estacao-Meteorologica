@@ -5,11 +5,10 @@ const PluviosityChart = ({ data }) => {
   const chartRef = useRef();
 
   useEffect(() => {
-    // Limpar gráfico no dom
-    // para impedir instânciações repetidas no local
+    // Limpar gráfico no DOM
     d3.select(chartRef.current).selectAll('*').remove();
 
-    // dimensões do gráfico
+    // Dimensões do gráfico
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
     const width = 800 - margin.left - margin.right;
     const height = 300 - margin.top - margin.bottom;
@@ -25,10 +24,24 @@ const PluviosityChart = ({ data }) => {
 
     const hourValues = Array.from({ length: 24 }, () => ({ chuva: [] }));
 
-    data.forEach(d => {
-      const time = parseTime(`${d.Data} ${d["Hora (UTC)"]}`);
-      const hour = time.getUTCHours();
-      if (!isNaN(d["Chuva (mm)"])) hourValues[hour].chuva.push(d["Chuva (mm)"]);
+    data.forEach(item => {
+      // Remover " UTC" da string de hora
+      const hourString = item.hora.replace(" UTC", ""); 
+
+      // Extrair a hora e os minutos
+      const hour = parseInt(hourString.slice(0, 2), 10); // Obtém a hora como um número
+      const minutes = hourString.slice(2); // Obtém os minutos como string
+
+      // Montar a string de data e hora
+      const timeString = `${item.data} ${hourString.slice(0, 2)}:${minutes}`; // "YYYY-MM-DD HH:MM"
+      const time = parseTime(timeString);
+
+      if (!time) {
+        console.warn(`Data inválida: ${timeString}`);
+        return;
+      }
+
+      if (!isNaN(item.chuva)) hourValues[hour].chuva.push(item.chuva);
     });
 
     const hourAverages = hourValues.map(values => ({
@@ -41,12 +54,16 @@ const PluviosityChart = ({ data }) => {
       .range([0, width])
       .padding(0.1);
 
+    // Define o valor máximo do eixo Y como o máximo entre 10 mm e o valor máximo dos dados
+    const maxChuva = d3.max(hourAverages, d => d.chuva);
+    const yMax = Math.max(10, maxChuva);
+
     const y = d3.scaleLinear()
-      .domain([0, 100])  
+      .domain([0, yMax]) // Definindo o domínio do eixo Y
       .nice()
       .range([height, 0]);
 
-    // eixos
+    // Eixos
     svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(x).tickFormat(d => `${d}:00`));
@@ -54,15 +71,15 @@ const PluviosityChart = ({ data }) => {
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} mm`));
 
-    // barras
+    // Barras
     svg.selectAll('.bar')
       .data(hourAverages)
       .enter().append('rect')
       .attr('class', 'bar')
       .attr('x', (d, i) => x(i))
-      .attr('y', d => y(d.chuva))
+      .attr('y', d => d.chuva > 0 ? y(d.chuva) : height) // Exibe a barra apenas se chuva > 0
       .attr('width', x.bandwidth())
-      .attr('height', d => height - y(d.chuva))
+      .attr('height', d => d.chuva > 0 ? height - y(d.chuva) : 0) 
       .attr('fill', '#69b3a2');
 
   }, [data]);
