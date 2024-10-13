@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { HomeOutlined, LineChartOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import Theme from '../components/ToggleButton';
+import Theme from '../components/ThemeToggle';
 
 
 const DashBar = () => {

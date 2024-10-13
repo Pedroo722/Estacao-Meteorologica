@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, maxIcon: MaxIcon }) => {
-    const [isExpanded, setIsExpanded] = useState(false); // Estado para controlar se o item foi clicado
+const StationDataIconsItem = ({ title, Icon, value, min, max, minIcon: MinIcon, maxIcon: MaxIcon }) => {
+    const [isExpanded, setIsExpanded] = useState(false); 
 
     const iconStyle = {
         backgroundColor: '#03624C',
@@ -14,12 +14,12 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
         color: 'white',
         fontWeight: 'bold',
         margin: '20px auto',
-        transition: 'height 0.5s ease, width 0.5s ease', // Animação para aumentar tamanho
+        transition: 'height 0.5s ease, width 0.5s ease', 
         cursor: 'pointer',
     };
 
     const expandedStyle = {
-        height: '180px', // Aumenta ao clicar
+        height: '180px', 
     };
 
     const textStyle = {
@@ -44,7 +44,7 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
     };
 
     const extraStyle = {
-        display: 'flex', // Flexbox para alinhar o ícone com o valor
+        display: 'flex', 
         justifyContent: 'flex-start', 
         alignItems: 'center',
         margin: '10px'
@@ -87,11 +87,11 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
     );
 };
 
-const ComponentDados = ({ items }) => {
+const StationDataIcons = ({ items }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-around', width: '80%', marginBottom: '20px', color: '#fff' }}>
             {items.map((item, index) => (
-                <ComponentDadosItem 
+                <StationDataIconsItem 
                     key={index} 
                     title={item.title} 
                     Icon={item.icon} 
@@ -106,4 +106,4 @@ const ComponentDados = ({ items }) => {
     );
 }
 
-export default ComponentDados;
+export default StationDataIcons;

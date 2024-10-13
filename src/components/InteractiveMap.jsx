@@ -12,7 +12,7 @@ const selectedStationIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-const Map = ({ selectedStation, stations }) => {
+const InteractiveMap = ({ selectedStation, stations }) => {
   const defaultPosition = [-7.1210, -36.7246]; // Centro geográfico da Paraíba
   const zoomLevel = 7; // Nível de zoom para mostrar a Paraíba
 
@@ -56,5 +56,5 @@ const Map = ({ selectedStation, stations }) => {
   );
 };
 
-export default Map;
+export default InteractiveMap;
 
