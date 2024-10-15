@@ -3,11 +3,13 @@ import { Button, DatePicker, Table, Tabs, Select } from 'antd';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import '../styles/Graphs.css';
-import TemperatureChart from '../components/graphs/TemperaturaChart';
+import DryBulbTempChart from '../components/graphs/DryBulbTempChart';
 import HumidityChart from '../components/graphs/HumidityChart';
-import DewPointChart from '../components/graphs/DewPointChart';
+import DewPointTempChart from '../components/graphs/DewPointTempChart';
 import PluviosityChart from '../components/graphs/PluviosityChart';
 import WindChart from '../components/graphs/WindChart';
+import PressureChart from '../components/graphs/PressureChart';
+import RadiationChart from '../components/graphs/RadiationChart';
 import { baseUrlWeatherData } from "../util/constants";
 
 const { TabPane } = Tabs;
@@ -167,25 +169,25 @@ const Graphs = () => {
         <TabPane tab="Tabela" key="1">
           <Table dataSource={weatherData} columns={columns} pagination={false} />
         </TabPane>
-        <TabPane tab="Temperatura" key="2">
-          <TemperatureChart data={weatherData} />
+        <TabPane tab="Bulbo Seco" key="2">
+          <DryBulbTempChart data={weatherData} />
         </TabPane>
-        <TabPane tab="Umidade" key="3">
+        <TabPane tab="Ponto de Orvalho" key="3">
+          <DewPointTempChart data={weatherData} />
+        </TabPane>
+        <TabPane tab="Umidade" key="4">
           <HumidityChart data={weatherData} />
         </TabPane>
-        <TabPane tab="Ponto de Orvalho" key="4">
-          <DewPointChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Pressão" key="6">
-        {/*  <PressureChart data={weatherData} /> */}
+        <TabPane tab="Pressão" key="5">
+          <PressureChart data={weatherData} />
         </TabPane>
         <TabPane tab="Vento" key="6">
           <WindChart data={weatherData} />
         </TabPane>
-        <TabPane tab="Radiação" key="6">
-        {/*  <RadiationChart data={weatherData} /> */}
+        <TabPane tab="Radiação" key="7">
+          <RadiationChart data={weatherData} />
         </TabPane>
-        <TabPane tab="Pluviosidade" key="5">
+        <TabPane tab="Pluviosidade" key="8">
           <PluviosityChart data={weatherData} />
         </TabPane>
       </Tabs>
