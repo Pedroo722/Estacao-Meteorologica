@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { Button } from 'antd';
 
-const HumidityChart = ({ data }) => {
+const PressureChart = ({ data }) => {
   const [showMin, setShowMin] = useState(true);
   const [showMax, setShowMax] = useState(true);
   const [showInstant, setShowInstant] = useState(true);
@@ -11,7 +11,7 @@ const HumidityChart = ({ data }) => {
     if (!data || data.length === 0) return;
 
     // Limpar os gráficos existentes no DOM
-    d3.select('#all-umi-chart').selectAll('*').remove();
+    d3.select('#all-pressure-chart').selectAll('*').remove();
 
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
     const width = 800 - margin.left - margin.right;
@@ -32,9 +32,9 @@ const HumidityChart = ({ data }) => {
         return;
       }
 
-      if (!isNaN(d.umidadeRelativa)) hourValues[hour].instant.push(d.umidadeRelativa);
-      if (!isNaN(d.umidadeRelativaMax)) hourValues[hour].max.push(d.umidadeRelativaMax);
-      if (!isNaN(d.umidadeRelativaMin)) hourValues[hour].min.push(d.umidadeRelativaMin);
+      if (!isNaN(d.pressaoAtmosfericaNivelEstacao)) hourValues[hour].instant.push(d.pressaoAtmosfericaNivelEstacao);
+      if (!isNaN(d.pressaoAtmosfericaMax)) hourValues[hour].max.push(d.pressaoAtmosfericaMax);
+      if (!isNaN(d.pressaoAtmosfericaMin)) hourValues[hour].min.push(d.pressaoAtmosfericaMin);
     });
 
     const hourAverages = hourValues.map(values => ({
@@ -43,7 +43,7 @@ const HumidityChart = ({ data }) => {
       min: values.min.length > 0 ? d3.mean(values.min) : null,
     }));
 
-    const svg = d3.select('#all-umi-chart')
+    const svg = d3.select('#all-pressure-chart')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -55,7 +55,8 @@ const HumidityChart = ({ data }) => {
       .range([0, width]);
 
     const y = d3.scaleLinear()
-      .domain([0, 100])
+      .domain([d3.min(hourAverages.map(d => Math.min(d.min || Infinity, d.instant || Infinity, d.max || Infinity))) - 5,
+               d3.max(hourAverages.map(d => Math.max(d.min || -Infinity, d.instant || -Infinity, d.max || -Infinity))) + 5])
       .range([height, 0]);
 
     svg.append('g')
@@ -63,7 +64,7 @@ const HumidityChart = ({ data }) => {
       .call(d3.axisBottom(x).ticks(24).tickFormat(d => `${d}:00`));
 
     svg.append('g')
-      .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)}%`));
+      .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} hPa`));
 
     const drawLineAndPoints = (dataset, color, show) => {
       if (!show) return;
@@ -88,7 +89,7 @@ const HumidityChart = ({ data }) => {
         .attr("r", 4)
         .attr("fill", color)
         .on("click", function (event, d) {
-          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'}%`);
+          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'} hPa`);
         });
     };
 
@@ -101,30 +102,30 @@ const HumidityChart = ({ data }) => {
 
   return (
     <div>
-      <h2>Gráfico de Umidade Relativa</h2>
-      <div id="all-umi-chart"></div>
+      <h2>Gráfico de Pressão Atmosférica</h2>
+      <div id="all-pressure-chart"></div>
       <div>
         <Button 
           type="primary" 
           style={{ backgroundColor: 'green', borderColor: 'green', marginLeft: '10px' }} 
           onClick={() => setShowMin(!showMin)}>
-          {showMin ? 'Ocultar Umidade Mínima' : 'Mostrar Umidade Mínima'}
+          {showMin ? 'Ocultar Pressão Mínima' : 'Mostrar Pressão Mínima'}
         </Button>
         <Button 
           type="primary" 
           style={{ backgroundColor: 'red', borderColor: 'red', marginLeft: '10px' }} 
           onClick={() => setShowMax(!showMax)}>
-          {showMax ? 'Ocultar Umidade Máxima' : 'Mostrar Umidade Máxima'}
+          {showMax ? 'Ocultar Pressão Máxima' : 'Mostrar Pressão Máxima'}
         </Button>
         <Button 
           type="primary" 
           style={{ backgroundColor: 'blue', borderColor: 'blue', marginLeft: '10px' }} 
           onClick={() => setShowInstant(!showInstant)}>
-          {showInstant ? 'Ocultar Umidade Instantânea' : 'Mostrar Umidade Instantânea'}
+          {showInstant ? 'Ocultar Pressão Instantânea' : 'Mostrar Pressão Instantânea'}
         </Button>
       </div>
     </div>
   );
 };
 
-export default HumidityChart;
+export default PressureChart;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import { Button } from 'antd';
 
-const HumidityChart = ({ data }) => {
+const DryBulbTempChart = ({ data }) => {
   const [showMin, setShowMin] = useState(true);
   const [showMax, setShowMax] = useState(true);
   const [showInstant, setShowInstant] = useState(true);
@@ -10,8 +10,8 @@ const HumidityChart = ({ data }) => {
   useEffect(() => {
     if (!data || data.length === 0) return;
 
-    // Limpar os gráficos existentes no DOM
-    d3.select('#all-umi-chart').selectAll('*').remove();
+    // Limpar o gráfico existente no DOM
+    d3.select('#all-temp-chart').selectAll('*').remove();
 
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
     const width = 800 - margin.left - margin.right;
@@ -21,7 +21,7 @@ const HumidityChart = ({ data }) => {
     const hourValues = Array.from({ length: 24 }, () => ({ instant: [], max: [], min: [] }));
 
     data.forEach(d => {
-      const hourString = d.hora.replace(" UTC", "");
+      const hourString = d.hora.replace(" UTC", ""); // "2300"
       const hour = parseInt(hourString.slice(0, 2), 10);
       const minutes = hourString.slice(2);
       const timeString = `${d.data} ${hourString.slice(0, 2)}:${minutes}`;
@@ -32,9 +32,9 @@ const HumidityChart = ({ data }) => {
         return;
       }
 
-      if (!isNaN(d.umidadeRelativa)) hourValues[hour].instant.push(d.umidadeRelativa);
-      if (!isNaN(d.umidadeRelativaMax)) hourValues[hour].max.push(d.umidadeRelativaMax);
-      if (!isNaN(d.umidadeRelativaMin)) hourValues[hour].min.push(d.umidadeRelativaMin);
+      if (!isNaN(d.tempBulboSeco)) hourValues[hour].instant.push(d.tempBulboSeco);
+      if (!isNaN(d.tempMax)) hourValues[hour].max.push(d.tempMax);
+      if (!isNaN(d.tempMin)) hourValues[hour].min.push(d.tempMin);
     });
 
     const hourAverages = hourValues.map(values => ({
@@ -43,7 +43,7 @@ const HumidityChart = ({ data }) => {
       min: values.min.length > 0 ? d3.mean(values.min) : null,
     }));
 
-    const svg = d3.select('#all-umi-chart')
+    const svg = d3.select('#all-temp-chart')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -55,7 +55,7 @@ const HumidityChart = ({ data }) => {
       .range([0, width]);
 
     const y = d3.scaleLinear()
-      .domain([0, 100])
+      .domain([0, 45])
       .range([height, 0]);
 
     svg.append('g')
@@ -63,10 +63,10 @@ const HumidityChart = ({ data }) => {
       .call(d3.axisBottom(x).ticks(24).tickFormat(d => `${d}:00`));
 
     svg.append('g')
-      .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)}%`));
+      .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} °C`));
 
     const drawLineAndPoints = (dataset, color, show) => {
-      if (!show) return;
+      if (!show) return; // Se a série não estiver visível, não desenha nada
 
       const line = d3.line()
         .x((d, i) => x(i))
@@ -88,7 +88,7 @@ const HumidityChart = ({ data }) => {
         .attr("r", 4)
         .attr("fill", color)
         .on("click", function (event, d) {
-          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'}%`);
+          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'} °C`);
         });
     };
 
@@ -101,30 +101,30 @@ const HumidityChart = ({ data }) => {
 
   return (
     <div>
-      <h2>Gráfico de Umidade Relativa</h2>
-      <div id="all-umi-chart"></div>
+      <h2>Gráfico de Temperatura de Bulbo Seco</h2>
+      <div id="all-temp-chart"></div>
       <div>
         <Button 
           type="primary" 
           style={{ backgroundColor: 'green', borderColor: 'green', marginLeft: '10px' }} 
           onClick={() => setShowMin(!showMin)}>
-          {showMin ? 'Ocultar Umidade Mínima' : 'Mostrar Umidade Mínima'}
+          {showMin ? 'Ocultar Temp. Mínima' : 'Mostrar Temp. Mínima'}
         </Button>
         <Button 
           type="primary" 
           style={{ backgroundColor: 'red', borderColor: 'red', marginLeft: '10px' }} 
           onClick={() => setShowMax(!showMax)}>
-          {showMax ? 'Ocultar Umidade Máxima' : 'Mostrar Umidade Máxima'}
+          {showMax ? 'Ocultar Temp. Máxima' : 'Mostrar Temp. Máxima'}
         </Button>
         <Button 
           type="primary" 
           style={{ backgroundColor: 'blue', borderColor: 'blue', marginLeft: '10px' }} 
           onClick={() => setShowInstant(!showInstant)}>
-          {showInstant ? 'Ocultar Umidade Instantânea' : 'Mostrar Umidade Instantânea'}
+          {showInstant ? 'Ocultar Temp. Instantânea' : 'Mostrar Temp. Instantânea'}
         </Button>
       </div>
     </div>
   );
 };
 
-export default HumidityChart;
+export default DryBulbTempChart;
