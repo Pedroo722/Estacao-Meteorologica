@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import BrasilMap from '../components/BrasilMap';
-import DashBar from '../components/DashBarOld';
+import BrasilMap from './BrasilMap';
+import DashBar from './DashBarOld';
 import DashInfo from '../components/DashInfo';
 
 const OldHome = () => {

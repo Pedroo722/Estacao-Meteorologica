@@ -7,7 +7,7 @@ import {
   Marker,
   Annotation
 } from "react-simple-maps";
-import brTopoJson from "../data/Brazilian_States-topo.json";
+import brTopoJson from "../../data/Brazilian_States-topo.json";
 
 const statesWithAnnotations = {
   BR_DF: {

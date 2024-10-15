@@ -5,11 +5,10 @@ const WindChart = ({ data }) => {
   const chartRef = useRef();
 
   useEffect(() => {
-    // Limpar gráfico anterior no dom
-    // para impedir instâncias repetidas no local  
+    // Limpar gráfico anterior no DOM
     d3.select(chartRef.current).selectAll('*').remove();
 
-    // dimensões do gráfico
+    // Dimensões do gráfico
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
     const width = 1000 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
@@ -25,11 +24,25 @@ const WindChart = ({ data }) => {
 
     const hourValues = Array.from({ length: 24 }, () => ({ velVento: [], rajVento: [] }));
 
-    data.forEach(d => {
-      const time = parseTime(`${d.Data} ${d["Hora (UTC)"]}`);
-      const hour = time.getUTCHours();
-      if (!isNaN(d["Vel. Vento (m/s)"])) hourValues[hour].velVento.push(d["Vel. Vento (m/s)"]);
-      if (!isNaN(d["Raj. Vento (m/s)"])) hourValues[hour].rajVento.push(d["Raj. Vento (m/s)"]);
+    data.forEach(item => {
+      // Remover " UTC" da string de hora
+      const hourString = item.hora.replace(" UTC", ""); 
+
+      // Extrair a hora e os minutos
+      const hour = parseInt(hourString.slice(0, 2), 10); // Obtém a hora como um número
+      const minutes = hourString.slice(2); // Obtém os minutos como string
+
+      // Montar a string de data e hora
+      const timeString = `${item.data} ${hourString.slice(0, 2)}:${minutes}`; // "YYYY-MM-DD HH:MM"
+      const time = parseTime(timeString);
+
+      if (!time) {
+        console.warn(`Data inválida: ${timeString}`);
+        return;
+      }
+
+      if (!isNaN(item.ventoVelocidade)) { hourValues[hour].velVento.push(item.ventoVelocidade); }
+      if (!isNaN(item.ventoRajadaMax)) { hourValues[hour].rajVento.push(item.ventoRajadaMax); }
     });
 
     const hourAverages = hourValues.map(values => ({
@@ -48,12 +61,16 @@ const WindChart = ({ data }) => {
       .range([0, x0.bandwidth()])
       .padding(0.05);
 
+    // Define o valor máximo do eixo Y como o máximo entre 10 e o valor máximo dos dados recebidos
+    const maxVento = d3.max(hourAverages, d => Math.max(d.velVento, d.rajVento));
+    const yMax = Math.max(10, maxVento); 
+
     const y = d3.scaleLinear()
-      .domain([0, d3.max(hourAverages, d => Math.max(d.velVento, d.rajVento))])
+      .domain([0, yMax]) 
       .nice()
       .range([height, 0]);
 
-    // eixos
+    // Eixos
     svg.append('g')
       .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(x0).tickFormat(d => `${d}:00`));
@@ -61,7 +78,7 @@ const WindChart = ({ data }) => {
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} m/s`));
 
-    // barras para 'Vel. Vento' e 'Raj. Vento'
+    // Barras para 'Vel. Vento' e 'Raj. Vento'
     svg.append('g')
       .selectAll('g')
       .data(hourAverages)
@@ -89,7 +106,7 @@ const WindChart = ({ data }) => {
       .attr('class', 'legend');
 
     const legend = svg.selectAll('.legend');
-    
+
     legend.append('rect')
       .attr('x', 0)
       .attr('y', (d, i) => i * 20)

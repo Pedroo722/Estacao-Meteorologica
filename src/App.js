@@ -20,7 +20,6 @@ export default function App() {
             <Route path='/' element={<Home />} />
             <Route path='graphs' element={<Graphs />} />
             <Route path='info' element={<Info />} />
-            {/* <Route path="/stations/:stationCode" element={<Station />} />  */}
           </Routes>
         </HashRouter>
   );

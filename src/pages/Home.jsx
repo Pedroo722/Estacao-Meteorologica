@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import StatusBar from '../components/StatusBar';
-// import ParaibaMap from '../components/ParaibaMap';
 import StationDetails from '../components/StationDetails';
-import Map from  '../components/Map';
+import InteractiveMap from  '../components/InteractiveMap';
 import { baseUrlStationDetails } from '../util/constants';
 import { Select } from 'antd';
 import axios from 'axios';
@@ -19,7 +18,7 @@ const Home = () => {
     { id: 'A334', name: 'Monteiro', latitude: -7.88333, longitude: -37.125 },
     { id: 'A321', name: 'Patos', latitude: -7.01784, longitude: -37.2747 },
     { id: 'A333', name: 'São Gonçalo', latitude: -6.75611, longitude: -38.2294 }
-  ]);
+  ]); 
 
   const [stationDetails, setStationDetails] = useState({
     city: '',
@@ -108,35 +107,30 @@ const Home = () => {
     <div className="container" style={{ display: 'flex', height: '100vh', width: '100%' }}>
       <StatusBar selectedStationCode={selectedStation?.id} />
       
-
-      
       <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginRight: '5px', backgroundColor: '#042222', borderRadius: '20px' }}>
-
-        {/* <ParaibaMap selectedStation={selectedStation} setSelectedStation={setSelectedStation} /> */}
-        
-        <Map 
+        <InteractiveMap 
           selectedStation={selectedStation} 
           stations={stations} 
           setSelectedStation={fetchStationDetails}  // Passa o setter como prop
         />
-
       </div>
 
       <div className="details-section">
-        {/* <Select
-          showSearch
-          style={{ width: 200, marginBottom: '20px' }}
-          placeholder="Digite para pesquisar"
-          optionFilterProp="label"
-          onChange={handleSelectChange}
-          filterSort={(optionA, optionB) =>
-            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-          }
-          options={stations.map(station => ({
-            value: station.id,
-            label: station.name
-          }))}
-        /> */}
+        <Select
+            showSearch
+            style={{ width: 200, marginBottom: '20px' }}
+            placeholder="Digite para pesquisar"
+            optionFilterProp="label"
+            onChange={handleSelectChange}
+            filterSort={(optionA, optionB) =>
+              (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+            }
+            options={stations.map(station => ({
+              value: station.id,
+              label: station.name
+            }))}
+          />
+
         <StationDetails details={stationDetails} />
       </div>
     </div>
@@ -144,7 +138,3 @@ const Home = () => {
 };
 
 export default Home;
-
-
-
-
