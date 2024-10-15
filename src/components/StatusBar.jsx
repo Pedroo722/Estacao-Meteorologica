@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ComponentDados from './ComponentDados';
-import { FaTemperatureHalf, FaTemperatureArrowDown, FaTemperatureArrowUp, FaArrowDownShortWide, FaArrowUpShortWide } from "react-icons/fa6"; 
+import { FaTemperatureHalf, FaTemperatureArrowDown, FaTemperatureArrowUp, FaArrowDownShortWide, FaArrowUpShortWide, FaTemperatureLow } from "react-icons/fa6"; 
 import { RiWaterPercentFill } from "react-icons/ri";
 import { TiWeatherShower } from "react-icons/ti";
 import { GiWaterSplash } from "react-icons/gi"; 
 import { IoIosWater } from "react-icons/io";
 import { TbWorld, TbWorldDown, TbWorldUp } from "react-icons/tb";
+
 import { baseUrlIcons } from "../util/constants";
 
 const StatusBar = ({ selectedStationCode }) => {
@@ -41,6 +42,15 @@ const StatusBar = ({ selectedStationCode }) => {
                             value: (latestData.tempBulboSeco !== null && latestData.tempBulboSeco !== "NaN") ? `${latestData.tempBulboSeco}º` : "Dado Ausente",
                             min: (latestData.tempMin !== null && latestData.tempMin !== "NaN") ? `${latestData.tempMin}º` : "Null",
                             max: (latestData.tempMax !== null && latestData.tempMax !== "NaN") ? `${latestData.tempMax}º` : "Null",                            
+                            minIcon: FaTemperatureArrowDown, 
+                            maxIcon: FaTemperatureArrowUp 
+                        },
+                        { 
+                            title: "TEMPERATURA ORVALHO", 
+                            icon: FaTemperatureLow, 
+                            value: (latestData.tempPontoOrvalho !== null && latestData.tempPontoOrvalho !== "NaN") ? `${latestData.tempPontoOrvalho}º` : "Dado Ausente",
+                            min: (latestData.tempOrvalhoMin !== null && latestData.tempOrvalhoMin !== "NaN") ? `${latestData.tempOrvalhoMin}º` : "Null",
+                            max: (latestData.tempOrvalhoMax !== null && latestData.tempOrvalhoMax !== "NaN") ? `${latestData.tempOrvalhoMax}º` : "Null",                            
                             minIcon: FaTemperatureArrowDown, 
                             maxIcon: FaTemperatureArrowUp 
                         },

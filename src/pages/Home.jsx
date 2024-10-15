@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StatusBar from '../components/StatusBar';
-import ParaibaMap from '../components/ParaibaMap';
+// import ParaibaMap from '../components/ParaibaMap';
 import StationDetails from '../components/StationDetails';
 import Map from  '../components/Map';
 import { baseUrlStationDetails } from '../util/constants';
@@ -58,26 +58,72 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    const defaultStation = stations.find(station => station.id === 'A320'); // João Pessoa
+    if (defaultStation) {
+      setSelectedStation(defaultStation);
+      fetchStationDetails(defaultStation); // Carregar os detalhes de João Pessoa automaticamente
+    }
+  }, [stations]);
+
+  const fetchStationDetails = async (station) => {
+    console.log('Estação selecionada:', station); // Verificar qual estação foi clicada
+    setSelectedStation(station);
+  
+    // Atualiza a cidade e código primeiro
+    setStationDetails(prevDetails => ({
+      ...prevDetails,
+      city: station.name,
+      code: station.id,
+      state: '',
+      creationDate: '',
+      latitude: '',
+      longitude: ''
+    }));
+  
+    try {
+      const response = await axios.get(baseUrlStationDetails + `${station.id}`);
+      const { estado, latitude, longitude, dataFundacao } = response.data;
+  
+      // Atualiza o restante das informações
+      setStationDetails(prevDetails => ({
+        ...prevDetails,
+        state: estado,
+        creationDate: dataFundacao,
+        latitude: parseFloat(latitude).toFixed(2),
+        longitude: parseFloat(longitude).toFixed(2)
+      }));
+  
+      console.log('Detalhes da estação atualizados:', {
+        estado, latitude, longitude, dataFundacao
+      });
+  
+    } catch (error) {
+      console.error('Error fetching station details:', error);
+    }
+  };
+  
+
   return (
     <div className="container" style={{ display: 'flex', height: '100vh', width: '100%' }}>
       <StatusBar selectedStationCode={selectedStation?.id} />
-      
-      {/* <DashBar /> */}
-      {/* <StatusBar />       */}
       
 
       
       <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginRight: '5px', backgroundColor: '#042222', borderRadius: '20px' }}>
 
-        <ParaibaMap selectedStation={selectedStation} setSelectedStation={setSelectedStation} />
-        {/* <Map selectedStation={selectedStation} /> */}
+        {/* <ParaibaMap selectedStation={selectedStation} setSelectedStation={setSelectedStation} /> */}
+        
         <Map 
           selectedStation={selectedStation} 
-          stations={stations} // Passa a lista de todas as estações para o mapa
+          stations={stations} 
+          setSelectedStation={fetchStationDetails}  // Passa o setter como prop
         />
+
       </div>
+
       <div className="details-section">
-        <Select
+        {/* <Select
           showSearch
           style={{ width: 200, marginBottom: '20px' }}
           placeholder="Digite para pesquisar"
@@ -90,7 +136,7 @@ const Home = () => {
             value: station.id,
             label: station.name
           }))}
-        />
+        /> */}
         <StationDetails details={stationDetails} />
       </div>
     </div>

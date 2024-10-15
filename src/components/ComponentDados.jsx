@@ -5,8 +5,8 @@ const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, ma
 
     const iconStyle = {
         backgroundColor: '#03624C',
-        width: '130px',
-        height: '130px',
+        width: '180px',
+        height: '140px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-evenly',
