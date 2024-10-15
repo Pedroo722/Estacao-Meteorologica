@@ -1,231 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, DatePicker, Table, Tabs, Select } from 'antd'; 
 import dayjs from 'dayjs';
+import axios from 'axios';
 import '../styles/Graphs.css';
-import TemperatureChart from '../components/TemperaturaChart';
-import HumidityChart from '../components/HumidityChart';
-import DewPointChart from '../components/DewPointChart';
-import PluviosityChart from '../components/PluviosityChart';
-import WindChart from '../components/WindChart';
+import TemperatureChart from '../components/graphs/TemperaturaChart';
+import HumidityChart from '../components/graphs/HumidityChart';
+import DewPointChart from '../components/graphs/DewPointChart';
+import PluviosityChart from '../components/graphs/PluviosityChart';
+import WindChart from '../components/graphs/WindChart';
+import { baseUrlWeatherData } from "../util/constants";
 
 const { TabPane } = Tabs;
-
 const { MonthPicker } = DatePicker;
-
-// dados de exemplo para preencher a tabela,
-// apenas para testes
-const exampleData = [
-  {
-    "Data": "2024-08-01",
-    "Hora (UTC)": "00:00",
-    "Temp. Ins. (C)": 22.5,
-    "Temp. Max. (C)": 24.1,
-    "Temp. Min. (C)": 21.3,
-    "Umi. Ins. (%)": 78,
-    "Umi. Max. (%)": 85,
-    "Umi. Min. (%)": 70,
-    "Pto Orvalho Ins. (C)": 18.3,
-    "Pto Orvalho Max. (C)": 19.5,
-    "Pto Orvalho Min. (C)": 17.0,
-    "Pressao Ins. (hPa)": 1012,
-    "Pressao Max. (hPa)": 1015,
-    "Pressao Min. (hPa)": 1009,
-    "Vel. Vento (m/s)": 3.2,
-    "Dir. Vento (m/s)": 180,
-    "Raj. Vento (m/s)": 4.5,
-    "Radiacao (KJ/m²)": 350,
-    "Chuva (mm)": 10
-  },
-  {
-    "Data": "2024-08-01",
-    "Hora (UTC)": "03:00",
-    "Temp. Ins. (C)": 21.8,
-    "Temp. Max. (C)": 22.5,
-    "Temp. Min. (C)": 20.6,
-    "Umi. Ins. (%)": 81,
-    "Umi. Max. (%)": 88,
-    "Umi. Min. (%)": 75,
-    "Pto Orvalho Ins. (C)": 18.9,
-    "Pto Orvalho Max. (C)": 19.8,
-    "Pto Orvalho Min. (C)": 17.6,
-    "Pressao Ins. (hPa)": 1011,
-    "Pressao Max. (hPa)": 1013,
-    "Pressao Min. (hPa)": 1008,
-    "Vel. Vento (m/s)": 2.8,
-    "Dir. Vento (m/s)": 200,
-    "Raj. Vento (m/s)": 3.9,
-    "Radiacao (KJ/m²)": 340,
-    "Chuva (mm)": 14
-  },
-  {
-    "Data": "2024-08-01",
-    "Hora (UTC)": "06:00",
-    "Temp. Ins. (C)": 20.5,
-    "Temp. Max. (C)": 21.8,
-    "Temp. Min. (C)": 19.5,
-    "Umi. Ins. (%)": 85,
-    "Umi. Max. (%)": 90,
-    "Umi. Min. (%)": 80,
-    "Pto Orvalho Ins. (C)": 18.0,
-    "Pto Orvalho Max. (C)": 18.9,
-    "Pto Orvalho Min. (C)": 17.0,
-    "Pressao Ins. (hPa)": 1013,
-    "Pressao Max. (hPa)": 1016,
-    "Pressao Min. (hPa)": 1010,
-    "Vel. Vento (m/s)": 2.0,
-    "Dir. Vento (m/s)": 190,
-    "Raj. Vento (m/s)": 3.0,
-    "Radiacao (KJ/m²)": 360,
-    "Chuva (mm)": 15
-  },
-  {
-    "Data": "2024-08-01",
-    "Hora (UTC)": "09:00",
-    "Temp. Ins. (C)": 24.0,
-    "Temp. Max. (C)": 25.3,
-    "Temp. Min. (C)": 23.1,
-    "Umi. Ins. (%)": 70,
-    "Umi. Max. (%)": 75,
-    "Umi. Min. (%)": 65,
-    "Pto Orvalho Ins. (C)": 18.6,
-    "Pto Orvalho Max. (C)": 19.3,
-    "Pto Orvalho Min. (C)": 17.8,
-    "Pressao Ins. (hPa)": 1010,
-    "Pressao Max. (hPa)": 1013,
-    "Pressao Min. (hPa)": 1008,
-    "Vel. Vento (m/s)": 4.0,
-    "Dir. Vento (m/s)": 210,
-    "Raj. Vento (m/s)": 5.2,
-    "Radiacao (KJ/m²)": 370,
-    "Chuva (mm)": 17
-  },
-  {
-    "Data": "2024-08-01",
-    "Hora (UTC)": "12:00",
-    "Temp. Ins. (C)": 26.5,
-    "Temp. Max. (C)": 28.0,
-    "Temp. Min. (C)": 25.3,
-    "Umi. Ins. (%)": 60,
-    "Umi. Max. (%)": 65,
-    "Umi. Min. (%)": 55,
-    "Pto Orvalho Ins. (C)": 18.2,
-    "Pto Orvalho Max. (C)": 19.0,
-    "Pto Orvalho Min. (C)": 17.5,
-    "Pressao Ins. (hPa)": 1009,
-    "Pressao Max. (hPa)": 1011,
-    "Pressao Min. (hPa)": 1007,
-    "Vel. Vento (m/s)": 5.0,
-    "Dir. Vento (m/s)": 220,
-    "Raj. Vento (m/s)": 6.0,
-    "Radiacao (KJ/m²)": 400,
-    "Chuva (mm)": 21
-  },
-  {
-    "Data": "2024-08-01",
-    "Hora (UTC)": "15:00",
-    "Temp. Ins. (C)": 27.8,
-    "Temp. Max. (C)": 29.2,
-    "Temp. Min. (C)": 26.5,
-    "Umi. Ins. (%)": 55,
-    "Umi. Max. (%)": 60,
-    "Umi. Min. (%)": 50,
-    "Pto Orvalho Ins. (C)": 18.0,
-    "Pto Orvalho Max. (C)": 18.8,
-    "Pto Orvalho Min. (C)": 17.2,
-    "Pressao Ins. (hPa)": 1008,
-    "Pressao Max. (hPa)": 1010,
-    "Pressao Min. (hPa)": 1006,
-    "Vel. Vento (m/s)": 5.5,
-    "Dir. Vento (m/s)": 230,
-    "Raj. Vento (m/s)": 6.5,
-    "Radiacao (KJ/m²)": 410,
-    "Chuva (mm)": 0
-  },
-  {
-    "Data": "2024-08-02",
-    "Hora (UTC)": "18:00",
-    "Temp. Ins. (C)": 24.2,
-    "Temp. Max. (C)": 25.0,
-    "Temp. Min. (C)": 23.0,
-    "Umi. Ins. (%)": 75,
-    "Umi. Max. (%)": 80,
-    "Umi. Min. (%)": 70,
-    "Pto Orvalho Ins. (C)": 19.5,
-    "Pto Orvalho Max. (C)": 20.0,
-    "Pto Orvalho Min. (C)": 18.0,
-    "Pressao Ins. (hPa)": 1011,
-    "Pressao Max. (hPa)": 1013,
-    "Pressao Min. (hPa)": 1009,
-    "Vel. Vento (m/s)": 3.8,
-    "Dir. Vento (m/s)": 240,
-    "Raj. Vento (m/s)": 4.8,
-    "Radiacao (KJ/m²)": 320,
-    "Chuva (mm)": 0
-  },
-  {
-    "Data": "2024-08-02",
-    "Hora (UTC)": "21:00",
-    "Temp. Ins. (C)": 22.0,
-    "Temp. Max. (C)": 23.0,
-    "Temp. Min. (C)": 21.0,
-    "Umi. Ins. (%)": 80,
-    "Umi. Max. (%)": 85,
-    "Umi. Min. (%)": 75,
-    "Pto Orvalho Ins. (C)": 18.5,
-    "Pto Orvalho Max. (C)": 19.3,
-    "Pto Orvalho Min. (C)": 17.5,
-    "Pressao Ins. (hPa)": 1013,
-    "Pressao Max. (hPa)": 1015,
-    "Pressao Min. (hPa)": 1010,
-    "Vel. Vento (m/s)": 3.0,
-    "Dir. Vento (m/s)": 250,
-    "Raj. Vento (m/s)": 4.0,
-    "Radiacao (KJ/m²)": 280,
-    "Chuva (mm)": 0
-  },
-  {
-    "Data": "2024-08-03",
-    "Hora (UTC)": "00:00",
-    "Temp. Ins. (C)": 21.0,
-    "Temp. Max. (C)": 21.8,
-    "Temp. Min. (C)": 20.2,
-    "Umi. Ins. (%)": 82,
-    "Umi. Max. (%)": 88,
-    "Umi. Min. (%)": 78,
-    "Pto Orvalho Ins. (C)": 18.8,
-    "Pto Orvalho Max. (C)": 19.6,
-    "Pto Orvalho Min. (C)": 18.0,
-    "Pressao Ins. (hPa)": 1014,
-    "Pressao Max. (hPa)": 1017,
-    "Pressao Min. (hPa)": 1012,
-    "Vel. Vento (m/s)": 2.5,
-    "Dir. Vento (m/s)": 180,
-    "Raj. Vento (m/s)": 3.5,
-    "Radiacao (KJ/m²)": 300,
-    "Chuva (mm)": 0
-  },
-  {
-    "Data": "2024-08-03",
-    "Hora (UTC)": "03:00",
-    "Temp. Ins. (C)": 20.0,
-    "Temp. Max. (C)": 20.5,
-    "Temp. Min. (C)": 19.5,
-    "Umi. Ins. (%)": 85,
-    "Umi. Max. (%)": 90,
-    "Umi. Min. (%)": 80,
-    "Pto Orvalho Ins. (C)": 18.0,
-    "Pto Orvalho Max. (C)": 18.9,
-    "Pto Orvalho Min. (C)": 17.3,
-    "Pressao Ins. (hPa)": 1015,
-    "Pressao Max. (hPa)": 1017,
-    "Pressao Min. (hPa)": 1013,
-    "Vel. Vento (m/s)": 2.0,
-    "Dir. Vento (m/s)": 170,
-    "Raj. Vento (m/s)": 2.8,
-    "Radiacao (KJ/m²)": 290,
-    "Chuva (mm)": 0
-  }
-];
 
 const Graphs = () => {
   const [stations] = useState([
@@ -245,10 +31,6 @@ const Graphs = () => {
   const [dateValue, setDateValue] = useState(null); 
   const [weatherData, setWeatherData] = useState([]);
 
-  useEffect(() => {
-    setWeatherData(exampleData);
-  }, []);
-
   const handleStationChange = (value) => {
     setSelectedStation(value);
   };
@@ -259,25 +41,25 @@ const Graphs = () => {
   };
 
   const columns = [
-    { title: 'Data', dataIndex: 'Data', key: 'data' },
-    { title: 'Hora (UTC)', dataIndex: 'Hora (UTC)', key: 'hora' },
-    { title: 'Temp. Ins. (C)', dataIndex: 'Temp. Ins. (C)', key: 'tempIns' },
-    { title: 'Temp. Max. (C)', dataIndex: 'Temp. Max. (C)', key: 'tempMax' },
-    { title: 'Temp. Min. (C)', dataIndex: 'Temp. Min. (C)', key: 'tempMin' },
-    { title: 'Umi. Ins. (%)', dataIndex: 'Umi. Ins. (%)', key: 'umiIns' },
-    { title: 'Umi. Max. (%)', dataIndex: 'Umi. Max. (%)', key: 'umiMax' },
-    { title: 'Umi. Min. (%)', dataIndex: 'Umi. Min. (%)', key: 'umiMin' },
-    { title: 'Pto Orvalho Ins. (C)', dataIndex: 'Pto Orvalho Ins. (C)', key: 'ptoOrvalhoIns' },
-    { title: 'Pto Orvalho Max. (C)', dataIndex: 'Pto Orvalho Max. (C)', key: 'ptoOrvalhoMax' },
-    { title: 'Pto Orvalho Min. (C)', dataIndex: 'Pto Orvalho Min. (C)', key: 'ptoOrvalhoMin' },
-    { title: 'Pressao Ins. (hPa)', dataIndex: 'Pressao Ins. (hPa)', key: 'pressaoIns' },
-    { title: 'Pressao Max. (hPa)', dataIndex: 'Pressao Max. (hPa)', key: 'pressaoMax' },
-    { title: 'Pressao Min. (hPa)', dataIndex: 'Pressao Min. (hPa)', key: 'pressaoMin' },
-    { title: 'Vel. Vento (m/s)', dataIndex: 'Vel. Vento (m/s)', key: 'velVento' },
-    { title: 'Dir. Vento (m/s)', dataIndex: 'Dir. Vento (m/s)', key: 'dirVento' },
-    { title: 'Raj. Vento (m/s)', dataIndex: 'Raj. Vento (m/s)', key: 'rajVento' },
-    { title: 'Radiacao (KJ/m²)', dataIndex: 'Radiacao (KJ/m²)', key: 'radiacao' },
-    { title: 'Chuva (mm)', dataIndex: 'Chuva (mm)', key: 'chuva' },
+    { title: 'Data', dataIndex: 'data', key: 'data' },
+    { title: 'Hora (UTC)', dataIndex: 'hora', key: 'hora' },
+    { title: 'Temp. Ins. (C)', dataIndex: 'tempBulboSeco', key: 'tempIns' },
+    { title: 'Temp. Max. (C)', dataIndex: 'tempMax', key: 'tempMax' },
+    { title: 'Temp. Min. (C)', dataIndex: 'tempMin', key: 'tempMin' },
+    { title: 'Umi. Ins. (%)', dataIndex: 'umidadeRelativa', key: 'umiIns' },
+    { title: 'Umi. Max. (%)', dataIndex: 'umidadeRelativaMax', key: 'umiMax' },
+    { title: 'Umi. Min. (%)', dataIndex: 'umidadeRelativaMin', key: 'umiMin' },
+    { title: 'Pto Orvalho Ins. (C)', dataIndex: 'tempPontoOrvalho', key: 'ptoOrvalhoIns' },
+    { title: 'Pto Orvalho Max. (C)', dataIndex: 'tempOrvalhoMax', key: 'ptoOrvalhoMax' },
+    { title: 'Pto Orvalho Min. (C)', dataIndex: 'tempOrvalhoMin', key: 'ptoOrvalhoMin' },
+    { title: 'Pressao Ins. (hPa)', dataIndex: 'pressaoAtmosfericaNivelEstacao', key: 'pressaoIns' },
+    { title: 'Pressao Max. (hPa)', dataIndex: 'pressaoAtmosfericaMax', key: 'pressaoMax' },
+    { title: 'Pressao Min. (hPa)', dataIndex: 'pressaoAtmosfericaMin', key: 'pressaoMin' },
+    { title: 'Vel. Vento (m/s)', dataIndex: 'ventoVelocidade', key: 'velVento' },
+    { title: 'Dir. Vento (m/s)', dataIndex: 'ventoDirecao', key: 'dirVento' },
+    { title: 'Raj. Vento (m/s)', dataIndex: 'ventoRajadaMax', key: 'rajVento' },
+    { title: 'Radiacao (KJ/m²)', dataIndex: 'radiacaoGlobal', key: 'radiacao' },
+    { title: 'Chuva (mm)', dataIndex: 'precipitacaoTotal', key: 'chuva' },
   ];
 
   const generateDateOptions = () => {
@@ -296,27 +78,45 @@ const Graphs = () => {
     }
   };
 
-  const filterViewTable = () => {
-    if (!dateValue) {
-      console.log("Selecione uma data");
+  const filterViewTable = async () => {
+    if (!dateValue || !selectedStation) {
+      console.log("Selecione uma estação e uma data");
       return;
     }
-  
-    let filteredData = [];
-  
-    if (dateType === 'dia') {
-      filteredData = exampleData.filter(item => item.Data === dateValue);
-    } else if (dateType === 'mes') {
-      const selectedMonth = dayjs(dateValue).format('YYYY-MM');
-      filteredData = exampleData.filter(item => {
-        const itemMonth = dayjs(item.Data).format('YYYY-MM');
-        return itemMonth === selectedMonth;
-      });
+
+    try {
+      const dateParam = dateType === 'dia' ? dateValue : dayjs(dateValue).format('YYYY-MM');
+      const response = await axios.get(`${baseUrlWeatherData}${selectedStation}?date=${dateParam}`);
+      const receivedData = response.data.data; 
+
+      // Mapear os dados para o formato esperado pela tabela
+      const formattedData = receivedData.map(item => ({
+        data: item.data,
+        hora: item.hora,
+        tempBulboSeco: item.tempBulboSeco,
+        tempMax: item.tempMax,
+        tempMin: item.tempMin,
+        umidadeRelativa: item.umidadeRelativa,
+        umidadeRelativaMax: item.umidadeRelativaMax,
+        umidadeRelativaMin: item.umidadeRelativaMin,
+        tempPontoOrvalho: item.tempPontoOrvalho,
+        tempOrvalhoMax: item.tempOrvalhoMax,
+        tempOrvalhoMin: item.tempOrvalhoMin,
+        pressaoAtmosfericaNivelEstacao: item.pressaoAtmosfericaNivelEstacao,
+        pressaoAtmosfericaMax: item.pressaoAtmosfericaMax,
+        pressaoAtmosfericaMin: item.pressaoAtmosfericaMin,
+        ventoVelocidade: item.ventoVelocidade,
+        ventoDirecao: item.ventoDirecao,
+        ventoRajadaMax: item.ventoRajadaMax,
+        radiacaoGlobal: item.radiacaoGlobal,
+        precipitacaoTotal: item.precipitacaoTotal,
+      }));
+
+      setWeatherData(formattedData);
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
     }
-  
-    setWeatherData(filteredData);
   };
-  
 
   return (
     <div className="station-container">
@@ -363,23 +163,9 @@ const Graphs = () => {
         </div>
       </div>
 
-    
       <Tabs defaultActiveKey="1" type="card" style={{ marginTop: '30px' }}>
-        <TabPane tab="Tabela Geral" key="1">
-          <div className="data-container">
-            <div className="station-content">
-              {weatherData.length > 0 ? (
-                <Table 
-                  dataSource={weatherData} 
-                  columns={columns} 
-                  rowKey={(record, index) => index}
-                  pagination={{ pageSize: 24 }}
-                />
-              ) : (
-                <p>Carregando dados...</p>
-              )}
-            </div>
-          </div>
+        <TabPane tab="Tabela" key="1">
+          <Table dataSource={weatherData} columns={columns} pagination={false} />
         </TabPane>
         <TabPane tab="Temperatura" key="2">
           <TemperatureChart data={weatherData} />
@@ -390,19 +176,18 @@ const Graphs = () => {
         <TabPane tab="Ponto de Orvalho" key="4">
           <DewPointChart data={weatherData} />
         </TabPane>
-        <TabPane tab="Pressão" key="5">
-          {/* <PressaoChart data={weatherData} /> */}
+        <TabPane tab="Pressão" key="6">
+        {/*  <PressureChart data={weatherData} /> */}
         </TabPane>
         <TabPane tab="Vento" key="6">
           <WindChart data={weatherData} />
         </TabPane>
-        <TabPane tab="Pluviosidade" key="7">
+        <TabPane tab="Radiação" key="6">
+        {/*  <RadiationChart data={weatherData} /> */}
+        </TabPane>
+        <TabPane tab="Pluviosidade" key="5">
           <PluviosityChart data={weatherData} />
         </TabPane>
-        <TabPane tab="Radiação" key="8">
-          {/* <RadiacaoChart data={weatherData} /> */}
-        </TabPane>
-
       </Tabs>
     </div>
   );

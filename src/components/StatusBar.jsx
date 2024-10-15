@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import ComponentDados from './ComponentDados';
-import { FaTemperatureHalf, FaTemperatureArrowDown, FaTemperatureArrowUp, FaArrowDownShortWide, FaArrowUpShortWide, FaTemperatureLow } from "react-icons/fa6"; 
+import StationDataIcons from './StationDataIcons';
+import { FaTemperatureLow, FaTemperatureHalf, FaTemperatureArrowDown, FaTemperatureArrowUp, FaArrowDownShortWide, FaArrowUpShortWide } from "react-icons/fa6"; 
 import { RiWaterPercentFill } from "react-icons/ri";
 import { TiWeatherShower } from "react-icons/ti";
 import { GiWaterSplash } from "react-icons/gi"; 
 import { IoIosWater } from "react-icons/io";
 import { TbWorld, TbWorldDown, TbWorldUp } from "react-icons/tb";
-
-import { baseUrlIcons } from "../util/constants";
+import { baseUrlWeatherData } from "../util/constants";
 
 const StatusBar = ({ selectedStationCode }) => {
     const StatusBarStyle = {
@@ -26,7 +25,7 @@ const StatusBar = ({ selectedStationCode }) => {
             const today = new Date().toISOString().split('T')[0]; // Formata a ata como YYYY-MM-DD
             console.log(today);
             console.log(selectedStationCode);
-            const url = `${baseUrlIcons}${selectedStationCode}?date=${today}`;
+            const url = `${baseUrlWeatherData}${selectedStationCode}?date=${today}`;
             console.log(url);
             try {
                 const response = await axios.get(url);
@@ -134,7 +133,7 @@ const StatusBar = ({ selectedStationCode }) => {
 
     return (
         <div style={StatusBarStyle}>
-            <ComponentDados items={statusItems} />
+            <StationDataIcons items={statusItems} />
         </div>
     );
 };

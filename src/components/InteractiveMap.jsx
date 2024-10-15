@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Circle, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -12,7 +12,7 @@ const selectedStationIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-const Map = ({ selectedStation, stations, setSelectedStation }) => {
+const InteractiveMap = ({ selectedStation, stations }) => {
   const defaultPosition = [-7.1210, -36.7246]; // Centro geográfico da Paraíba
   const zoomLevel = 7; // Nível de zoom para mostrar a Paraíba
 
@@ -23,64 +23,38 @@ const Map = ({ selectedStation, stations, setSelectedStation }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
 
-      {/* Exibe todas as estações meteorológicas com círculo */}
+      {/* Exibe todas as estações meteorológicas fixas com círculo verde */}
       {stations.map((station) => (
         <Circle
           key={station.id}
           center={[station.latitude, station.longitude]}
           radius={20000} 
-          color={"#B22222"} // Muda para verde se for a estação selecionada
-          fillColor={"#B22222"} // Muda a cor de preenchimento
-          fillOpacity={0.6}
-          eventHandlers={{
-            click: () => {
-              console.log("Estação clicada:", station); // Verifica se o clique funciona
-              setSelectedStation(station); // Atualiza a estação selecionada ao clicar
-            },
-          }}
+          color="red" 
+          fillColor="red"
+          fillOpacity={0.3}
         >
           <Popup>
             <strong>{station.name}</strong><br />
             ID: {station.id}
           </Popup>
-          <Tooltip direction="top" offset={[0, -20]} opacity={1}>
-            {station.name}
-          </Tooltip>
         </Circle>
       ))}
 
       {/* Exibe um marcador para a estação selecionada */}
       {selectedStation && (
-        <>
-        <Circle
-          center={[selectedStation.latitude, selectedStation.longitude]}
-          radius={20000}
-          color={"#03624C"} // Cor verde para a estação selecionada
-          fillColor={"#03624C"}
-          fillOpacity={0.6}
-        >
-          <Popup>
-            <strong>{selectedStation.name}</strong><br />
-            ID: {selectedStation.id}
-          </Popup>
-          <Tooltip direction="top" offset={[0, -20]} opacity={1}>
-            {selectedStation.name}
-          </Tooltip>
-        </Circle>
-    
         <Marker
           position={[selectedStation.latitude, selectedStation.longitude]}
-          icon={selectedStationIcon}
+          icon={selectedStationIcon} // Ícone de marcador padrão
         >
           <Popup>
             <strong>{selectedStation.name}</strong><br />
             ID: {selectedStation.id}
           </Popup>
         </Marker>
-      </>
       )}
     </MapContainer>
   );
 };
 
-export default Map;
+export default InteractiveMap;
+

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 
-const ToggleButton = () => {
-  // Gerenciar o estado de dia/noite
+const ThemeToggle = () => {
   const [isDay, setIsDay] = useState(true);
 
-  // Função para alternar entre os temas
   const toggleTheme = () => {
     setIsDay((prevIsDay) => !prevIsDay);
   };
@@ -48,17 +46,13 @@ const moonStyle = {
 
 
   return (
-    <div  >
-      
-      {/* Ao clicar no contêiner, a função toggleTheme é chamada */}
+    <div  >      
       <div style={containerStyle} onClick={toggleTheme}>
         {/* Lua ou Sol são representados pelo mesmo div, mas com estilos dinâmicos */}
         <div style={moonStyle}></div>
-        
       </div>
-      {/* <p style={{color: 'white', fontWeight: 'bold' }} >Tema</p> */}
     </div>
   );
 };
 
-export default ToggleButton;
+export default ThemeToggle;
