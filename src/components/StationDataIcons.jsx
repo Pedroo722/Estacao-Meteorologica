@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-const StationDataIconsItem = ({ title, Icon, value, min, max, minIcon: MinIcon, maxIcon: MaxIcon }) => {
-    const [isExpanded, setIsExpanded] = useState(false); 
+const ComponentDadosItem = ({ title, Icon, value, min, max, minIcon: MinIcon, maxIcon: MaxIcon }) => {
+    const [isExpanded, setIsExpanded] = useState(false); // Estado para controlar se o item foi clicado
 
     const iconStyle = {
         backgroundColor: '#03624C',
@@ -13,13 +13,13 @@ const StationDataIconsItem = ({ title, Icon, value, min, max, minIcon: MinIcon, 
         borderRadius: '20px',
         color: 'white',
         fontWeight: 'bold',
-        margin: '20px auto',
-        transition: 'height 0.5s ease, width 0.5s ease', 
+        margin: '10px auto',
+        transition: 'height 0.5s ease, width 0.5s ease', // Animação para aumentar tamanho
         cursor: 'pointer',
     };
 
     const expandedStyle = {
-        height: '180px', 
+        height: '180px', // Aumenta ao clicar
     };
 
     const textStyle = {
@@ -44,7 +44,7 @@ const StationDataIconsItem = ({ title, Icon, value, min, max, minIcon: MinIcon, 
     };
 
     const extraStyle = {
-        display: 'flex', 
+        display: 'flex', // Flexbox para alinhar o ícone com o valor
         justifyContent: 'flex-start', 
         alignItems: 'center',
         margin: '10px'
@@ -87,11 +87,11 @@ const StationDataIconsItem = ({ title, Icon, value, min, max, minIcon: MinIcon, 
     );
 };
 
-const StationDataIcons = ({ items }) => {
+const ComponentDados = ({ items }) => {
     return (
         <div style={{ display: 'flex', justifyContent: 'space-around', width: '80%', marginBottom: '20px', color: '#fff' }}>
             {items.map((item, index) => (
-                <StationDataIconsItem 
+                <ComponentDadosItem 
                     key={index} 
                     title={item.title} 
                     Icon={item.icon} 
@@ -106,4 +106,4 @@ const StationDataIcons = ({ items }) => {
     );
 }
 
-export default StationDataIcons;
+export default ComponentDados;

@@ -1,35 +1,32 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import StationDataIcons from './StationDataIcons';
+import StationDataIcons from './StationDataIcons'; // Componente anterior
 import { FaTemperatureLow, FaTemperatureHalf, FaTemperatureArrowDown, FaTemperatureArrowUp, FaArrowDownShortWide, FaArrowUpShortWide } from "react-icons/fa6"; 
 import { RiWaterPercentFill } from "react-icons/ri";
-import { TiWeatherShower } from "react-icons/ti";
+import { TiWeatherShower } from "react-icons/ti"; 
 import { GiWaterSplash } from "react-icons/gi"; 
 import { IoIosWater } from "react-icons/io";
 import { TbWorld, TbWorldDown, TbWorldUp } from "react-icons/tb";
+import { FaCloudRain } from "react-icons/fa6";
+
 import { baseUrlWeatherData } from "../util/constants";
+import RainContainer from './RainComponent'; // Novo componente para dados de chuva
 
 const StatusBar = ({ selectedStationCode }) => {
     const StatusBarStyle = {
         display: 'flex',
         justifyContent: 'space-around',
-        width: '80%',
+        width: '65%',
         marginBottom: '20px',
-        color: '#fff'
     };
 
     const [statusItems, setStatusItems] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
-            const today = new Date().toISOString().split('T')[0]; // Formata a ata como YYYY-MM-DD
-            console.log(today);
-            console.log(selectedStationCode);
-            const url = `${baseUrlWeatherData}${selectedStationCode}?date=${today}`;
-            console.log(url);
+            const url = `${baseUrlWeatherData}${selectedStationCode}?date=${'2024-04-06'}`;
             try {
                 const response = await axios.get(url);
-                console.log("Retorno da api Icones: ", response);
                 const data = response.data.data;
 
                 if (data.length > 0) {
@@ -73,7 +70,7 @@ const StatusBar = ({ selectedStationCode }) => {
                         },
                         { 
                             title: "CHUVA", 
-                            icon: TiWeatherShower, 
+                            icon: FaCloudRain, 
                             value: (latestData.precipitacaoTotal !== null && latestData.precipitacaoTotal !== "NaN") ? `${latestData.precipitacaoTotal} mm` : "Dado Ausente",
                             min: '0 mm', 
                             max: '100 mm', 
@@ -86,6 +83,15 @@ const StatusBar = ({ selectedStationCode }) => {
                         { 
                             title: "TEMPERATURA", 
                             icon: FaTemperatureHalf, 
+                            value: "Dado Ausente", 
+                            min: "--", 
+                            max: "--", 
+                            minIcon: FaTemperatureArrowDown, 
+                            maxIcon: FaTemperatureArrowUp 
+                        },
+                        { 
+                            title: "TEMPERATURA ORVALHO", 
+                            icon: FaTemperatureLow, 
                             value: "Dado Ausente", 
                             min: "--", 
                             max: "--", 
@@ -133,9 +139,20 @@ const StatusBar = ({ selectedStationCode }) => {
 
     return (
         <div style={StatusBarStyle}>
-            <StationDataIcons items={statusItems} />
+            {statusItems.map((item, index) => {
+                if (item.title === "CHUVA") {
+                    return (
+                        <RainContainer key={index} item={item} />
+                    );
+                } else {
+                    return (
+                        <StationDataIcons key={index} items={[item]} />
+                    );
+                }
+            })}
         </div>
     );
+    
 };
 
 export default StatusBar;

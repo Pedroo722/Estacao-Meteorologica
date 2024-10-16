@@ -116,7 +116,7 @@ const Home = () => {
       </div>
 
       <div className="details-section">
-        <Select
+        {/* <Select
             showSearch
             style={{ width: 200, marginBottom: '20px' }}
             placeholder="Digite para pesquisar"
@@ -129,7 +129,7 @@ const Home = () => {
               value: station.id,
               label: station.name
             }))}
-          />
+          /> */}
 
         <StationDetails details={stationDetails} />
       </div>
