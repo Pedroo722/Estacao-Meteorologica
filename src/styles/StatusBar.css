@@ -1,0 +1,17 @@
+.container-status {
+    display: flex;
+    justify-content: space-around;
+    transition: all 0.5s ease;
+}
+
+.container-expanded {
+    width: calc(90% - 300px);
+    margin-left: 300px;
+    align-self: center;
+}
+
+.container-minimized {
+    width: calc(100% - 60px);
+    margin-left: 60px;
+    align-self: center;
+}

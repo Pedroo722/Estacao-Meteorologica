@@ -2,6 +2,7 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Circle, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
+import "../styles/InteractiveMap.css"
 
 const selectedStationIcon = new L.Icon({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
@@ -12,12 +13,12 @@ const selectedStationIcon = new L.Icon({
   shadowSize: [41, 41]
 });
 
-const Map = ({ selectedStation, stations, setSelectedStation }) => {
+const Map = ({ selectedStation, stations, setSelectedStation, isMinimized }) => {
   const defaultPosition = [-8.1210, -36.7246]; // Centro geográfico da Paraíba
   const zoomLevel = 7; // Nível de zoom para mostrar a Paraíba
 
   return (
-    <MapContainer center={defaultPosition} zoom={zoomLevel} style={{ height: "100%", width: "100%" }}>
+    <MapContainer center={defaultPosition} zoom={zoomLevel} className={`map ${isMinimized ? 'map-minimized' : 'map-expanded'}`}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

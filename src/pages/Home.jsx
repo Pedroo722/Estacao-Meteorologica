@@ -3,10 +3,9 @@ import StatusBar from '../components/StatusBar';
 import StationDetails from '../components/StationDetails';
 import InteractiveMap from  '../components/InteractiveMap';
 import { baseUrlStationDetails } from '../util/constants';
-import { Select } from 'antd';
 import axios from 'axios';
 
-const Home = () => {
+const Home = ({ isMinimized }) => {
   const [selectedStation, setSelectedStation] = useState(null);
   const [stations] = useState([
     { id: 'A310', name: 'Areia', latitude: -7.117, longitude: -35.7 },
@@ -29,33 +28,6 @@ const Home = () => {
     longitude: ''
   });
 
-  const handleSelectChange = async (value) => {
-    const selected = stations.find(station => station.id === value);
-    if (selected) {
-      setSelectedStation(selected);
-
-      setStationDetails(prevDetails => ({
-        ...prevDetails,
-        city: selected.name,
-        code: selected.id    
-      }));
-
-      try {
-        const response = await axios.get(baseUrlStationDetails + `${selected.id}`);
-        const { estado, latitude, longitude, dataFundacao } = response.data;
-
-        setStationDetails(prevDetails => ({
-          ...prevDetails,
-          state: estado,
-          creationDate: dataFundacao,
-          latitude: parseFloat(latitude).toFixed(2),
-          longitude: parseFloat(longitude).toFixed(2)
-        }));
-      } catch (error) {
-        console.error('Error fetching station details:', error);
-      }
-    }
-  };
 
   useEffect(() => {
     const defaultStation = stations.find(station => station.id === 'A320'); // João Pessoa
@@ -104,34 +76,22 @@ const Home = () => {
   
 
   return (
-    <div className="container" style={{ display: 'flex', height: '100vh', width: '100%' }}>
-      <StatusBar selectedStationCode={selectedStation?.id} />
+    <div className={`container ${isMinimized ? 'minimized' : 'maximized'}`}>
+    {/* // <div className="container" style={{alignItems: 'center'}}> */}
+
+      <StatusBar selectedStationCode={selectedStation?.id} isMinimized={isMinimized} />
       
-      <div className="map-container" style={{ flexGrow: 1, position: 'relative', marginRight: '5px', backgroundColor: '#042222', borderRadius: '20px' }}>
+      <div className= {`map-container ${isMinimized ? 'map-container-minimized' : 'map-container-expanded'}`}>
         <InteractiveMap 
           selectedStation={selectedStation} 
           stations={stations} 
           setSelectedStation={fetchStationDetails}  // Passa o setter como prop
+          isMinimized={isMinimized}
         />
       </div>
 
       <div className="details-section">
-        {/* <Select
-            showSearch
-            style={{ width: 200, marginBottom: '20px' }}
-            placeholder="Digite para pesquisar"
-            optionFilterProp="label"
-            onChange={handleSelectChange}
-            filterSort={(optionA, optionB) =>
-              (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-            }
-            options={stations.map(station => ({
-              value: station.id,
-              label: station.name
-            }))}
-          /> */}
-
-        <StationDetails details={stationDetails} />
+        <StationDetails details={stationDetails} isMinimized={isMinimized} />
       </div>
     </div>
   );

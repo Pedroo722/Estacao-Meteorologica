@@ -1,48 +1,20 @@
 import React, { useState } from "react";
+import '../styles/RainComponent.css'; // Importando o CSS separado
 
-const RainComponent = ({ title, Icon, value}) => {
+const RainComponent = ({ title, Icon, value }) => {
     const [isExpanded, setIsExpanded] = useState(false); 
-
-    const iconStyle = {
-        width: '175px',
-        height: '135px',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-evenly',
-        borderRadius: '20px',
-        
-        color: 'white',
-        fontWeight: 'bold',
-        margin: '10px auto',
-        transition: 'height 0.5s ease, width 0.5s ease', // Animação para aumentar tamanho
-        cursor: 'pointer',
-        border: '5px solid #03624C',
-    };
-
-    const textStyle = {
-        margin: '5px 0',
-        fontSize: '14px',
-        color: '#03624C',
-        fontWeight: 'bold',
-    };
-
-    const numberStyle = {
-        margin: '5px 0',
-        fontSize: '25px',
-        color: '#03624C',
-    };
 
     const handleClick = () => {
         setIsExpanded(!isExpanded);
     };
 
     return (
-        <div style={{ textAlign: 'center' }} onClick={handleClick}>
-            <p style={textStyle}>{title}</p>
-            <div style={iconStyle}>
+        <div className="rain-component" onClick={handleClick}>
+            <p className="rain-text">{title}</p>
+            <div className="rain-icon-container">
                 <div>
-                    <Icon style={{ fontSize: isExpanded ? '20px' : '50px', transition: 'height 1s ease, width 1s ease', color: '#03624C' }} />
-                    <h3 style={numberStyle}>{value}</h3>
+                    <Icon className={`rain-icon ${isExpanded ? 'rain-icon-small' : 'rain-icon-large'}`} />
+                    <h3 className="rain-number">{value}</h3>
                 </div>
             </div>
         </div>
@@ -51,7 +23,7 @@ const RainComponent = ({ title, Icon, value}) => {
 
 const RainContainer = ({ item }) => {
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', width: '80%', marginBottom: '20px', color: '#fff' }}>
+        <div className="rain-container">
             <RainComponent 
                 title={item.title} 
                 Icon={item.icon} 
