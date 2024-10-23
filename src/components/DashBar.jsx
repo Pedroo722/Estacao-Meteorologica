@@ -3,31 +3,22 @@ import { HomeOutlined, LineChartOutlined, InfoCircleOutlined } from '@ant-design
 import Theme from '../components/ThemeToggle';
 
 
-const DashBar = () => {
-  const [isMinimized, setIsMinimized] = useState(false);
+const DashBar = ({ toggleDash, isMinimized }) => { // Receber props aqui
 
   const handleToggleDashBar = () => {
-    setIsMinimized(!isMinimized);
+    toggleDash(); // Chamar o toggleDash vindo do App via props
   };
 
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
-  // Função que alterna o tema ao clicar em <Theme />
   const switchTheme = () => {
-    // Alterna o estado de isDarkTheme
     setIsDarkTheme(prevTheme => !prevTheme);
-
-    // Altera o atributo 'data-theme' do body com base no estado atual
-    if (!isDarkTheme) {
-      document.querySelector('body').setAttribute('data-theme', 'dark');
-    } else {
-      document.querySelector('body').setAttribute('data-theme', 'light');
-    }
+    document.querySelector('body').setAttribute('data-theme', isDarkTheme ? 'light' : 'dark');
   }
 
   return (
     <aside style={{
-        width: isMinimized ? '50px' : '300px',  
+        width: isMinimized ? '50px' : '300px',  // Aqui usamos o isMinimized recebido como prop
         backgroundColor: '#03624C',
         height: '100vh',
         position: 'fixed',
@@ -50,7 +41,7 @@ const DashBar = () => {
         {!isMinimized && <h2 style={{color: 'white'}}>DashBoard</h2>}
         <div 
           style={{ fontSize: '20px', cursor: 'pointer', color: 'white' }} 
-          onClick={handleToggleDashBar}
+          onClick={handleToggleDashBar}  // Alterar o estado usando o toggleDash
         >
           &#9776; {/* Ícone de menu */}
         </div>

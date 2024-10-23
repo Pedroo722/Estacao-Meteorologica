@@ -2,9 +2,9 @@ import React from 'react';
 import '../styles/StationDetails.css';
 
 
-const StationDetails = ({ details }) => {
+const StationDetails = ({ details, isMinimized }) => {
   return (
-    <div className="details-container">
+    <div className={`details-container ${isMinimized ? 'details-container-minimized' : 'details-container-expanded'}`}>
       <h1 className="details-title">Detalhes da Estação {details.code}</h1>
       <div className="details-grid">
         <div className="details-item"><strong>Cidade:</strong> {details.city}</div>

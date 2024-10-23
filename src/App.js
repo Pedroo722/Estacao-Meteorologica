@@ -1,6 +1,6 @@
-import React from 'react'; 
+import React, { useState } from 'react'; 
 import { HashRouter, Routes, Route } from 'react-router-dom'; 
-import './App.css'
+import './App.css';
 
 import './styles/Home.css';
 import './styles/Graphs.css';
@@ -13,14 +13,26 @@ import Info from './pages/Info.jsx';
 
 
 export default function App() {  
+  const [isMinimized, setIsMinimized] = useState(true);
+
+  // Função para alternar entre minimizado e expandido
+  const toggleDash = () => {
+    setIsMinimized(!isMinimized);
+  };
+
   return ( 
-        <HashRouter>
-          <DashBar />
+    <div className={`app-container ${isMinimized ? 'dash-minimized' : 'dash-expanded'}`}>
+      <HashRouter>
+        {/* Passando toggleDash e isMinimized como props para o DashBar */}
+        <DashBar toggleDash={toggleDash} isMinimized={isMinimized} />
+        <div className="content">
           <Routes>
-            <Route path='/' element={<Home />} />
+            <Route path='/' element={<Home isMinimized={isMinimized} />} />
             <Route path='graphs' element={<Graphs />} />
             <Route path='info' element={<Info />} />
           </Routes>
-        </HashRouter>
+        </div>
+      </HashRouter>
+    </div>
   );
 }

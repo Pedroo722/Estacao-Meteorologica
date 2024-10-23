@@ -8,17 +8,12 @@ import { GiWaterSplash } from "react-icons/gi";
 import { IoIosWater } from "react-icons/io";
 import { TbWorld, TbWorldDown, TbWorldUp } from "react-icons/tb";
 import { FaCloudRain } from "react-icons/fa6";
+import '../styles/StatusBar.css'
 
 import { baseUrlWeatherData } from "../util/constants";
 import RainContainer from './RainComponent'; // Novo componente para dados de chuva
 
-const StatusBar = ({ selectedStationCode }) => {
-    const StatusBarStyle = {
-        display: 'flex',
-        justifyContent: 'space-around',
-        width: '65%',
-        marginBottom: '20px',
-    };
+const StatusBar = ({ selectedStationCode, isMinimized }) => {
 
     const [statusItems, setStatusItems] = useState([]);
 
@@ -138,7 +133,7 @@ const StatusBar = ({ selectedStationCode }) => {
     }, [selectedStationCode]);
 
     return (
-        <div style={StatusBarStyle}>
+        <div className={`container-status ${isMinimized ? 'container-minimized' : 'container-expanded'}`}>
             {statusItems.map((item, index) => {
                 if (item.title === "CHUVA") {
                     return (

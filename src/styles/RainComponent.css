@@ -1,0 +1,53 @@
+.rain-component {
+    margin: 10px auto;
+    text-align: center;
+    cursor: pointer;
+}
+
+.rain-text {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #03624C;
+    font-weight: bold;
+}
+
+.rain-icon-container {
+    width: 175px;
+    height: 135px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+    margin: 10px auto;
+    transition: height 0.5s ease, width 0.5s ease;
+    border: 5px solid #03624C;
+}
+
+.rain-icon {
+    transition: height 1s ease, width 1s ease;
+    color: #03624C;
+}
+
+.rain-icon-large {
+    font-size: 50px;
+}
+
+.rain-icon-small {
+    font-size: 20px;
+}
+
+.rain-number {
+    margin: 5px 0;
+    font-size: 25px;
+    color: #03624C;
+}
+
+.rain-container {
+    display: flex;
+    justify-content: center;
+    width: 80%;
+    margin-bottom: 20px;
+    color: #fff;
+}
