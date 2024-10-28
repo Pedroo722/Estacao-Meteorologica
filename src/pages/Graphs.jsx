@@ -12,7 +12,6 @@ import PressureChart from '../components/graphs/PressureChart';
 import RadiationChart from '../components/graphs/RadiationChart';
 import { baseUrlWeatherData } from "../util/constants";
 
-const { TabPane } = Tabs;
 const { MonthPicker } = DatePicker;
 
 const Graphs = () => {
@@ -43,27 +42,6 @@ const Graphs = () => {
   };
 
   const columns = [
-<<<<<<< Updated upstream
-    { title: 'Data', dataIndex: 'data', key: 'data' },
-    { title: 'Hora (UTC)', dataIndex: 'hora', key: 'hora' },
-    { title: 'Temp. Ins. (C)', dataIndex: 'tempBulboSeco', key: 'tempIns' },
-    { title: 'Temp. Max. (C)', dataIndex: 'tempMax', key: 'tempMax' },
-    { title: 'Temp. Min. (C)', dataIndex: 'tempMin', key: 'tempMin' },
-    { title: 'Umi. Ins. (%)', dataIndex: 'umidadeRelativa', key: 'umiIns' },
-    { title: 'Umi. Max. (%)', dataIndex: 'umidadeRelativaMax', key: 'umiMax' },
-    { title: 'Umi. Min. (%)', dataIndex: 'umidadeRelativaMin', key: 'umiMin' },
-    { title: 'Pto Orvalho Ins. (C)', dataIndex: 'tempPontoOrvalho', key: 'ptoOrvalhoIns' },
-    { title: 'Pto Orvalho Max. (C)', dataIndex: 'tempOrvalhoMax', key: 'ptoOrvalhoMax' },
-    { title: 'Pto Orvalho Min. (C)', dataIndex: 'tempOrvalhoMin', key: 'ptoOrvalhoMin' },
-    { title: 'Pressao Ins. (hPa)', dataIndex: 'pressaoAtmosfericaNivelEstacao', key: 'pressaoIns' },
-    { title: 'Pressao Max. (hPa)', dataIndex: 'pressaoAtmosfericaMax', key: 'pressaoMax' },
-    { title: 'Pressao Min. (hPa)', dataIndex: 'pressaoAtmosfericaMin', key: 'pressaoMin' },
-    { title: 'Vel. Vento (m/s)', dataIndex: 'ventoVelocidade', key: 'velVento' },
-    { title: 'Dir. Vento (m/s)', dataIndex: 'ventoDirecao', key: 'dirVento' },
-    { title: 'Raj. Vento (m/s)', dataIndex: 'ventoRajadaMax', key: 'rajVento' },
-    { title: 'Radiacao (KJ/m²)', dataIndex: 'radiacaoGlobal', key: 'radiacao' },
-    { title: 'Chuva (mm)', dataIndex: 'precipitacaoTotal', key: 'chuva' },
-=======
     {
       title: dateType === 'dia' ? 'Hora (UTC)' : 'Dia',
       dataIndex: 'hora',
@@ -154,7 +132,6 @@ const Graphs = () => {
       dataIndex: 'precipitacaoTotal',
       key: 'chuva' 
     }
->>>>>>> Stashed changes
   ];
   
 
@@ -176,40 +153,11 @@ const Graphs = () => {
 
   const filterViewTable = async () => {
     if (!dateValue || !selectedStation) {
-      console.log("Selecione uma estação e uma data");
+      alert("Selecione uma estação e uma data");
       return;
     }
   
     try {
-<<<<<<< Updated upstream
-      const dateParam = dateType === 'dia' ? dateValue : dayjs(dateValue).format('YYYY-MM');
-      const response = await axios.get(`${baseUrlWeatherData}${selectedStation}?date=${dateParam}`);
-      const receivedData = response.data.data; 
-
-      // Mapear os dados para o formato esperado pela tabela
-      const formattedData = receivedData.map(item => ({
-        data: item.data,
-        hora: item.hora,
-        tempBulboSeco: item.tempBulboSeco,
-        tempMax: item.tempMax,
-        tempMin: item.tempMin,
-        umidadeRelativa: item.umidadeRelativa,
-        umidadeRelativaMax: item.umidadeRelativaMax,
-        umidadeRelativaMin: item.umidadeRelativaMin,
-        tempPontoOrvalho: item.tempPontoOrvalho,
-        tempOrvalhoMax: item.tempOrvalhoMax,
-        tempOrvalhoMin: item.tempOrvalhoMin,
-        pressaoAtmosfericaNivelEstacao: item.pressaoAtmosfericaNivelEstacao,
-        pressaoAtmosfericaMax: item.pressaoAtmosfericaMax,
-        pressaoAtmosfericaMin: item.pressaoAtmosfericaMin,
-        ventoVelocidade: item.ventoVelocidade,
-        ventoDirecao: item.ventoDirecao,
-        ventoRajadaMax: item.ventoRajadaMax,
-        radiacaoGlobal: item.radiacaoGlobal,
-        precipitacaoTotal: item.precipitacaoTotal,
-      }));
-
-=======
       let response, formattedData = [];
       if (dateType === 'dia') {
         const dateParam = dateValue;
@@ -288,7 +236,6 @@ const Graphs = () => {
         });
       }
   
->>>>>>> Stashed changes
       setWeatherData(formattedData);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
@@ -342,30 +289,30 @@ const Graphs = () => {
       </div>
 
       <Tabs defaultActiveKey="1" type="card" style={{ marginTop: '30px' }}>
-        <TabPane tab="Tabela" key="1">
+        <items tab="Tabela" key="1">
           <Table dataSource={weatherData} columns={columns} pagination={false} />
-        </TabPane>
-        <TabPane tab="Bulbo Seco" key="2">
+        </items>
+        <items tab="Bulbo Seco" key="2">
           <DryBulbTempChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Ponto de Orvalho" key="3">
+        </items>
+        <items tab="Ponto de Orvalho" key="3">
           <DewPointTempChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Umidade" key="4">
+        </items>
+        <items tab="Umidade" key="4">
           <HumidityChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Pressão" key="5">
+        </items>
+        <items tab="Pressão" key="5">
           <PressureChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Vento" key="6">
+        </items>
+        <items tab="Vento" key="6">
           <WindChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Radiação" key="7">
+        </items>
+        <items tab="Radiação" key="7">
           <RadiationChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Pluviosidade" key="8">
+        </items>
+        <items tab="Pluviosidade" key="8">
           <PluviosityChart data={weatherData} />
-        </TabPane>
+        </items>
       </Tabs>
     </div>
   );

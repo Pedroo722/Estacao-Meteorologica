@@ -10,7 +10,7 @@ const StationDetails = ({ details, isMinimized }) => {
         <div className="details-item"><strong>Cidade:</strong> {details.city}</div>
         <div className="details-item"><strong>Código (WMO):</strong> {details.code}</div>
         
-        <div className="details-item"><strong>Estado:</strong> {details.state}</div>
+        <div className="details-item"><strong>Estado:</strong> {details.uf}</div>
         <div className="details-item"><strong>Latitude:</strong> {details.latitude}</div>
         
         <div className="details-item"><strong>Data de Criação:</strong> {details.creationDate}</div>

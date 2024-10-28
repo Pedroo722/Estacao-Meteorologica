@@ -21,7 +21,7 @@ const Home = ({ isMinimized }) => {
 
   const [stationDetails, setStationDetails] = useState({
     city: '',
-    state: '',
+    uf: '',
     creationDate: '',
     code: '',
     latitude: '',
@@ -38,7 +38,6 @@ const Home = ({ isMinimized }) => {
   }, [stations]);
 
   const fetchStationDetails = async (station) => {
-    console.log('Estação selecionada:', station); // Verificar qual estação foi clicada
     setSelectedStation(station);
   
     // Atualiza a cidade e código primeiro
@@ -46,7 +45,7 @@ const Home = ({ isMinimized }) => {
       ...prevDetails,
       city: station.name,
       code: station.id,
-      state: '',
+      uf: '',
       creationDate: '',
       latitude: '',
       longitude: ''
@@ -54,21 +53,16 @@ const Home = ({ isMinimized }) => {
   
     try {
       const response = await axios.get(baseUrlStationDetails + `${station.id}`);
-      const { estado, latitude, longitude, dataFundacao } = response.data;
+      const { uf, latitude, longitude, dataFundacao } = response.data;
   
       // Atualiza o restante das informações
       setStationDetails(prevDetails => ({
         ...prevDetails,
-        state: estado,
+        uf: uf,
         creationDate: dataFundacao,
         latitude: parseFloat(latitude).toFixed(2),
         longitude: parseFloat(longitude).toFixed(2)
-      }));
-  
-      console.log('Detalhes da estação atualizados:', {
-        estado, latitude, longitude, dataFundacao
-      });
-  
+      }));  
     } catch (error) {
       console.error('Error fetching station details:', error);
     }
