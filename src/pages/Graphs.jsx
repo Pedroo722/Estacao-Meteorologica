@@ -41,6 +41,7 @@ const Graphs = () => {
   };
 
   const columns = [
+<<<<<<< Updated upstream
     { title: 'Data', dataIndex: 'data', key: 'data' },
     { title: 'Hora (UTC)', dataIndex: 'hora', key: 'hora' },
     { title: 'Temp. Ins. (C)', dataIndex: 'tempBulboSeco', key: 'tempIns' },
@@ -60,7 +61,100 @@ const Graphs = () => {
     { title: 'Raj. Vento (m/s)', dataIndex: 'ventoRajadaMax', key: 'rajVento' },
     { title: 'Radiacao (KJ/m²)', dataIndex: 'radiacaoGlobal', key: 'radiacao' },
     { title: 'Chuva (mm)', dataIndex: 'precipitacaoTotal', key: 'chuva' },
+=======
+    {
+      title: dateType === 'dia' ? 'Hora (UTC)' : 'Dia',
+      dataIndex: 'hora',
+      key: 'hora'
+    },
+    { 
+      title: dateType === 'dia' ? 'Temp. Ins. (C)' : 'Média Temp. Ins. (C)',
+      dataIndex: 'tempBulboSeco',
+      key: 'tempIns' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Temp. Max. (C)' : 'Média Temp. Max. (C)',
+      dataIndex: 'tempMax',
+      key: 'tempMax' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Temp. Min. (C)' : 'Média Temp. Min. (C)',
+      dataIndex: 'tempMin',
+      key: 'tempMin' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Umi. Ins. (%)' : 'Média Umi. Ins. (%)',
+      dataIndex: 'umidadeRelativa',
+      key: 'umiIns' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Umi. Max. (%)' : 'Média Umi. Max. (%)',
+      dataIndex: 'umidadeRelativaMax',
+      key: 'umiMax' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Umi. Min. (%)' : 'Média Umi. Min. (%)',
+      dataIndex: 'umidadeRelativaMin',
+      key: 'umiMin' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Pto Orvalho Ins. (C)' : 'Média Pto Orvalho Ins. (C)',
+      dataIndex: 'tempPontoOrvalho',
+      key: 'ptoOrvalhoIns' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Pto Orvalho Max. (C)' : 'Média Pto Orvalho Max. (C)',
+      dataIndex: 'tempOrvalhoMax',
+      key: 'ptoOrvalhoMax' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Pto Orvalho Min. (C)' : 'Média Pto Orvalho Min. (C)',
+      dataIndex: 'tempOrvalhoMin',
+      key: 'ptoOrvalhoMin' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Pressao Ins. (hPa)' : 'Média Pressao Ins. (hPa)',
+      dataIndex: 'pressaoAtmosfericaNivelEstacao',
+      key: 'pressaoIns' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Pressao Max. (hPa)' : 'Média Pressao Max. (hPa)',
+      dataIndex: 'pressaoAtmosfericaMax',
+      key: 'pressaoMax' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Pressao Min. (hPa)' : 'Média Pressao Min. (hPa)',
+      dataIndex: 'pressaoAtmosfericaMin',
+      key: 'pressaoMin' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Vel. Vento (m/s)' : 'Média Vel. Vento (m/s)',
+      dataIndex: 'ventoVelocidade',
+      key: 'velVento' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Dir. Vento (m/s)' : 'Média Dir. Vento (m/s)',
+      dataIndex: 'ventoDirecao',
+      key: 'dirVento' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Raj. Vento (m/s)' : 'Média Raj. Vento (m/s)',
+      dataIndex: 'ventoRajadaMax',
+      key: 'rajVento' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Radiacao (KJ/m²)' : 'Radiacao Média (KJ/m²)',
+      dataIndex: 'radiacaoGlobal',
+      key: 'radiacao' 
+    },
+    { 
+      title: dateType === 'dia' ? 'Chuva (mm)' : 'Pluviosidade Média (mm)',
+      dataIndex: 'precipitacaoTotal',
+      key: 'chuva' 
+    }
+>>>>>>> Stashed changes
   ];
+  
 
   const generateDateOptions = () => {
     if (dateType === 'dia') {
@@ -83,8 +177,9 @@ const Graphs = () => {
       console.log("Selecione uma estação e uma data");
       return;
     }
-
+  
     try {
+<<<<<<< Updated upstream
       const dateParam = dateType === 'dia' ? dateValue : dayjs(dateValue).format('YYYY-MM');
       const response = await axios.get(`${baseUrlWeatherData}${selectedStation}?date=${dateParam}`);
       const receivedData = response.data.data; 
@@ -112,11 +207,92 @@ const Graphs = () => {
         precipitacaoTotal: item.precipitacaoTotal,
       }));
 
+=======
+      let response, formattedData = [];
+      if (dateType === 'dia') {
+        const dateParam = dateValue;
+        response = await axios.get(`${baseUrlWeatherData}${selectedStation}?date=${dateParam}`);
+        const receivedData = response.data.metrics;
+  
+        formattedData = receivedData.map(item => ({
+          hora: item.hora,
+          tempBulboSeco: item.tempBulboSeco?.toFixed(2),
+          tempMax: item.tempMax?.toFixed(2),
+          tempMin: item.tempMin?.toFixed(2),
+          umidadeRelativa: item.umidadeRelativa?.toFixed(2),
+          umidadeRelativaMax: item.umidadeRelativaMax?.toFixed(2),
+          umidadeRelativaMin: item.umidadeRelativaMin?.toFixed(2),
+          tempPontoOrvalho: item.tempPontoOrvalho?.toFixed(2),
+          tempOrvalhoMax: item.tempOrvalhoMax?.toFixed(2),
+          tempOrvalhoMin: item.tempOrvalhoMin?.toFixed(2),
+          pressaoAtmosfericaNivelEstacao: item.pressaoAtmosfericaNivelEstacao?.toFixed(2),
+          pressaoAtmosfericaMax: item.pressaoAtmosfericaMax?.toFixed(2),
+          pressaoAtmosfericaMin: item.pressaoAtmosfericaMin?.toFixed(2),
+          ventoVelocidade: item.ventoVelocidade?.toFixed(2),
+          ventoDirecao: item.ventoDirecao?.toFixed(2),
+          ventoRajadaMax: item.ventoRajadaMax?.toFixed(2),
+          radiacaoGlobal: item.radiacaoGlobal?.toFixed(2),
+          precipitacaoTotal: item.precipitacaoTotal?.toFixed(2),
+        }));
+      } else if (dateType === 'mes') {
+        const [ano, mes] = dateValue.split('-');
+        response = await axios.get(`${baseUrlWeatherData}${selectedStation}/${ano}/${mes}`);
+        const dailyData = response.data.dailyAverage;
+        const monthlyData = response.data.monthlyAverage;
+  
+        // Formatar dados diários
+        formattedData = Object.keys(dailyData).map(day => ({
+          hora: `Dia ${day.split('_')[1]}`,
+          tempBulboSeco: dailyData[day].mediaTempBulboSeco.toFixed(2),
+          tempMax: dailyData[day].mediaTempMax.toFixed(2),
+          tempMin: dailyData[day].mediaTempMin.toFixed(2),
+          umidadeRelativa: dailyData[day].mediaUmidadeRelativa.toFixed(2),
+          umidadeRelativaMax: dailyData[day].mediaUmidadeRelativaMax.toFixed(2),
+          umidadeRelativaMin: dailyData[day].mediaUmidadeRelativaMin.toFixed(2),
+          tempPontoOrvalho: dailyData[day].mediaTempPontoOrvalho.toFixed(2),
+          tempOrvalhoMax: dailyData[day].mediaTempOrvalhoMax.toFixed(2),
+          tempOrvalhoMin: dailyData[day].mediaTempOrvalhoMin.toFixed(2),
+          pressaoAtmosfericaNivelEstacao: dailyData[day].mediaPressaoAtmosfericaNivelEstacao.toFixed(2),
+          pressaoAtmosfericaMax: dailyData[day].mediaPressaoAtmosfericaMax.toFixed(2),
+          pressaoAtmosfericaMin: dailyData[day].mediaPressaoAtmosfericaMin.toFixed(2),
+          ventoVelocidade: dailyData[day].mediaVentoVelocidade.toFixed(2),
+          ventoDirecao: dailyData[day].mediaVentoDirecao.toFixed(2),
+          ventoRajadaMax: dailyData[day].mediaVentoRajadaMax.toFixed(2),
+          radiacaoGlobal: dailyData[day].mediaRadiacaoGlobal.toFixed(2),
+          precipitacaoTotal: dailyData[day].mediaPrecipitacaoTotal.toFixed(2),
+        }))
+        .sort((a, b) => parseInt(a.hora.split(' ')[1]) - parseInt(b.hora.split(' ')[1]));
+  
+        // Adicionar linha de médias mensais
+        formattedData.push({
+          hora: 'Média Mensal',
+          tempBulboSeco: monthlyData.mediaTempBulboSeco.toFixed(2),
+          tempMax: monthlyData.mediaTempMax.toFixed(2),
+          tempMin: monthlyData.mediaTempMin.toFixed(2),
+          umidadeRelativa: monthlyData.mediaUmidadeRelativa.toFixed(2),
+          umidadeRelativaMax: monthlyData.mediaUmidadeRelativaMax.toFixed(2),
+          umidadeRelativaMin: monthlyData.mediaUmidadeRelativaMin.toFixed(2),
+          tempPontoOrvalho: monthlyData.mediaTempPontoOrvalho.toFixed(2),
+          tempOrvalhoMax: monthlyData.mediaTempOrvalhoMax.toFixed(2),
+          tempOrvalhoMin: monthlyData.mediaTempOrvalhoMin.toFixed(2),
+          pressaoAtmosfericaNivelEstacao: monthlyData.mediaPressaoAtmosfericaNivelEstacao.toFixed(2),
+          pressaoAtmosfericaMax: monthlyData.mediaPressaoAtmosfericaMax.toFixed(2),
+          pressaoAtmosfericaMin: monthlyData.mediaPressaoAtmosfericaMin.toFixed(2),
+          ventoVelocidade: monthlyData.mediaVentoVelocidade.toFixed(2),
+          ventoDirecao: monthlyData.mediaVentoDirecao.toFixed(2),
+          ventoRajadaMax: monthlyData.mediaVentoRajadaMax.toFixed(2),
+          radiacaoGlobal: monthlyData.mediaRadiacaoGlobal.toFixed(2),
+          precipitacaoTotal: monthlyData.mediaPrecipitacaoTotal.toFixed(2),
+        });
+      }
+  
+>>>>>>> Stashed changes
       setWeatherData(formattedData);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     }
   };
+  
 
   return (
     <div className="station-container">
