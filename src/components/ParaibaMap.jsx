@@ -15,8 +15,6 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
     const target = e.target;
 
     if (target.id) {
-      console.log(`Clicked on station ID: ${target.id}`);
-
       const stations = {
         'Areia': { id: 'A310', name: 'Areia' },
         'Cabaceiras': { id: 'A348', name: 'Cabaceiras' },
@@ -31,7 +29,7 @@ const ParaibaMap = ({ selectedStation, setSelectedStation }) => {
 
       const stationData = stations[target.id];
       if (stationData) {
-        console.log(stationData);
+//        console.log(stationData);
         setSelectedStation(stationData);
       }
     }

@@ -35,7 +35,6 @@ const Map = ({ selectedStation, stations, setSelectedStation, isMinimized }) => 
           fillOpacity={0.6}
           eventHandlers={{
             click: () => {
-              console.log("Estação clicada:", station); // Verifica se o clique funciona
               setSelectedStation(station); // Atualiza a estação selecionada ao clicar
             },
           }}

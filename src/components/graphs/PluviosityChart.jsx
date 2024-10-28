@@ -20,66 +20,36 @@ const PluviosityChart = ({ data }) => {
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const parseTime = d3.timeParse("%Y-%m-%d %H:%M");
-
-    const hourValues = Array.from({ length: 24 }, () => ({ chuva: [] }));
-
-    data.forEach(item => {
-      // Remover " UTC" da string de hora
-      const hourString = item.hora.replace(" UTC", ""); 
-
-      // Extrair a hora e os minutos
-      const hour = parseInt(hourString.slice(0, 2), 10); // Obtém a hora como um número
-      const minutes = hourString.slice(2); // Obtém os minutos como string
-
-      // Montar a string de data e hora
-      const timeString = `${item.data} ${hourString.slice(0, 2)}:${minutes}`; // "YYYY-MM-DD HH:MM"
-      const time = parseTime(timeString);
-
-      if (!time) {
-        console.warn(`Data inválida: ${timeString}`);
-        return;
-      }
-
-      if (!isNaN(item.chuva)) hourValues[hour].chuva.push(item.chuva);
-    });
-
-    const hourAverages = hourValues.map(values => ({
-      chuva: values.chuva.length > 0 ? d3.mean(values.chuva) : 0,
-    }));
-
     // Definir escalas
     const x = d3.scaleBand()
-      .domain(d3.range(24))
+      .domain(data.map(d => d.hora))
       .range([0, width])
       .padding(0.1);
 
-    // Define o valor máximo do eixo Y como o máximo entre 10 mm e o valor máximo dos dados
-    const maxChuva = d3.max(hourAverages, d => d.chuva);
-    const yMax = Math.max(10, maxChuva);
+    const yMax = Math.max(10, d3.max(data, d => d.precipitacaoTotal));
 
     const y = d3.scaleLinear()
-      .domain([0, yMax]) // Definindo o domínio do eixo Y
+      .domain([0, yMax])
       .nice()
       .range([height, 0]);
 
     // Eixos
     svg.append('g')
       .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(x).tickFormat(d => `${d}:00`));
+      .call(d3.axisBottom(x).tickFormat(d => `${d.slice(0, 2)}:00`));
 
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} mm`));
 
     // Barras
     svg.selectAll('.bar')
-      .data(hourAverages)
+      .data(data.filter(d => d.precipitacaoTotal > 0)) // Filtrar apenas os dados com precipitação maior que 0
       .enter().append('rect')
       .attr('class', 'bar')
-      .attr('x', (d, i) => x(i))
-      .attr('y', d => d.chuva > 0 ? y(d.chuva) : height) // Exibe a barra apenas se chuva > 0
+      .attr('x', d => x(d.hora))
+      .attr('y', d => y(d.precipitacaoTotal))
       .attr('width', x.bandwidth())
-      .attr('height', d => d.chuva > 0 ? height - y(d.chuva) : 0) 
+      .attr('height', d => height - y(d.precipitacaoTotal))
       .attr('fill', '#69b3a2');
 
   }, [data]);
