@@ -12,7 +12,6 @@ import PressureChart from '../components/graphs/PressureChart';
 import RadiationChart from '../components/graphs/RadiationChart';
 import { baseUrlWeatherData } from "../util/constants";
 
-const { TabPane } = Tabs;
 const { MonthPicker } = DatePicker;
 
 const Graphs = () => {
@@ -43,7 +42,6 @@ const Graphs = () => {
   };
 
   const columns = [
-    { title: 'Data', dataIndex: 'data', key: 'data' },
     { title: 'Hora (UTC)', dataIndex: 'hora', key: 'hora' },
     { title: 'Temp. Ins. (C)', dataIndex: 'tempBulboSeco', key: 'tempIns' },
     { title: 'Temp. Max. (C)', dataIndex: 'tempMax', key: 'tempMax' },
@@ -82,18 +80,20 @@ const Graphs = () => {
 
   const filterViewTable = async () => {
     if (!dateValue || !selectedStation) {
-      console.log("Selecione uma estação e uma data");
+      alert("Selecione uma estação e uma data");
       return;
     }
 
     try {
       const dateParam = dateType === 'dia' ? dateValue : dayjs(dateValue).format('YYYY-MM');
+      console.log("PARAMETRO DO DIA: ", dateParam);
       const response = await axios.get(`${baseUrlWeatherData}${selectedStation}?date=${dateParam}`);
-      const receivedData = response.data.data; 
+      const receivedData = response.data.metrics; 
+
+      console.log("DADOS RECEBIDOS: ", receivedData);
 
       // Mapear os dados para o formato esperado pela tabela
       const formattedData = receivedData.map(item => ({
-        data: item.data,
         hora: item.hora,
         tempBulboSeco: item.tempBulboSeco,
         tempMax: item.tempMax,
@@ -166,30 +166,30 @@ const Graphs = () => {
       </div>
 
       <Tabs defaultActiveKey="1" type="card" style={{ marginTop: '30px' }}>
-        <TabPane tab="Tabela" key="1">
+        <items tab="Tabela" key="1">
           <Table dataSource={weatherData} columns={columns} pagination={false} />
-        </TabPane>
-        <TabPane tab="Bulbo Seco" key="2">
+        </items>
+        <items tab="Bulbo Seco" key="2">
           <DryBulbTempChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Ponto de Orvalho" key="3">
+        </items>
+        <items tab="Ponto de Orvalho" key="3">
           <DewPointTempChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Umidade" key="4">
+        </items>
+        <items tab="Umidade" key="4">
           <HumidityChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Pressão" key="5">
+        </items>
+        <items tab="Pressão" key="5">
           <PressureChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Vento" key="6">
+        </items>
+        <items tab="Vento" key="6">
           <WindChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Radiação" key="7">
+        </items>
+        <items tab="Radiação" key="7">
           <RadiationChart data={weatherData} />
-        </TabPane>
-        <TabPane tab="Pluviosidade" key="8">
+        </items>
+        <items tab="Pluviosidade" key="8">
           <PluviosityChart data={weatherData} />
-        </TabPane>
+        </items>
       </Tabs>
     </div>
   );

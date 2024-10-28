@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { Button } from 'antd';
 
 const DewPointTempChart = ({ data }) => {
+  const chartRef = useRef();
   const [showMin, setShowMin] = useState(true);
   const [showMax, setShowMax] = useState(true);
   const [showInstant, setShowInstant] = useState(true);
@@ -11,27 +12,19 @@ const DewPointTempChart = ({ data }) => {
     if (!data || data.length === 0) return;
 
     // Limpar o gráfico existente no DOM
-    d3.select('#all-dew-chart').selectAll('*').remove();
+    d3.select(chartRef.current).selectAll('*').remove();
 
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
     const width = 800 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
-    const parseTime = d3.timeParse("%Y-%m-%d %H:%M");
     const hourValues = Array.from({ length: 24 }, () => ({ instant: [], max: [], min: [] }));
 
     data.forEach(d => {
       const hourString = d.hora.replace(" UTC", ""); // "2300"
       const hour = parseInt(hourString.slice(0, 2), 10);
-      const minutes = hourString.slice(2);
-      const timeString = `${d.data} ${hourString.slice(0, 2)}:${minutes}`;
-      const time = parseTime(timeString);
-
-      if (!time) {
-        console.warn(`Data inválida: ${timeString}`);
-        return;
-      }
-
+      
+      // Adicionando valores às respectivas horas
       if (!isNaN(d.tempPontoOrvalho)) hourValues[hour].instant.push(d.tempPontoOrvalho);
       if (!isNaN(d.tempOrvalhoMax)) hourValues[hour].max.push(d.tempOrvalhoMax);
       if (!isNaN(d.tempOrvalhoMin)) hourValues[hour].min.push(d.tempOrvalhoMin);
@@ -43,7 +36,7 @@ const DewPointTempChart = ({ data }) => {
       min: values.min.length > 0 ? d3.mean(values.min) : null,
     }));
 
-    const svg = d3.select('#all-dew-chart')
+    const svg = d3.select(chartRef.current)
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom)
@@ -51,7 +44,7 @@ const DewPointTempChart = ({ data }) => {
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const x = d3.scaleLinear()
-      .domain([0, 23])
+      .domain([1, 23]) 
       .range([0, width]);
 
     const y = d3.scaleLinear()
@@ -60,16 +53,16 @@ const DewPointTempChart = ({ data }) => {
 
     svg.append('g')
       .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(x).ticks(24).tickFormat(d => `${d}:00`));
+      .call(d3.axisBottom(x).ticks(23).tickFormat(d => `${d.toString().padStart(2, '0')}:00`)); // Formata horas com dois dígitos
 
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} °C`));
 
     const drawLineAndPoints = (dataset, color, show) => {
-      if (!show) return; // Se a série não estiver visível, não desenha nada
+      if (!show) return;
 
       const line = d3.line()
-        .x((d, i) => x(i))
+        .x((d, i) => x(i + 1)) // Adiciona 1 para alinhar com o eixo x de 1 a 23
         .y(d => (d !== null ? y(d) : height));
 
       svg.append("path")
@@ -83,12 +76,12 @@ const DewPointTempChart = ({ data }) => {
         .data(dataset)
         .enter().append("circle")
         .attr("class", "dot-" + color)
-        .attr("cx", (d, i) => x(i))
+        .attr("cx", (d, i) => x(i + 1)) 
         .attr("cy", d => (d !== null ? y(d) : height))
         .attr("r", 4)
         .attr("fill", color)
         .on("click", function (event, d) {
-          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'} °C`);
+          alert(d !== null ? `Valor: ${d.toFixed(1)} °C` : 'Dado Ausente');
         });
     };
 
@@ -102,9 +95,9 @@ const DewPointTempChart = ({ data }) => {
   return (
     <div>
       <h2>Gráfico de Ponto de Orvalho</h2>
-      <div id="all-dew-chart"></div>
+      <div ref={chartRef}></div>
       <div>
-      <Button 
+        <Button 
           type="primary" 
           style={{ backgroundColor: 'green', borderColor: 'green', marginLeft: '10px' }} 
           onClick={() => setShowMin(!showMin)}>

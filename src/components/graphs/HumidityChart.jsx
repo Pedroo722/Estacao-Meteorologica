@@ -17,20 +17,11 @@ const HumidityChart = ({ data }) => {
     const width = 800 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
-    const parseTime = d3.timeParse("%Y-%m-%d %H:%M");
     const hourValues = Array.from({ length: 24 }, () => ({ instant: [], max: [], min: [] }));
 
     data.forEach(d => {
-      const hourString = d.hora.replace(" UTC", "");
+      const hourString = d.hora.replace(" UTC", ""); // "2300"
       const hour = parseInt(hourString.slice(0, 2), 10);
-      const minutes = hourString.slice(2);
-      const timeString = `${d.data} ${hourString.slice(0, 2)}:${minutes}`;
-      const time = parseTime(timeString);
-
-      if (!time) {
-        console.warn(`Data inválida: ${timeString}`);
-        return;
-      }
 
       if (!isNaN(d.umidadeRelativa)) hourValues[hour].instant.push(d.umidadeRelativa);
       if (!isNaN(d.umidadeRelativaMax)) hourValues[hour].max.push(d.umidadeRelativaMax);
@@ -88,7 +79,7 @@ const HumidityChart = ({ data }) => {
         .attr("r", 4)
         .attr("fill", color)
         .on("click", function (event, d) {
-          alert(`Valor: ${d !== null ? d.toFixed(1) : 'N/A'}%`);
+          alert(d !== null ? `Valor: ${d.toFixed(1)}%` : 'Dado Ausente');
         });
     };
 
