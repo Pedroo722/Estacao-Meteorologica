@@ -29,6 +29,7 @@ const Graphs = () => {
 
   const [selectedStation, setSelectedStation] = useState(null);
   const [dateType, setDateType] = useState('dia'); 
+  const [finalDateType, setFinalDateType] = useState('dia');
   const [dateValue, setDateValue] = useState(null); 
   const [weatherData, setWeatherData] = useState([]);
 
@@ -43,92 +44,92 @@ const Graphs = () => {
 
   const columns = [
     {
-      title: dateType === 'dia' ? 'Hora (UTC)' : 'Dia',
+      title: finalDateType === 'dia' ? 'Hora (UTC)' : 'Dia',
       dataIndex: 'hora',
       key: 'hora'
     },
     { 
-      title: dateType === 'dia' ? 'Temp. Ins. (C)' : 'Média Temp. Ins. (C)',
+      title: finalDateType === 'dia' ? 'Temp. Ins. (C)' : 'Média Temp. Ins. (C)',
       dataIndex: 'tempBulboSeco',
       key: 'tempIns' 
     },
     { 
-      title: dateType === 'dia' ? 'Temp. Max. (C)' : 'Média Temp. Max. (C)',
+      title: finalDateType === 'dia' ? 'Temp. Max. (C)' : 'Média Temp. Max. (C)',
       dataIndex: 'tempMax',
       key: 'tempMax' 
     },
     { 
-      title: dateType === 'dia' ? 'Temp. Min. (C)' : 'Média Temp. Min. (C)',
+      title: finalDateType === 'dia' ? 'Temp. Min. (C)' : 'Média Temp. Min. (C)',
       dataIndex: 'tempMin',
       key: 'tempMin' 
     },
     { 
-      title: dateType === 'dia' ? 'Umi. Ins. (%)' : 'Média Umi. Ins. (%)',
+      title: finalDateType === 'dia' ? 'Umi. Ins. (%)' : 'Média Umi. Ins. (%)',
       dataIndex: 'umidadeRelativa',
       key: 'umiIns' 
     },
     { 
-      title: dateType === 'dia' ? 'Umi. Max. (%)' : 'Média Umi. Max. (%)',
+      title: finalDateType === 'dia' ? 'Umi. Max. (%)' : 'Média Umi. Max. (%)',
       dataIndex: 'umidadeRelativaMax',
       key: 'umiMax' 
     },
     { 
-      title: dateType === 'dia' ? 'Umi. Min. (%)' : 'Média Umi. Min. (%)',
+      title: finalDateType === 'dia' ? 'Umi. Min. (%)' : 'Média Umi. Min. (%)',
       dataIndex: 'umidadeRelativaMin',
       key: 'umiMin' 
     },
     { 
-      title: dateType === 'dia' ? 'Pto Orvalho Ins. (C)' : 'Média Pto Orvalho Ins. (C)',
+      title: finalDateType === 'dia' ? 'Pto Orvalho Ins. (C)' : 'Média Pto Orvalho Ins. (C)',
       dataIndex: 'tempPontoOrvalho',
       key: 'ptoOrvalhoIns' 
     },
     { 
-      title: dateType === 'dia' ? 'Pto Orvalho Max. (C)' : 'Média Pto Orvalho Max. (C)',
+      title: finalDateType === 'dia' ? 'Pto Orvalho Max. (C)' : 'Média Pto Orvalho Max. (C)',
       dataIndex: 'tempOrvalhoMax',
       key: 'ptoOrvalhoMax' 
     },
     { 
-      title: dateType === 'dia' ? 'Pto Orvalho Min. (C)' : 'Média Pto Orvalho Min. (C)',
+      title: finalDateType === 'dia' ? 'Pto Orvalho Min. (C)' : 'Média Pto Orvalho Min. (C)',
       dataIndex: 'tempOrvalhoMin',
       key: 'ptoOrvalhoMin' 
     },
     { 
-      title: dateType === 'dia' ? 'Pressao Ins. (hPa)' : 'Média Pressao Ins. (hPa)',
+      title: finalDateType === 'dia' ? 'Pressao Ins. (hPa)' : 'Média Pressao Ins. (hPa)',
       dataIndex: 'pressaoAtmosfericaNivelEstacao',
       key: 'pressaoIns' 
     },
     { 
-      title: dateType === 'dia' ? 'Pressao Max. (hPa)' : 'Média Pressao Max. (hPa)',
+      title: finalDateType === 'dia' ? 'Pressao Max. (hPa)' : 'Média Pressao Max. (hPa)',
       dataIndex: 'pressaoAtmosfericaMax',
       key: 'pressaoMax' 
     },
     { 
-      title: dateType === 'dia' ? 'Pressao Min. (hPa)' : 'Média Pressao Min. (hPa)',
+      title: finalDateType === 'dia' ? 'Pressao Min. (hPa)' : 'Média Pressao Min. (hPa)',
       dataIndex: 'pressaoAtmosfericaMin',
       key: 'pressaoMin' 
     },
     { 
-      title: dateType === 'dia' ? 'Vel. Vento (m/s)' : 'Média Vel. Vento (m/s)',
+      title: finalDateType === 'dia' ? 'Vel. Vento (m/s)' : 'Média Vel. Vento (m/s)',
       dataIndex: 'ventoVelocidade',
       key: 'velVento' 
     },
     { 
-      title: dateType === 'dia' ? 'Dir. Vento (m/s)' : 'Média Dir. Vento (m/s)',
+      title: finalDateType === 'dia' ? 'Dir. Vento (m/s)' : 'Média Dir. Vento (m/s)',
       dataIndex: 'ventoDirecao',
       key: 'dirVento' 
     },
     { 
-      title: dateType === 'dia' ? 'Raj. Vento (m/s)' : 'Média Raj. Vento (m/s)',
+      title: finalDateType === 'dia' ? 'Raj. Vento (m/s)' : 'Média Raj. Vento (m/s)',
       dataIndex: 'ventoRajadaMax',
       key: 'rajVento' 
     },
     { 
-      title: dateType === 'dia' ? 'Radiacao (KJ/m²)' : 'Radiacao Média (KJ/m²)',
+      title: finalDateType === 'dia' ? 'Radiacao (KJ/m²)' : 'Radiacao Média (KJ/m²)',
       dataIndex: 'radiacaoGlobal',
       key: 'radiacao' 
     },
     { 
-      title: dateType === 'dia' ? 'Chuva (mm)' : 'Pluviosidade Média (mm)',
+      title: finalDateType === 'dia' ? 'Chuva (mm)' : 'Pluviosidade Média (mm)',
       dataIndex: 'precipitacaoTotal',
       key: 'chuva' 
     }
@@ -181,7 +182,7 @@ const Graphs = () => {
           ventoVelocidade: item.ventoVelocidade?.toFixed(2),
           ventoDirecao: item.ventoDirecao?.toFixed(2),
           ventoRajadaMax: item.ventoRajadaMax?.toFixed(2),
-          radiacaoGlobal: item.radiacaoGlobal?.toFixed(2),
+          radiacaoGlobal: item.radiacaoGlobal,
           precipitacaoTotal: item.precipitacaoTotal?.toFixed(2),
         }));
       } else if (dateType === 'mes') {
@@ -237,7 +238,9 @@ const Graphs = () => {
       }
   
       setWeatherData(formattedData);
+      alert("Dados Recebidos!")
     } catch (error) {
+      alert("Erro ao buscar dados!")
       console.error("Erro ao buscar dados:", error);
     }
   };
@@ -281,7 +284,7 @@ const Graphs = () => {
           <Button 
             type="primary" 
             style={{ marginLeft: '30px' }}
-            onClick={filterViewTable}
+            onClick={() => { setFinalDateType(dateType); filterViewTable(); }}
           >
             Filtrar
           </Button>
