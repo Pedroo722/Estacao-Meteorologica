@@ -167,23 +167,23 @@ const Graphs = () => {
   
         formattedData = receivedData.map(item => ({
           hora: item.hora,
-          tempBulboSeco: item.tempBulboSeco?.toFixed(2),
-          tempMax: item.tempMax?.toFixed(2),
-          tempMin: item.tempMin?.toFixed(2),
-          umidadeRelativa: item.umidadeRelativa?.toFixed(2),
-          umidadeRelativaMax: item.umidadeRelativaMax?.toFixed(2),
-          umidadeRelativaMin: item.umidadeRelativaMin?.toFixed(2),
-          tempPontoOrvalho: item.tempPontoOrvalho?.toFixed(2),
-          tempOrvalhoMax: item.tempOrvalhoMax?.toFixed(2),
-          tempOrvalhoMin: item.tempOrvalhoMin?.toFixed(2),
-          pressaoAtmosfericaNivelEstacao: item.pressaoAtmosfericaNivelEstacao?.toFixed(2),
-          pressaoAtmosfericaMax: item.pressaoAtmosfericaMax?.toFixed(2),
-          pressaoAtmosfericaMin: item.pressaoAtmosfericaMin?.toFixed(2),
-          ventoVelocidade: item.ventoVelocidade?.toFixed(2),
-          ventoDirecao: item.ventoDirecao?.toFixed(2),
-          ventoRajadaMax: item.ventoRajadaMax?.toFixed(2),
+          tempBulboSeco: item.tempBulboSeco,
+          tempMax: item.tempMax,
+          tempMin: item.tempMin,
+          umidadeRelativa: item.umidadeRelativa,
+          umidadeRelativaMax: item.umidadeRelativaMax,
+          umidadeRelativaMin: item.umidadeRelativaMin,
+          tempPontoOrvalho: item.tempPontoOrvalho,
+          tempOrvalhoMax: item.tempOrvalhoMax,
+          tempOrvalhoMin: item.tempOrvalhoMin,
+          pressaoAtmosfericaNivelEstacao: item.pressaoAtmosfericaNivelEstacao,
+          pressaoAtmosfericaMax: item.pressaoAtmosfericaMax,
+          pressaoAtmosfericaMin: item.pressaoAtmosfericaMin,
+          ventoVelocidade: item.ventoVelocidade,
+          ventoDirecao: item.ventoDirecao,
+          ventoRajadaMax: item.ventoRajadaMax,
           radiacaoGlobal: item.radiacaoGlobal,
-          precipitacaoTotal: item.precipitacaoTotal?.toFixed(2),
+          precipitacaoTotal: item.precipitacaoTotal,
         }));
       } else if (dateType === 'mes') {
         const [ano, mes] = dateValue.split('-');
@@ -238,6 +238,7 @@ const Graphs = () => {
       }
   
       setWeatherData(formattedData);
+      console.log("DADOS FORMATADOS: ", formattedData);
       alert("Dados Recebidos!")
     } catch (error) {
       alert("Erro ao buscar dados!")
@@ -281,8 +282,8 @@ const Graphs = () => {
             Valor:
             {generateDateOptions()}
           </label>
-          <Button 
-            type="primary" 
+          <Button
+            type="primary"
             style={{ marginLeft: '30px' }}
             onClick={() => { setFinalDateType(dateType); filterViewTable(); }}
           >
@@ -296,27 +297,28 @@ const Graphs = () => {
           <Table dataSource={weatherData} columns={columns} pagination={false} />
         </items>
         <items tab="Bulbo Seco" key="2">
-          <DryBulbTempChart data={weatherData} />
+          <DryBulbTempChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Ponto de Orvalho" key="3">
-          <DewPointTempChart data={weatherData} />
+          <DewPointTempChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Umidade" key="4">
-          <HumidityChart data={weatherData} />
+          <HumidityChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Pressão" key="5">
-          <PressureChart data={weatherData} />
+          <PressureChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Vento" key="6">
-          <WindChart data={weatherData} />
+          {/* <WindChart data={weatherData} finalDateType={finalDateType} /> */}
         </items>
         <items tab="Radiação" key="7">
-          <RadiationChart data={weatherData} />
+          {/* <RadiationChart data={weatherData} finalDateType={finalDateType} /> */}
         </items>
         <items tab="Pluviosidade" key="8">
-          <PluviosityChart data={weatherData} />
+          {/* <PluviosityChart data={weatherData} finalDateType={finalDateType} /> */}
         </items>
       </Tabs>
+
     </div>
   );
 };
