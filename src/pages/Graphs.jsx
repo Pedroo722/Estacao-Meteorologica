@@ -309,13 +309,13 @@ const Graphs = () => {
           <PressureChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Vento" key="6">
-          {/* <WindChart data={weatherData} finalDateType={finalDateType} /> */}
+          <WindChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Radiação" key="7">
-          {/* <RadiationChart data={weatherData} finalDateType={finalDateType} /> */}
+          <RadiationChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Pluviosidade" key="8">
-          {/* <PluviosityChart data={weatherData} finalDateType={finalDateType} /> */}
+          <PluviosityChart data={weatherData} finalDateType={finalDateType} />
         </items>
       </Tabs>
 
