@@ -29,6 +29,7 @@ const Graphs = () => {
 
   const [selectedStation, setSelectedStation] = useState(null);
   const [dateType, setDateType] = useState('dia'); 
+  const [finalDateType, setFinalDateType] = useState('dia');
   const [dateValue, setDateValue] = useState(null); 
   const [weatherData, setWeatherData] = useState([]);
 
@@ -42,25 +43,98 @@ const Graphs = () => {
   };
 
   const columns = [
-    { title: 'Hora (UTC)', dataIndex: 'hora', key: 'hora' },
-    { title: 'Temp. Ins. (C)', dataIndex: 'tempBulboSeco', key: 'tempIns' },
-    { title: 'Temp. Max. (C)', dataIndex: 'tempMax', key: 'tempMax' },
-    { title: 'Temp. Min. (C)', dataIndex: 'tempMin', key: 'tempMin' },
-    { title: 'Umi. Ins. (%)', dataIndex: 'umidadeRelativa', key: 'umiIns' },
-    { title: 'Umi. Max. (%)', dataIndex: 'umidadeRelativaMax', key: 'umiMax' },
-    { title: 'Umi. Min. (%)', dataIndex: 'umidadeRelativaMin', key: 'umiMin' },
-    { title: 'Pto Orvalho Ins. (C)', dataIndex: 'tempPontoOrvalho', key: 'ptoOrvalhoIns' },
-    { title: 'Pto Orvalho Max. (C)', dataIndex: 'tempOrvalhoMax', key: 'ptoOrvalhoMax' },
-    { title: 'Pto Orvalho Min. (C)', dataIndex: 'tempOrvalhoMin', key: 'ptoOrvalhoMin' },
-    { title: 'Pressao Ins. (hPa)', dataIndex: 'pressaoAtmosfericaNivelEstacao', key: 'pressaoIns' },
-    { title: 'Pressao Max. (hPa)', dataIndex: 'pressaoAtmosfericaMax', key: 'pressaoMax' },
-    { title: 'Pressao Min. (hPa)', dataIndex: 'pressaoAtmosfericaMin', key: 'pressaoMin' },
-    { title: 'Vel. Vento (m/s)', dataIndex: 'ventoVelocidade', key: 'velVento' },
-    { title: 'Dir. Vento (m/s)', dataIndex: 'ventoDirecao', key: 'dirVento' },
-    { title: 'Raj. Vento (m/s)', dataIndex: 'ventoRajadaMax', key: 'rajVento' },
-    { title: 'Radiacao (KJ/m²)', dataIndex: 'radiacaoGlobal', key: 'radiacao' },
-    { title: 'Chuva (mm)', dataIndex: 'precipitacaoTotal', key: 'chuva' },
+    {
+      title: finalDateType === 'dia' ? 'Hora (UTC)' : 'Dia',
+      dataIndex: 'hora',
+      key: 'hora'
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Temp. Ins. (C)' : 'Média Temp. Ins. (C)',
+      dataIndex: 'tempBulboSeco',
+      key: 'tempIns' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Temp. Max. (C)' : 'Média Temp. Max. (C)',
+      dataIndex: 'tempMax',
+      key: 'tempMax' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Temp. Min. (C)' : 'Média Temp. Min. (C)',
+      dataIndex: 'tempMin',
+      key: 'tempMin' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Umi. Ins. (%)' : 'Média Umi. Ins. (%)',
+      dataIndex: 'umidadeRelativa',
+      key: 'umiIns' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Umi. Max. (%)' : 'Média Umi. Max. (%)',
+      dataIndex: 'umidadeRelativaMax',
+      key: 'umiMax' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Umi. Min. (%)' : 'Média Umi. Min. (%)',
+      dataIndex: 'umidadeRelativaMin',
+      key: 'umiMin' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Pto Orvalho Ins. (C)' : 'Média Pto Orvalho Ins. (C)',
+      dataIndex: 'tempPontoOrvalho',
+      key: 'ptoOrvalhoIns' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Pto Orvalho Max. (C)' : 'Média Pto Orvalho Max. (C)',
+      dataIndex: 'tempOrvalhoMax',
+      key: 'ptoOrvalhoMax' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Pto Orvalho Min. (C)' : 'Média Pto Orvalho Min. (C)',
+      dataIndex: 'tempOrvalhoMin',
+      key: 'ptoOrvalhoMin' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Pressao Ins. (hPa)' : 'Média Pressao Ins. (hPa)',
+      dataIndex: 'pressaoAtmosfericaNivelEstacao',
+      key: 'pressaoIns' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Pressao Max. (hPa)' : 'Média Pressao Max. (hPa)',
+      dataIndex: 'pressaoAtmosfericaMax',
+      key: 'pressaoMax' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Pressao Min. (hPa)' : 'Média Pressao Min. (hPa)',
+      dataIndex: 'pressaoAtmosfericaMin',
+      key: 'pressaoMin' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Vel. Vento (m/s)' : 'Média Vel. Vento (m/s)',
+      dataIndex: 'ventoVelocidade',
+      key: 'velVento' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Dir. Vento (m/s)' : 'Média Dir. Vento (m/s)',
+      dataIndex: 'ventoDirecao',
+      key: 'dirVento' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Raj. Vento (m/s)' : 'Média Raj. Vento (m/s)',
+      dataIndex: 'ventoRajadaMax',
+      key: 'rajVento' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Radiacao (KJ/m²)' : 'Radiacao Média (KJ/m²)',
+      dataIndex: 'radiacaoGlobal',
+      key: 'radiacao' 
+    },
+    { 
+      title: finalDateType === 'dia' ? 'Chuva (mm)' : 'Pluviosidade Média (mm)',
+      dataIndex: 'precipitacaoTotal',
+      key: 'chuva' 
+    }
   ];
+  
 
   const generateDateOptions = () => {
     if (dateType === 'dia') {
@@ -83,42 +157,95 @@ const Graphs = () => {
       alert("Selecione uma estação e uma data");
       return;
     }
-
+  
     try {
-      const dateParam = dateType === 'dia' ? dateValue : dayjs(dateValue).format('YYYY-MM');
-      console.log("PARAMETRO DO DIA: ", dateParam);
-      const response = await axios.get(`${baseUrlWeatherData}${selectedStation}?date=${dateParam}`);
-      const receivedData = response.data.metrics; 
-
-      console.log("DADOS RECEBIDOS: ", receivedData);
-
-      // Mapear os dados para o formato esperado pela tabela
-      const formattedData = receivedData.map(item => ({
-        hora: item.hora,
-        tempBulboSeco: item.tempBulboSeco,
-        tempMax: item.tempMax,
-        tempMin: item.tempMin,
-        umidadeRelativa: item.umidadeRelativa,
-        umidadeRelativaMax: item.umidadeRelativaMax,
-        umidadeRelativaMin: item.umidadeRelativaMin,
-        tempPontoOrvalho: item.tempPontoOrvalho,
-        tempOrvalhoMax: item.tempOrvalhoMax,
-        tempOrvalhoMin: item.tempOrvalhoMin,
-        pressaoAtmosfericaNivelEstacao: item.pressaoAtmosfericaNivelEstacao,
-        pressaoAtmosfericaMax: item.pressaoAtmosfericaMax,
-        pressaoAtmosfericaMin: item.pressaoAtmosfericaMin,
-        ventoVelocidade: item.ventoVelocidade,
-        ventoDirecao: item.ventoDirecao,
-        ventoRajadaMax: item.ventoRajadaMax,
-        radiacaoGlobal: item.radiacaoGlobal,
-        precipitacaoTotal: item.precipitacaoTotal,
-      }));
-
+      let response, formattedData = [];
+      if (dateType === 'dia') {
+        const dateParam = dateValue;
+        response = await axios.get(`${baseUrlWeatherData}${selectedStation}?date=${dateParam}`);
+        const receivedData = response.data.metrics;
+  
+        formattedData = receivedData.map(item => ({
+          hora: item.hora,
+          tempBulboSeco: item.tempBulboSeco,
+          tempMax: item.tempMax,
+          tempMin: item.tempMin,
+          umidadeRelativa: item.umidadeRelativa,
+          umidadeRelativaMax: item.umidadeRelativaMax,
+          umidadeRelativaMin: item.umidadeRelativaMin,
+          tempPontoOrvalho: item.tempPontoOrvalho,
+          tempOrvalhoMax: item.tempOrvalhoMax,
+          tempOrvalhoMin: item.tempOrvalhoMin,
+          pressaoAtmosfericaNivelEstacao: item.pressaoAtmosfericaNivelEstacao,
+          pressaoAtmosfericaMax: item.pressaoAtmosfericaMax,
+          pressaoAtmosfericaMin: item.pressaoAtmosfericaMin,
+          ventoVelocidade: item.ventoVelocidade,
+          ventoDirecao: item.ventoDirecao,
+          ventoRajadaMax: item.ventoRajadaMax,
+          radiacaoGlobal: item.radiacaoGlobal,
+          precipitacaoTotal: item.precipitacaoTotal,
+        }));
+      } else if (dateType === 'mes') {
+        const [ano, mes] = dateValue.split('-');
+        response = await axios.get(`${baseUrlWeatherData}${selectedStation}/${ano}/${mes}`);
+        const dailyData = response.data.dailyAverage;
+        const monthlyData = response.data.monthlyAverage;
+  
+        // Formatar dados diários
+        formattedData = Object.keys(dailyData).map(day => ({
+          hora: `Dia ${day.split('_')[1]}`,
+          tempBulboSeco: dailyData[day].mediaTempBulboSeco.toFixed(2),
+          tempMax: dailyData[day].mediaTempMax.toFixed(2),
+          tempMin: dailyData[day].mediaTempMin.toFixed(2),
+          umidadeRelativa: dailyData[day].mediaUmidadeRelativa.toFixed(2),
+          umidadeRelativaMax: dailyData[day].mediaUmidadeRelativaMax.toFixed(2),
+          umidadeRelativaMin: dailyData[day].mediaUmidadeRelativaMin.toFixed(2),
+          tempPontoOrvalho: dailyData[day].mediaTempPontoOrvalho.toFixed(2),
+          tempOrvalhoMax: dailyData[day].mediaTempOrvalhoMax.toFixed(2),
+          tempOrvalhoMin: dailyData[day].mediaTempOrvalhoMin.toFixed(2),
+          pressaoAtmosfericaNivelEstacao: dailyData[day].mediaPressaoAtmosfericaNivelEstacao.toFixed(2),
+          pressaoAtmosfericaMax: dailyData[day].mediaPressaoAtmosfericaMax.toFixed(2),
+          pressaoAtmosfericaMin: dailyData[day].mediaPressaoAtmosfericaMin.toFixed(2),
+          ventoVelocidade: dailyData[day].mediaVentoVelocidade.toFixed(2),
+          ventoDirecao: dailyData[day].mediaVentoDirecao.toFixed(2),
+          ventoRajadaMax: dailyData[day].mediaVentoRajadaMax.toFixed(2),
+          radiacaoGlobal: dailyData[day].mediaRadiacaoGlobal.toFixed(2),
+          precipitacaoTotal: dailyData[day].mediaPrecipitacaoTotal.toFixed(2),
+        }))
+        .sort((a, b) => parseInt(a.hora.split(' ')[1]) - parseInt(b.hora.split(' ')[1]));
+  
+        // Adicionar linha de médias mensais
+        formattedData.push({
+          hora: 'Média Mensal',
+          tempBulboSeco: monthlyData.mediaTempBulboSeco.toFixed(2),
+          tempMax: monthlyData.mediaTempMax.toFixed(2),
+          tempMin: monthlyData.mediaTempMin.toFixed(2),
+          umidadeRelativa: monthlyData.mediaUmidadeRelativa.toFixed(2),
+          umidadeRelativaMax: monthlyData.mediaUmidadeRelativaMax.toFixed(2),
+          umidadeRelativaMin: monthlyData.mediaUmidadeRelativaMin.toFixed(2),
+          tempPontoOrvalho: monthlyData.mediaTempPontoOrvalho.toFixed(2),
+          tempOrvalhoMax: monthlyData.mediaTempOrvalhoMax.toFixed(2),
+          tempOrvalhoMin: monthlyData.mediaTempOrvalhoMin.toFixed(2),
+          pressaoAtmosfericaNivelEstacao: monthlyData.mediaPressaoAtmosfericaNivelEstacao.toFixed(2),
+          pressaoAtmosfericaMax: monthlyData.mediaPressaoAtmosfericaMax.toFixed(2),
+          pressaoAtmosfericaMin: monthlyData.mediaPressaoAtmosfericaMin.toFixed(2),
+          ventoVelocidade: monthlyData.mediaVentoVelocidade.toFixed(2),
+          ventoDirecao: monthlyData.mediaVentoDirecao.toFixed(2),
+          ventoRajadaMax: monthlyData.mediaVentoRajadaMax.toFixed(2),
+          radiacaoGlobal: monthlyData.mediaRadiacaoGlobal.toFixed(2),
+          precipitacaoTotal: monthlyData.mediaPrecipitacaoTotal.toFixed(2),
+        });
+      }
+  
       setWeatherData(formattedData);
+      console.log("DADOS FORMATADOS: ", formattedData);
+      alert("Dados Recebidos!")
     } catch (error) {
+      alert("Erro ao buscar dados!")
       console.error("Erro ao buscar dados:", error);
     }
   };
+  
 
   return (
     <div className="station-container">
@@ -155,10 +282,10 @@ const Graphs = () => {
             Valor:
             {generateDateOptions()}
           </label>
-          <Button 
-            type="primary" 
+          <Button
+            type="primary"
             style={{ marginLeft: '30px' }}
-            onClick={filterViewTable}
+            onClick={() => { setFinalDateType(dateType); filterViewTable(); }}
           >
             Filtrar
           </Button>
@@ -170,27 +297,28 @@ const Graphs = () => {
           <Table dataSource={weatherData} columns={columns} pagination={false} />
         </items>
         <items tab="Bulbo Seco" key="2">
-          <DryBulbTempChart data={weatherData} />
+          <DryBulbTempChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Ponto de Orvalho" key="3">
-          <DewPointTempChart data={weatherData} />
+          <DewPointTempChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Umidade" key="4">
-          <HumidityChart data={weatherData} />
+          <HumidityChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Pressão" key="5">
-          <PressureChart data={weatherData} />
+          <PressureChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Vento" key="6">
-          <WindChart data={weatherData} />
+          <WindChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Radiação" key="7">
-          <RadiationChart data={weatherData} />
+          <RadiationChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Pluviosidade" key="8">
-          <PluviosityChart data={weatherData} />
+          <PluviosityChart data={weatherData} finalDateType={finalDateType} />
         </items>
       </Tabs>
+
     </div>
   );
 };

@@ -15,6 +15,7 @@ Este repositório contém o código front-end que foi desenvolvido como parte do
 ![Javascript](https://img.shields.io/badge/javascript-%23323330?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![React](https://img.shields.io/badge/react-%2320232a?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![D3.js](https://img.shields.io/badge/d3.js-%23F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)
 ![Ant-Design](https://img.shields.io/badge/-AntDesign-%230170FE?style=for-the-badge&logo=ant-design&logoColor=white)
 
 </div>
@@ -26,7 +27,7 @@ O dashboard possui duas páginas principais, com o intuito de oferecer uma exper
 ### 1. Página Inicial
 - **Mapa Interativo da Paraíba**: Ao acessar a página inicial, você encontrará um mapa interativo da Paraíba contendo suas estações metereólogicas. 
 - **Seleção de Estações Meteorológicas**: O usuário pode clicar nas estações meteorológicas marcadas no mapa para exibir informações detalhadas sobre a estação, exibindo os dados na seção embaixo do mapa. 
-- **Informações em Destaque**: Após selecionar uma estação, os ícones em cima do mapa mostram a média diária do dia atual dos seguintes valores:
+- **Informações em Destaque**: Após selecionar uma estação, os ícones em cima do mapa mostram a média diária, incluindo mínima e máxima, do dia atual dos seguintes valores:
   - Temperatura do bulbo seco
   - Temperatura de orvalho
   - Pressão atmosférica

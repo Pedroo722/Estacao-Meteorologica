@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
-const RadiationChart = ({ data }) => {
+const RadiationChart = ({ data, finalDateType }) => {
   const chartRef = useRef();
 
   useEffect(() => {
@@ -10,8 +10,8 @@ const RadiationChart = ({ data }) => {
 
     // Dimensões do gráfico
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
-    const width = 800 - margin.left - margin.right;
-    const height = 300 - margin.top - margin.bottom;
+    const width = 1000 - margin.left - margin.right;
+    const height = 450 - margin.top - margin.bottom;
 
     const svg = d3.select(chartRef.current)
       .append('svg')
@@ -20,58 +20,57 @@ const RadiationChart = ({ data }) => {
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
-    const hourValues = Array.from({ length: 24 }, () => ({ radiacao: [] }));
-
-    data.forEach(item => {
-      const hourString = item.hora.replace(" UTC", ""); 
-
-      const hour = parseInt(hourString.slice(0, 2), 10);
-      const radiacaoValue = parseFloat(item.radiacaoGlobal);
-
-      if (!isNaN(radiacaoValue)) hourValues[hour].radiacao.push(radiacaoValue);
-    });
-
-    const hourAverages = hourValues.map(values => ({
-      radiacao: values.radiacao.length > 0 ? d3.mean(values.radiacao) : 0,
-    }));
+    // Preparação dos dados para cada tipo de visualização
+    const dataProcessed = finalDateType === 'dia'
+      ? Array.from({ length: 24 }, (_, hour) => ({
+          label: `${hour.toString().padStart(2, '0')}:00`,
+          radiacao: d3.mean(data.filter(d => parseInt(d.hora.slice(0, 2), 10) === hour).map(d => parseFloat(d.radiacaoGlobal))) || 0,
+        })).filter(d => d.radiacao > 0)
+      : Array.from({ length: 31 }, (_, day) => ({
+          label: `Dia ${day + 1}`,
+          radiacao: d3.mean(data.filter(d => parseInt(d.hora.split(' ')[1], 10) - 1 === day).map(d => parseFloat(d.radiacaoGlobal))) || 0,
+        })).filter(d => d.radiacao > 0);
 
     const x = d3.scaleBand()
-      .domain(hourAverages.map((_, i) => i)) 
+      .domain(dataProcessed.map(d => d.label))
       .range([0, width])
       .padding(0.1);
 
-    // A radiação varia de 0 a 6.000 J/m²
-    const yMax = 6000;
-
     const y = d3.scaleLinear()
-      .domain([0, yMax])
+      .domain([0, 6000])
       .nice()
       .range([height, 0]);
 
     // Eixos
     svg.append('g')
       .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(x).tickFormat(d => `${d.toString().padStart(2, '0')}:00`)); // Formatação da hora
+      .call(d3.axisBottom(x));
 
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d} J/m²`));
 
-    // Barras
+    // Barras com evento de clique para alerta
     svg.selectAll('.bar')
-      .data(hourAverages.filter(d => d.radiacao > 0)) // Filtrar apenas valores de radiação maior que 0
+      .data(dataProcessed)
       .enter().append('rect')
       .attr('class', 'bar')
-      .attr('x', (d, i) => x(i))
+      .attr('x', d => x(d.label))
       .attr('y', d => y(d.radiacao))
       .attr('width', x.bandwidth())
       .attr('height', d => height - y(d.radiacao))
-      .attr('fill', '#ffa500');
+      .attr('fill', '#ffa500')
+      .on("click", function (event, d) {
+        const alertMessage = finalDateType === 'dia'
+          ? `Valor da Radiação no Horário: ${d.radiacao !== null ? d.radiacao.toFixed(2) + ' J/m²' : 'Dado Ausente'}`
+          : `Média Diária de Radiação: ${d.radiacao !== null ? d.radiacao.toFixed(2) + ' J/m²' : 'Dado Ausente'}`;
+        alert(alertMessage);
+      });
 
-  }, [data]);
+  }, [data, finalDateType]);
 
   return (
     <div>
-      <h3>Gráfico de Radiação Solar (J/m² por Hora)</h3>
+      <h3>Gráfico de Radiação Solar (J/m² por {finalDateType === 'dia' ? 'Hora' : 'Dia'})</h3>
       <div ref={chartRef}></div>
     </div>
   );
