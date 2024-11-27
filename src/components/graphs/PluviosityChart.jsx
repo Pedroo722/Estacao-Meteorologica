@@ -25,9 +25,14 @@ const PluviosityChart = ({ data, finalDateType }) => {
       .range([0, width])
       .padding(0.1);
 
-    const yMax = Math.max(d3.max(data, d => d.precipitacaoTotal)) + 1;
+    const pluviosioties = data.flatMap(d => [
+      d.precipitacaoTotal
+    ]).filter(t => t !== null && !isNaN(t));
+
+    const maxPluviosity = Math.max(...pluviosioties) + 1;
+
     const y = d3.scaleLinear()
-      .domain([0, yMax])
+      .domain([0, maxPluviosity])
       .nice()
       .range([height, 0]);
 
@@ -36,25 +41,38 @@ const PluviosityChart = ({ data, finalDateType }) => {
       .call(d3.axisBottom(x).tickFormat(d => (finalDateType === 'dia' ? `${d.slice(0, 2)}:00` : d)));
 
     svg.append('g')
-      .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} mm`));
+      .call(d3.axisLeft(y).ticks(6).tickFormat(d => `${d} mm`));
+
+    const tempStep = maxPluviosity / 5;
+    for (let pres = Math.ceil(0 / tempStep) * tempStep; pres <= maxPluviosity; pres += tempStep) {  // Limita até 5mm
+      svg.append('line')
+        .attr('x1', 0)
+        .attr('x2', width)
+        .attr('y1', y(pres))
+        .attr('y2', y(pres))
+        .attr('stroke', 'gray')
+        .attr('stroke-dasharray', '5,5');
+    }
+
+    const chartData = finalDateType === 'dia'
+      ? data
+      : Array.from({ length: 31 }, (_, i) => ({
+          precipitacaoTotal: d3.mean(data.filter(d => parseInt(d.hora.split(' ')[1]) - 1 === i).map(d => d.precipitacaoTotal)) || 0,
+          label: `Dia ${i + 1}`
+        }));
 
     svg.selectAll('.bar')
-      .data(finalDateType === 'dia' ? data.filter(d => d.precipitacaoTotal > 0) : 
-            Array.from({ length: 31 }, (_, i) => ({
-              precipitacaoTotal: d3.mean(data.filter(d => parseInt(d.hora.split(' ')[1]) - 1 === i).map(d => d.precipitacaoTotal)) || 0,
-              label: `Dia ${i + 1}`
-            })).filter(d => d.precipitacaoTotal > 0)
-      )
+      .data(chartData)
       .enter().append('rect')
       .attr('class', 'bar')
       .attr('x', d => x(finalDateType === 'dia' ? d.hora : d.label))
-      .attr('y', d => y(d.precipitacaoTotal))
+      .attr('y', d => d.precipitacaoTotal > 0 ? y(d.precipitacaoTotal) : height) // Não desenha a barra se o valor for 0
       .attr('width', x.bandwidth())
-      .attr('height', d => height - y(d.precipitacaoTotal))
+      .attr('height', d => d.precipitacaoTotal > 0 ? height - y(d.precipitacaoTotal) : 0) // Não desenha a barra se o valor for 0
       .attr('fill', '#69b3a2')
       .on("click", function (event, d) {
         const alertMessage = finalDateType === 'dia'
-          ? `Valor do Horário: ${d.precipitacaoTotal !== null ? d.precipitacaoTotal.toFixed(2) + ' mm' : 'Dado Ausente'}` 
+          ? `Valor do Horário: ${d.precipitacaoTotal !== null ? d.precipitacaoTotal.toFixed(2) + ' mm' : 'Dado Ausente'}`
           : `Média Diária: ${d.precipitacaoTotal !== null ? d.precipitacaoTotal.toFixed(2) + ' mm' : 'Dado Ausente'}`;
         alert(alertMessage);
       });

@@ -33,9 +33,10 @@ const PressureChart = ({ data, finalDateType }) => {
       d.pressaoAtmosfericaMin,
       d.pressaoAtmosfericaMax,
       d.pressaoAtmosfericaNivelEstacao,
-    ].filter(value => value !== undefined && value !== null));
+    ].filter(value => value !== null && !isNaN(value)));
     
-    const [minPres, maxPres] = d3.extent(pressures);
+    const minPres = Math.min(...pressures) - 1;
+    const maxPres = Math.max(...pressures) + 1;
     
     const y = d3.scaleLinear()
       .domain([minPres - 1, maxPres + 1])
@@ -48,6 +49,17 @@ const PressureChart = ({ data, finalDateType }) => {
 
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} hPa`));
+
+    const tempStep = 1;
+    for (let pres = Math.ceil(minPres / tempStep) * tempStep; pres <= maxPres; pres += tempStep) {
+      svg.append('line')
+        .attr('x1', 0)
+        .attr('x2', width)
+        .attr('y1', y(pres))
+        .attr('y2', y(pres))
+        .attr('stroke', 'gray')
+        .attr('stroke-dasharray', '5,5');
+    }
 
     const drawLineAndPoints = (dataset, color, show) => {
       if (!show) return;

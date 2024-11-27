@@ -49,6 +49,17 @@ const DewPointTempChart = ({ data, finalDateType }) => {
 
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} °C`));
+    
+    const tempStep = 1;
+    for (let temp = Math.ceil(minTemp / tempStep) * tempStep; temp <= maxTemp; temp += tempStep) {
+      svg.append('line')
+        .attr('x1', 0)
+        .attr('x2', width)
+        .attr('y1', y(temp))
+        .attr('y2', y(temp))
+        .attr('stroke', 'gray')
+        .attr('stroke-dasharray', '5,5')
+    }
 
     const drawLineAndPoints = (dataset, color, show) => {
       if (!show) return;

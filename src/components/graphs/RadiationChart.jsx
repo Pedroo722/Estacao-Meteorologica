@@ -48,6 +48,18 @@ const RadiationChart = ({ data, finalDateType }) => {
 
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d} J/m²`));
+    
+    // linhas de referência
+    const tempStep = 500;
+    for (let radiacao = Math.ceil(0 / tempStep) * tempStep; radiacao <= Math.max(...data.map(d => parseFloat(d.radiacaoGlobal) || 0)) * 1.1; radiacao += tempStep) {
+      svg.append('line')
+        .attr('x1', 0)
+        .attr('x2', width)
+        .attr('y1', y(radiacao))
+        .attr('y2', y(radiacao))
+        .attr('stroke', 'gray')
+        .attr('stroke-dasharray', '5,5');
+    }
 
     // Barras com evento de clique para alerta
     svg.selectAll('.bar')
