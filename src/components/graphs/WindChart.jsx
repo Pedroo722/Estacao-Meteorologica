@@ -84,6 +84,19 @@ const WindChart = ({ data, finalDateType }) => {
           label: `Dia ${i + 1}`
         })).filter(d => d.ventoVelocidade > 0 || d.ventoRajadaMax > 0);
 
+
+    // Adicionando linhas de referência
+    const tempStep = 1;
+    for (let i = 0; i <= yMax; i += tempStep) {
+      svg.append('line')
+        .attr('x1', 0)
+        .attr('x2', width)
+        .attr('y1', y(i))
+        .attr('y2', y(i))
+        .attr('stroke', 'gray')
+        .attr('stroke-dasharray', '5,5');
+    }
+
     // Barras de 'Vel. Vento' e 'Raj. Vento'
     svg.selectAll('.bar-group')
       .data(chartData)
