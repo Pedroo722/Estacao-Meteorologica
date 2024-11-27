@@ -14,7 +14,7 @@ const HumidityChart = ({ data, finalDateType }) => {
     d3.select('#all-umi-chart').selectAll('*').remove();
 
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
-    const width = 1000 - margin.left - margin.right;
+    const width = 1200 - margin.left - margin.right;
     const height = 450 - margin.top - margin.bottom;
 
     const svg = d3.select('#all-umi-chart')
@@ -28,8 +28,17 @@ const HumidityChart = ({ data, finalDateType }) => {
       .domain(finalDateType === 'dia' ? [0, 23] : [0, 30]) // Ajuste para meses
       .range([0, width]);
 
+    const humidities = data.flatMap(d => [
+      d.umidadeRelativa,
+      d.umidadeRelativaMax,
+      d.umidadeRelativaMin,
+    ]).filter(value => value !== undefined && value !== null);
+    
+    const minHumidity = Math.min(...humidities) - 1;
+    const maxHumidity = Math.max(...humidities) + 1;
+    
     const y = d3.scaleLinear()
-      .domain([0, 100])
+      .domain([minHumidity, maxHumidity])
       .range([height, 0]);
 
     svg.append('g')

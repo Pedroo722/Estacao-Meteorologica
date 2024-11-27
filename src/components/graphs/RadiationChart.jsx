@@ -10,7 +10,7 @@ const RadiationChart = ({ data, finalDateType }) => {
 
     // Dimensões do gráfico
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
-    const width = 1000 - margin.left - margin.right;
+    const width = 1200 - margin.left - margin.right;
     const height = 450 - margin.top - margin.bottom;
 
     const svg = d3.select(chartRef.current)
@@ -35,9 +35,9 @@ const RadiationChart = ({ data, finalDateType }) => {
       .domain(dataProcessed.map(d => d.label))
       .range([0, width])
       .padding(0.1);
-
+    
     const y = d3.scaleLinear()
-      .domain([0, 6000])
+      .domain([0, Math.max(...data.map(d => parseFloat(d.radiacaoGlobal) || 0)) * 1.1])
       .nice()
       .range([height, 0]);
 

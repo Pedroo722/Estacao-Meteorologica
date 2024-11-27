@@ -25,7 +25,7 @@ const PluviosityChart = ({ data, finalDateType }) => {
       .range([0, width])
       .padding(0.1);
 
-    const yMax = Math.max(10, d3.max(data, d => d.precipitacaoTotal));
+    const yMax = Math.max(d3.max(data, d => d.precipitacaoTotal)) + 1;
     const y = d3.scaleLinear()
       .domain([0, yMax])
       .nice()

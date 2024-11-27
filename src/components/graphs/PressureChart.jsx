@@ -15,7 +15,7 @@ const PressureChart = ({ data, finalDateType }) => {
     d3.select(chartRef.current).selectAll('*').remove();
 
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
-    const width = 1000 - margin.left - margin.right;
+    const width = 1200 - margin.left - margin.right;
     const height = 450 - margin.top - margin.bottom;
 
     const svg = d3.select(chartRef.current)
@@ -29,9 +29,16 @@ const PressureChart = ({ data, finalDateType }) => {
       .domain(finalDateType === 'dia' ? [1, 23] : [1, 31])
       .range([0, width]);
 
+    const pressures = data.flatMap(d => [
+      d.pressaoAtmosfericaMin,
+      d.pressaoAtmosfericaMax,
+      d.pressaoAtmosfericaNivelEstacao,
+    ].filter(value => value !== undefined && value !== null));
+    
+    const [minPres, maxPres] = d3.extent(pressures);
+    
     const y = d3.scaleLinear()
-      .domain([d3.min(data.map(d => Math.min(d.pressaoAtmosfericaMin || Infinity, d.pressaoAtmosfericaMax || Infinity, d.pressaoAtmosfericaNivelEstacao || Infinity))) - 5,
-               d3.max(data.map(d => Math.max(d.pressaoAtmosfericaMin || -Infinity, d.pressaoAtmosfericaMax || -Infinity, d.pressaoAtmosfericaNivelEstacao || -Infinity))) + 5])
+      .domain([minPres - 1, maxPres + 1])
       .range([height, 0]);
 
     svg.append('g')
