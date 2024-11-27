@@ -15,7 +15,7 @@ const DewPointTempChart = ({ data, finalDateType }) => {
     d3.select(chartRef.current).selectAll('*').remove();
 
     const margin = { top: 20, right: 30, bottom: 40, left: 60 };
-    const width = 1000 - margin.left - margin.right;
+    const width = 1200 - margin.left - margin.right;
     const height = 450 - margin.top - margin.bottom;
 
     const svg = d3.select(chartRef.current)
@@ -29,8 +29,17 @@ const DewPointTempChart = ({ data, finalDateType }) => {
       .domain(finalDateType === 'dia' ? [1, 23] : [1, 31])
       .range([0, width]);
 
+    const temperatures = data.flatMap(d => [
+      d.tempPontoOrvalho,
+      d.tempOrvalhoMax,
+      d.tempOrvalhoMin,
+    ]).filter(t => t !== null && !isNaN(t));
+    
+    const minTemp = Math.min(...temperatures) - 1;
+    const maxTemp = Math.max(...temperatures) + 1;
+
     const y = d3.scaleLinear()
-      .domain([0, 45])
+      .domain([minTemp, maxTemp])
       .range([height, 0]);
 
     svg.append('g')

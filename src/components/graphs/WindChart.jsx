@@ -20,17 +20,48 @@ const WindChart = ({ data, finalDateType }) => {
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
+      // Adicionar legenda no canto superior direito
+      const legend = svg.append('g')
+      .attr('transform', `translate(${width - 120},${-10})`);
+  
+      const legendData = [
+        { key: 'Vel. Vento', color: '#69b3a2' },
+        { key: 'Raj. Vento', color: '#ff7f0e' }
+      ];
+  
+      legend.selectAll('.legend-item')
+        .data(legendData)
+        .enter().append('g')
+        .attr('class', 'legend-item')
+        .attr('transform', (d, i) => `translate(0,${i * 20})`)
+        .each(function (d) {
+          d3.select(this)
+            .append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 10)
+            .attr('height', 10)
+            .attr('fill', d.color);
+  
+          d3.select(this)
+            .append('text')
+            .attr('x', 15)
+            .attr('y', 10)
+            .attr('fill', '#000')
+            .style('font-size', '12px')
+            .text(d.key);
+        });
+
     // Escala X para dias ou horas, dependendo do `finalDateType`
-    const xDomain = finalDateType === 'dia' 
-      ? data.map(d => d.hora) 
+    const xDomain = finalDateType === 'dia'
+      ? data.map(d => d.hora)
       : Array.from({ length: 31 }, (_, i) => `Dia ${i + 1}`);
     const x = d3.scaleBand()
       .domain(xDomain)
       .range([0, width])
       .padding(0.1);
 
-    // Calcular o valor máximo para o eixo Y
-    const yMax = Math.max(10, d3.max(data, d => Math.max(d.ventoVelocidade, d.ventoRajadaMax)));
+    const yMax = Math.max(5, d3.max(data, d => Math.max(d.ventoVelocidade, d.ventoRajadaMax)));
     const y = d3.scaleLinear()
       .domain([0, yMax])
       .nice()
@@ -45,8 +76,7 @@ const WindChart = ({ data, finalDateType }) => {
     svg.append('g')
       .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} m/s`));
 
-    // Dados para o gráfico, filtrados por hora ou média diária
-    const chartData = finalDateType === 'dia' 
+    const chartData = finalDateType === 'dia'
       ? data.filter(d => d.ventoVelocidade > 0 || d.ventoRajadaMax > 0)
       : Array.from({ length: 31 }, (_, i) => ({
           ventoVelocidade: d3.mean(data.filter(d => parseInt(d.hora.split(' ')[1]) - 1 === i).map(d => d.ventoVelocidade)) || 0,
