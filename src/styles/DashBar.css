@@ -1,0 +1,29 @@
+/* styles.css */
+.aside {
+    transition: background-color 0.3s ease;
+    background-color: aqua;
+  }
+  
+  .aside:hover {
+    background-color: #F4f4; /* Cor quando o mouse estiver sobre o elemento */
+  }
+
+  .nav-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .nav-option:hover {
+    background-color: #e0e0e0; /* Cor de fundo ao passar o mouse */
+  }
+  
+  .nav-option.active {
+    background-color: #e0e0e0; /* Mesma cor de fundo para a opção selecionada */
+  }
+  
+  
+  

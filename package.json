@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@carbon/charts": "^1.22.5",
+    "@carbon/charts-react": "^1.22.5",
     "@react-google-maps/api": "^2.19.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -11,6 +13,7 @@
     "antd": "^5.20.1",
     "axios": "^1.7.7",
     "d3": "^7.9.0",
+    "echarts": "^5.5.1",
     "leaflet": "^1.9.4",
     "papaparse": "^5.4.1",
     "react": "^18.3.1",

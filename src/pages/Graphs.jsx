@@ -293,9 +293,6 @@ const Graphs = () => {
       </div>
 
       <Tabs defaultActiveKey="1" type="card" style={{ marginTop: '30px' }}>
-        <items tab="Tabela" key="1">
-          <Table dataSource={weatherData} columns={columns} pagination={false} />
-        </items>
         <items tab="Bulbo Seco" key="2">
           <DryBulbTempChart data={weatherData} finalDateType={finalDateType} />
         </items>
@@ -316,6 +313,9 @@ const Graphs = () => {
         </items>
         <items tab="Pluviosidade" key="8">
           <PluviosityChart data={weatherData} finalDateType={finalDateType} />
+        </items>
+        <items tab="Tabela" key="1">
+          <Table dataSource={weatherData} columns={columns} pagination={false} />
         </items>
       </Tabs>
 
