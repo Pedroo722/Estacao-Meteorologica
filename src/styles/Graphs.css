@@ -1,66 +1,89 @@
+/* Estilo principal para o container */
 .station-container {
-    
-    /* display: flex;
-    flex-direction: column; */
-    /* align-items: center; */
-    /* margin: 0 auto; */
-    /* padding: 20px;
-    max-width: 1200px; */
-    display: flex;
+  display: flex;
   flex-direction: column;
   align-content: center;
-  height: 100vh;
-  width: 100%;
   align-items: center;
+  /* justify-content: center; */
+  /* height: 100vh; */
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient( #f0f0f0, #d9e4f5);
   transition: all 0.5s ease;
+  /* background-color: aqua; */
 }
 
-.station-container-minimized {
-
-    /* margin-left: 60px; */
-    
-  }
-  
-  .station-container-maximized {
-
-    /* margin-left: 300px; */
-  }
-
+/* Estilo para o contêiner do datapicker */
 .datapicker-container {
-    /* margin: 20px;
-    padding: 10px;
-    border-radius: 15px;
-    background-color: #f0f0f0; */
-  }
+  margin: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  
+}
+.datapicker-container:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
 
-
-
+/* Modernização do datapicker */
 .datapicker {
-    /* display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  /* padding: 10px; */
+  padding: 10px 5px 10px 5px;
+  margin: auto;
+  /* font-family: 'Roboto', sans-serif; */
+  font-size: 14px;
+  background: #fafafa;
+  transition: border 0.3s ease, background 0.3s ease;
+}
+.datapicker:focus-within {
+  border: 1px solid #4a90e2;
+  background: #ffffff;
 }
 
+/* Estilo para botões ou ícones dentro do datapicker */
+.datapicker button, .datapicker svg {
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #4a90e2;
+  transition: transform 0.3s ease;
+}
+.datapicker button:hover, .datapicker svg:hover {
+  transform: scale(1.2);
+  color: #336699;
+}
+
+/* Estilo para o conteúdo principal */
 .station-content {
-    /* width: 100%;
-    overflow-x: auto; */
+  width: 90%;
+  max-width: 1200px;
+  overflow-x: auto;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Estilo para o container de dados */
 .data-container {
-    /* display: flex;
-    justify-content: center;
-    width: 100%; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  padding: 10px;
 }
 
-.ant-tabs-card .ant-tabs-content-holder {
-    /* width: 100%; */
-}
-
-.ant-table-wrapper {
-    /* width: 100%; */
-}
-
+/* Tabs normais e minimizadas */
 .tabs-normal {
   width: 80%;
   margin-left: 300px;
@@ -68,11 +91,55 @@
 }
 
 .tabs-minimized {
-  width: 90%; 
+  width: 90%;
   margin-left: 60px;
   transition: width 0.3s ease;
 }
 
+/* Estilo personalizado para as tabs */
+.ant-tabs-card .ant-tabs-content-holder {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 15px;
+  margin-bottom: 20px;
+}
 
+/* Estilo da tabela */
+.ant-table-wrapper {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background: #fafafa;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-  
+.ant-table-wrapper table {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #333;
+  width: 100%;
+  border-collapse: collapse;
+}
+.ant-table-wrapper table th, .ant-table-wrapper table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+.ant-table-wrapper table tr:hover {
+  background: #f5f5f5;
+}
+
+/* Efeitos interativos adicionais */
+input, select {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+input:focus, select:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
