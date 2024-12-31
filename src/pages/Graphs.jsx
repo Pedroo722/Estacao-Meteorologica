@@ -14,7 +14,7 @@ import { baseUrlWeatherData } from "../util/constants";
 
 const { MonthPicker } = DatePicker;
 
-const Graphs = () => {
+const Graphs = ({isMinimized}) => {
   const [stations] = useState([
     { id: 'A310', name: 'Areia' },
     { id: 'A348', name: 'Cabaceiras' },
@@ -46,92 +46,110 @@ const Graphs = () => {
     {
       title: finalDateType === 'dia' ? 'Hora (UTC)' : 'Dia',
       dataIndex: 'hora',
-      key: 'hora'
+      key: 'hora',
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Temp. Ins. (C)' : 'Média Temp. Ins. (C)',
       dataIndex: 'tempBulboSeco',
-      key: 'tempIns' 
+      key: 'tempIns' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Temp. Max. (C)' : 'Média Temp. Max. (C)',
       dataIndex: 'tempMax',
-      key: 'tempMax' 
+      key: 'tempMax' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Temp. Min. (C)' : 'Média Temp. Min. (C)',
       dataIndex: 'tempMin',
-      key: 'tempMin' 
+      key: 'tempMin',
+       
     },
     { 
       title: finalDateType === 'dia' ? 'Umi. Ins. (%)' : 'Média Umi. Ins. (%)',
       dataIndex: 'umidadeRelativa',
-      key: 'umiIns' 
+      key: 'umiIns' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Umi. Max. (%)' : 'Média Umi. Max. (%)',
       dataIndex: 'umidadeRelativaMax',
-      key: 'umiMax' 
+      key: 'umiMax' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Umi. Min. (%)' : 'Média Umi. Min. (%)',
       dataIndex: 'umidadeRelativaMin',
-      key: 'umiMin' 
+      key: 'umiMin' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Pto Orvalho Ins. (C)' : 'Média Pto Orvalho Ins. (C)',
       dataIndex: 'tempPontoOrvalho',
-      key: 'ptoOrvalhoIns' 
+      key: 'ptoOrvalhoIns' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Pto Orvalho Max. (C)' : 'Média Pto Orvalho Max. (C)',
       dataIndex: 'tempOrvalhoMax',
-      key: 'ptoOrvalhoMax' 
+      key: 'ptoOrvalhoMax' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Pto Orvalho Min. (C)' : 'Média Pto Orvalho Min. (C)',
       dataIndex: 'tempOrvalhoMin',
-      key: 'ptoOrvalhoMin' 
+      key: 'ptoOrvalhoMin' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Pressao Ins. (hPa)' : 'Média Pressao Ins. (hPa)',
       dataIndex: 'pressaoAtmosfericaNivelEstacao',
-      key: 'pressaoIns' 
+      key: 'pressaoIns' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Pressao Max. (hPa)' : 'Média Pressao Max. (hPa)',
       dataIndex: 'pressaoAtmosfericaMax',
-      key: 'pressaoMax' 
+      key: 'pressaoMax' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Pressao Min. (hPa)' : 'Média Pressao Min. (hPa)',
       dataIndex: 'pressaoAtmosfericaMin',
-      key: 'pressaoMin' 
+      key: 'pressaoMin' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Vel. Vento (m/s)' : 'Média Vel. Vento (m/s)',
       dataIndex: 'ventoVelocidade',
-      key: 'velVento' 
+      key: 'velVento' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Dir. Vento (m/s)' : 'Média Dir. Vento (m/s)',
       dataIndex: 'ventoDirecao',
-      key: 'dirVento' 
+      key: 'dirVento' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Raj. Vento (m/s)' : 'Média Raj. Vento (m/s)',
       dataIndex: 'ventoRajadaMax',
-      key: 'rajVento' 
+      key: 'rajVento' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Radiacao (KJ/m²)' : 'Radiacao Média (KJ/m²)',
       dataIndex: 'radiacaoGlobal',
-      key: 'radiacao' 
+      key: 'radiacao' ,
+      
     },
     { 
       title: finalDateType === 'dia' ? 'Chuva (mm)' : 'Pluviosidade Média (mm)',
       dataIndex: 'precipitacaoTotal',
-      key: 'chuva' 
+      key: 'chuva' ,
+      
     }
   ];
   
@@ -248,14 +266,14 @@ const Graphs = () => {
   
 
   return (
-    <div className="station-container">
+    <div className={`station-container ${isMinimized ? 'station-container-minimized' : 'station-container-maximized'}`}>
       <div className="datapicker-container">
         <h2>Selecione um Tipo de Data</h2>
         <div className="datapicker">
           <label>
             Estação Metereológica:
             <Select
-              style={{ width: 200, marginLeft: '10px', marginRight: '10px' }} 
+              // style={{ width: 200, marginLeft: '10px', marginRight: '10px' }} 
               placeholder="Selecione uma estação"
               onChange={handleStationChange} 
               value={selectedStation}
@@ -270,7 +288,7 @@ const Graphs = () => {
           <label>
             Tipo de Data:
             <Select
-              style={{ width: 150, marginLeft: '10px', marginRight: '10px' }}
+              // style={{ width: 150, marginLeft: '10px', marginRight: '10px' }}
               onChange={handleDateTypeChange}
               value={dateType}
             >
@@ -292,9 +310,9 @@ const Graphs = () => {
         </div>
       </div>
 
-      <Tabs defaultActiveKey="1" type="card" style={{ marginTop: '30px' }}>
+      <Tabs defaultActiveKey="1" type="card"   className={isMinimized ? 'tabs-minimized' : 'tabs-normal'}>
         <items tab="Bulbo Seco" key="2">
-          <DryBulbTempChart data={weatherData} finalDateType={finalDateType} />
+          <DryBulbTempChart data={weatherData} finalDateType={finalDateType} isMinimized={isMinimized}/>
         </items>
         <items tab="Ponto de Orvalho" key="3">
           <DewPointTempChart data={weatherData} finalDateType={finalDateType} />
@@ -315,7 +333,8 @@ const Graphs = () => {
           <PluviosityChart data={weatherData} finalDateType={finalDateType} />
         </items>
         <items tab="Tabela" key="1">
-          <Table dataSource={weatherData} columns={columns} pagination={false} />
+          <Table dataSource={weatherData} columns={columns} pagination={false} 
+          />
         </items>
       </Tabs>
 

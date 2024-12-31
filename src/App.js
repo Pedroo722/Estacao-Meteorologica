@@ -28,7 +28,7 @@ export default function App() {
         <div className="content">
           <Routes>
             <Route path='/' element={<Home isMinimized={isMinimized} />} />
-            <Route path='graphs' element={<Graphs />} />
+            <Route path='graphs' element={<Graphs isMinimized={isMinimized} />} />
             <Route path='info' element={<Info />} />
           </Routes>
         </div>

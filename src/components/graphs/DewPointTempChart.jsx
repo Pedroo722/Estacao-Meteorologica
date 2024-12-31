@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as d3 from 'd3';
-import { Button } from 'antd';
+import * as echarts from 'echarts';
 
 const DewPointTempChart = ({ data, finalDateType }) => {
   const chartRef = useRef();
+  const chartInstanceRef = useRef(null); // Referência ao gráfico para evitar inicializações duplicadas
+  
+
   const [showMin, setShowMin] = useState(true);
   const [showMax, setShowMax] = useState(true);
   const [showInstant, setShowInstant] = useState(true);
@@ -12,172 +14,131 @@ const DewPointTempChart = ({ data, finalDateType }) => {
     if (!data || data.length === 0) return;
 
     // Clear the existing chart
-    d3.select(chartRef.current).selectAll('*').remove();
 
-    const margin = { top: 20, right: 30, bottom: 40, left: 60 };
-    const width = 1200 - margin.left - margin.right;
-    const height = 450 - margin.top - margin.bottom;
+    if (!chartInstanceRef.current) {
+      chartInstanceRef.current = echarts.init(chartRef.current);
+    }
 
-    const svg = d3.select(chartRef.current)
-      .append('svg')
-      .attr('width', width + margin.left + margin.right)
-      .attr('height', height + margin.top + margin.bottom)
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    const x = d3.scaleLinear()
-      .domain(finalDateType === 'dia' ? [1, 23] : [1, 31])
-      .range([0, width]);
+    const xAxisData = finalDateType === 'dia'
+      ? Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '0')}:00`) // 24 horas
+      : Array.from({ length: 31 }, (_, i) => `Dia ${i + 1}`); // 31 dias
 
     const temperatures = data.flatMap(d => [
-      d.tempPontoOrvalho,
-      d.tempOrvalhoMax,
-      d.tempOrvalhoMin,
+            d.tempPontoOrvalho,
+            d.tempOrvalhoMax,
+            d.tempOrvalhoMin,
     ]).filter(t => t !== null && !isNaN(t));
+
+    const minTempRaw = Math.min(...temperatures); // Menor temperatura
+    const maxTempRaw = Math.max(...temperatures); // Maior temperatura
+    const range = maxTempRaw - minTempRaw; // Intervalo de temperatura
+    const minTemp = minTempRaw - range * 0.1; // Margem 10% abaixo
+    const maxTemp = maxTempRaw + range * 0.1; // Margem 10% acima
     
-    const minTemp = Math.min(...temperatures) - 1;
-    const maxTemp = Math.max(...temperatures) + 1;
-
-    const y = d3.scaleLinear()
-      .domain([minTemp, maxTemp])
-      .range([height, 0]);
-
-    svg.append('g')
-      .attr('transform', `translate(0,${height})`)
-      .call(d3.axisBottom(x).ticks(finalDateType === 'dia' ? 23 : 31)
-        .tickFormat(d => finalDateType === 'dia' ? `${d.toString().padStart(2, '0')}:00` : `Dia ${d}`));
-
-    svg.append('g')
-      .call(d3.axisLeft(y).ticks(10).tickFormat(d => `${d.toFixed(1)} °C`));
-    
-    const tempStep = 1;
-    for (let temp = Math.ceil(minTemp / tempStep) * tempStep; temp <= maxTemp; temp += tempStep) {
-      svg.append('line')
-        .attr('x1', 0)
-        .attr('x2', width)
-        .attr('y1', y(temp))
-        .attr('y2', y(temp))
-        .attr('stroke', 'gray')
-        .attr('stroke-dasharray', '5,5')
-    }
-
-    const drawLineAndPoints = (dataset, color, show) => {
-      if (!show) return;
-
-      const line = d3.line()
-        .x((d, i) => x(i + 1))
-        .y(d => (d !== null ? y(d) : height));
-
-      svg.append("path")
-        .datum(dataset)
-        .attr("fill", "none")
-        .attr("stroke", color)
-        .attr("stroke-width", 2)
-        .attr("d", line);
-
-      svg.selectAll(".dot-" + color)
-        .data(dataset)
-        .enter().append("circle")
-        .attr("class", "dot-" + color)
-        .attr("cx", (d, i) => x(i + 1))
-        .attr("cy", d => (d !== null ? y(d) : height))
-        .attr("r", 4)
-        .attr("fill", color)
-        .on("click", function (event, d) {
-          const alertMessage = finalDateType === 'dia'
-            ? `Valor do Horário: ${d !== null ? d.toFixed(1) + ' °C' : 'Dado Ausente'}` 
-            : `Média Diária: ${d !== null ? d.toFixed(1) + ' °C' : 'Dado Ausente'}`;
-          alert(alertMessage);
-        });
+    const seriesData = {
+      instant: Array(xAxisData.length).fill(null), // Temperatura instantânea
+      max: Array(xAxisData.length).fill(null),    // Temperatura máxima
+      min: Array(xAxisData.length).fill(null),    // Temperatura mínima
     };
 
-    let averagesAvailable = false;
+    data.forEach((d) => {
+      const axisIndex = finalDateType === 'dia'
+        ? parseInt(d.hora.slice(0, 2), 10) // Extrai a hora (para tipo "dia")
+        : parseInt(d.hora.split(' ')[1], 10) - 1; // Extrai o dia (para tipo "mês")
 
-    if (finalDateType === 'dia') {
-      const hourValues = Array.from({ length: 24 }, () => ({ instant: [], max: [], min: [] }));
-
-      data.forEach(d => {
-        const hourString = d.hora.replace(" UTC", "");
-        const hour = parseInt(hourString.slice(0, 2), 10);
-
-        // Verifique se o hour está dentro do intervalo
-        if (hour >= 0 && hour < 24) {
-          if (!isNaN(d.tempPontoOrvalho)) hourValues[hour].instant.push(d.tempPontoOrvalho);
-          if (!isNaN(d.tempOrvalhoMax)) hourValues[hour].max.push(d.tempOrvalhoMax);
-          if (!isNaN(d.tempOrvalhoMin)) hourValues[hour].min.push(d.tempOrvalhoMin);
-        }
-      });
-
-      const hourAverages = hourValues.map(values => ({
-        instant: values.instant.length > 0 ? d3.mean(values.instant) : null,
-        max: values.max.length > 0 ? d3.mean(values.max) : null,
-        min: values.min.length > 0 ? d3.mean(values.min) : null,
-      }));
-
-      averagesAvailable = hourAverages.some(avg => avg.instant !== null || avg.max !== null || avg.min !== null);
-
-      if (averagesAvailable) {
-        drawLineAndPoints(hourAverages.map(d => d.min), 'green', showMin);
-        drawLineAndPoints(hourAverages.map(d => d.max), 'red', showMax);
-        drawLineAndPoints(hourAverages.map(d => d.instant), 'steelblue', showInstant);
+      if (!isNaN(axisIndex) && axisIndex < xAxisData.length) {
+        seriesData.instant[axisIndex] = d.tempPontoOrvalho || null; // Temperatura instantânea
+        seriesData.max[axisIndex] = d.tempOrvalhoMax || null;           // Temperatura máxima
+        seriesData.min[axisIndex] = d.tempOrvalhoMin || null;           // Temperatura mínima
       }
-    } else {
-      const dayValues = Array.from({ length: 31 }, () => ({ instant: [], max: [], min: [] }));
+    });
 
-      data.forEach(d => {
-        const dayString = d.hora;
-        const day = parseInt(dayString.split(' ')[1], 10) - 1;
+    
 
-        // Verifique se o day está dentro do intervalo
-        if (day >= 0 && day < 31) {
-          if (!isNaN(d.tempPontoOrvalho)) dayValues[day].instant.push(d.tempPontoOrvalho);
-          if (!isNaN(d.tempOrvalhoMax)) dayValues[day].max.push(d.tempOrvalhoMax);
-          if (!isNaN(d.tempOrvalhoMin)) dayValues[day].min.push(d.tempOrvalhoMin);
-        } else {
-          console.warn(`Day ${day + 1} está fora do alcance do mês: ${dayString}`);
-        }
-      });
+    const options = {
+      tooltip: { trigger: 'axis' }, // Exibe tooltip ao passar o mouse
+      legend: {
+        data: ['Temp. Instantânea', 'Temp. Máxima', 'Temp. Mínima'], // Legendas das séries
+      },
+      toolbox: {
+        show: true, // Ferramentas adicionais para o gráfico
+        feature: {
+          dataZoom: { yAxisIndex: 'none' }, // Zoom nos dados
+          dataView: { readOnly: false },   // Visualização dos dados
+          magicType: { type: ['line', 'bar'] }, // Alterar entre gráfico de linha e barras
+          restore: {},                     // Restaurar o gráfico ao estado inicial
+          saveAsImage: {},                 // Salvar como imagem
+        },
+      },
+      xAxis: {
+        type: 'category', // Eixo categórico
+        data: xAxisData,  // Dados do eixo X (horas ou dias)
+      },
+      yAxis: {
+        type: 'value', // Eixo numérico
+        axisLabel: { formatter: '{value} °C' }, // Formato do rótulo
+        min: minTemp, // Temperatura mínima ajustada
+        max: maxTemp, // Temperatura máxima ajustada
+      },
+      series: [
+        showInstant && {
+          name: 'Temp. Instantânea', // Nome da série
+          type: 'line',              // Tipo de gráfico: linha
+          data: seriesData.instant,  // Dados da série
+          smooth: true,              // Linha suavizada
+          lineStyle: { color: 'steelblue' }, // Cor da linha
+        },
+        showMax && {
+          name: 'Temp. Máxima',
+          type: 'line',
+          data: seriesData.max,
+          smooth: true,
+          lineStyle: { color: 'red' },
+        },
+        showMin && {
+          name: 'Temp. Mínima',
+          type: 'line',
+          data: seriesData.min,
+          smooth: true,
+          lineStyle: { color: 'green' },
+        },
+      ].filter(Boolean), // Remove séries nulas
+    };
 
-      const dayAverages = dayValues.map(values => ({
-        instant: values.instant.length > 0 ? d3.mean(values.instant) : null,
-        max: values.max.length > 0 ? d3.mean(values.max) : null,
-        min: values.min.length > 0 ? d3.mean(values.min) : null,
-      }));
-
-      averagesAvailable = dayAverages.some(avg => avg.instant !== null || avg.max !== null || avg.min !== null);
-
-      if (averagesAvailable) {
-        drawLineAndPoints(dayAverages.map(d => d.min), 'green', showMin);
-        drawLineAndPoints(dayAverages.map(d => d.max), 'red', showMax);
-        drawLineAndPoints(dayAverages.map(d => d.instant), 'steelblue', showInstant);
-      }
-    }
+    setTimeout(() => {
+      chartInstanceRef.current.setOption(options);
+    }, 300); // Atraso de 300ms para permitir a visualização da animação inicial
+  
+    let resizeTimeout;
+    const resizeObserver = new ResizeObserver(() => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        chartInstanceRef.current?.resize();
+      }, 0); // Debounce de 100ms
+    });
+  
+    resizeObserver.observe(chartRef.current);
+  
+    return () => {
+      clearTimeout(resizeTimeout);
+      resizeObserver.disconnect();
+      chartInstanceRef.current?.dispose();
+      chartInstanceRef.current = null;
+    };
   }, [data, showMin, showMax, showInstant, finalDateType]);
+
+  const containerStyle = {
+    width: '100%',
+    height: '70vh',
+    alignSelf: 'center',
+    transition: "1s ease"
+  };
 
   return (
     <div>
-      <h2>Gráfico de Ponto de Orvalho</h2>
-      <div ref={chartRef}></div>
-      <div>
-        <Button
-          type="primary"
-          style={{ backgroundColor: 'green', borderColor: 'green', marginLeft: '10px' }} 
-          onClick={() => setShowMin(!showMin)}>
-          {showMin ? 'Ocultar Temp. Mínima' : 'Mostrar Temp. Mínima'}
-        </Button>
-        <Button
-          type="primary"
-          style={{ backgroundColor: 'red', borderColor: 'red', marginLeft: '10px' }} 
-          onClick={() => setShowMax(!showMax)}>
-          {showMax ? 'Ocultar Temp. Máxima' : 'Mostrar Temp. Máxima'}
-        </Button>
-        <Button
-          type="primary"
-          style={{ backgroundColor: 'blue', borderColor: 'blue', marginLeft: '10px' }} 
-          onClick={() => setShowInstant(!showInstant)}>
-          {showInstant ? 'Ocultar Temp. Instantânea' : 'Mostrar Temp. Instantânea'}
-        </Button>
-      </div>
+      <h2>Gráfico de Temperatura de Ponto de Orvalho</h2>
+      <div ref={chartRef} style={containerStyle}></div> {/* Elemento do gráfico */}
+      
     </div>
   );
 };

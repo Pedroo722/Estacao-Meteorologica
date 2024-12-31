@@ -1,41 +1,78 @@
 .station-container {
+    
+    /* display: flex;
+    flex-direction: column; */
+    /* align-items: center; */
+    /* margin: 0 auto; */
+    /* padding: 20px;
+    max-width: 1200px; */
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-    padding: 20px;
-    max-width: 1200px;
+  flex-direction: column;
+  align-content: center;
+  height: 100vh;
+  width: 100%;
+  align-items: center;
+  transition: all 0.5s ease;
 }
 
-.datapicker-container {
-    margin: 20px;
-    padding: 10px;
-    border-radius: 15px;
-    background-color: #f0f0f0;
+.station-container-minimized {
+
+    /* margin-left: 60px; */
+    
+  }
+  
+  .station-container-maximized {
+
+    /* margin-left: 300px; */
   }
 
+.datapicker-container {
+    /* margin: 20px;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #f0f0f0; */
+  }
+
+
+
 .datapicker {
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 100%; */
 }
 
 .station-content {
-    width: 100%;
-    overflow-x: auto;
+    /* width: 100%;
+    overflow-x: auto; */
 }
 
 .data-container {
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    width: 100%;
+    width: 100%; */
 }
 
 .ant-tabs-card .ant-tabs-content-holder {
-    width: 100%;
+    /* width: 100%; */
 }
 
 .ant-table-wrapper {
-    width: 100%;
+    /* width: 100%; */
 }
+
+.tabs-normal {
+  width: 80%;
+  margin-left: 300px;
+  transition: width 0.3s ease;
+}
+
+.tabs-minimized {
+  width: 90%; 
+  margin-left: 60px;
+  transition: width 0.3s ease;
+}
+
+
+
+  
