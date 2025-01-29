@@ -21,7 +21,7 @@
 
 .details-container-minimized {
     width: 80%;
-    margin-left: 100px;
+    margin-left: 60px;
     align-self: center;
     
 }
@@ -51,4 +51,8 @@
 
 .details-item:hover {
   background-color: #e9e9e9;
+}
+
+@media (max-width: 655px){
+  
 }

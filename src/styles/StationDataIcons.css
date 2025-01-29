@@ -73,3 +73,67 @@
     width: 80%;
     color: #fff;
 }
+
+@media(max-width: 480px){
+    .container-icon {
+        margin: 10px;
+        width: 100%; /* Garantir que o container ocupe toda a largura */
+    }
+
+    .icon-container {
+        width: 125px; /* Reduzir a largura do ícone */
+        height: 100px; /* Ajustar a altura para manter a proporção */
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; /* Centralizar o conteúdo */
+    }
+
+    .text-icon {
+        font-size: 10px; /* Ajuste para um tamanho razoável em telas pequenas */
+        color: #03624C;
+        font-weight: bold;
+    }
+
+    .icon-small {
+        font-size: 18px; /* Ajuste para um ícone menor */
+    }
+    
+    .icon-large {
+        font-size: 30px; /* Ajuste para um tamanho adequado em telas pequenas */
+    }
+
+    .number-style {
+        font-size: 18px; /* Ajuste para que o número também fique adequado */
+    }
+
+    .min-max-style {
+        font-size: 8px; /* Ajustar o texto para o tamanho adequado */
+    }
+
+    .min-max-icon {
+        font-size: 10px; /* Tamanho do ícone de minimização/maximização */
+    }
+
+    .extra-style {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 5px;
+    }
+
+    .min-max-text {
+        margin: 0;
+        padding-left: 10px;
+    }
+
+    .component-dados-container {
+        width: 100%; /* Ajustar para 100% da largura */
+        color: #fff;
+    }
+
+    .icon-container.expanded {
+        height: 140px;
+    }
+}

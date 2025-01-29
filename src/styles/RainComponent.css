@@ -51,3 +51,63 @@
     margin-bottom: 20px;
     color: #fff;
 }
+
+@media(max-width: 480px){
+    .rain-component  {
+        margin: 10px;
+        width: 100%; /* Garantir que o container ocupe toda a largura */
+    }
+
+    .rain-icon-container {
+        width: 125px; /* Reduzir a largura do ícone */
+        height: 100px; /* Ajustar a altura para manter a proporção */
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; /* Centralizar o conteúdo */
+    }
+
+    .rain-text {
+        font-size: 10px; /* Ajuste para um tamanho razoável em telas pequenas */
+        color: #03624C;
+        font-weight: bold;
+    }
+
+    .rain-icon-small {
+        font-size: 18px; /* Ajuste para um ícone menor */
+    }
+    
+    .rain-icon-large {
+        font-size: 30px; /* Ajuste para um tamanho adequado em telas pequenas */
+    }
+
+    .rain-number {
+        font-size: 18px; /* Ajuste para que o número também fique adequado */
+    }
+
+    .rain-min-max-style {
+        font-size: 8px; /* Ajustar o texto para o tamanho adequado */
+    }
+
+    .rain-min-max-icon {
+        font-size: 10px; /* Tamanho do ícone de minimização/maximização */
+    }
+
+    .rain-extra-style {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin: 5px;
+    }
+
+    .rain-min-max-text {
+        margin: 0;
+        padding-left: 10px;
+    }
+
+    .rain-component-dados-container {
+        width: 100%; /* Ajustar para 100% da largura */
+        color: #fff;
+    }
+}

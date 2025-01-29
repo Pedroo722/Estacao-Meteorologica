@@ -12,6 +12,7 @@ import '../styles/StatusBar.css';
 
 import { baseUrlWeatherData } from "../util/constants";
 import RainContainer from './RainComponent';
+// import StatusBarStyle from "./StatusBarStyle";
 
 // Função auxiliar para formatar valores
 const formatValue = (value, unit) => {

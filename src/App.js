@@ -29,7 +29,7 @@ export default function App() {
           <Routes>
             <Route path='/' element={<Home isMinimized={isMinimized} />} />
             <Route path='graphs' element={<Graphs isMinimized={isMinimized} />} />
-            <Route path='info' element={<Info />} />
+            <Route path='info' element={<Info isMinimized={isMinimized}  />} />
           </Routes>
         </div>
       </HashRouter>

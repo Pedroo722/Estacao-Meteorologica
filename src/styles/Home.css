@@ -12,7 +12,7 @@ body {
 }
 
 
-.container {
+/* .container {
   display: flex;
   flex-direction: column;
   align-content: center;
@@ -20,6 +20,14 @@ body {
   width: 100%;
   align-items: center;
  
+} */
+
+.container {
+  display: flex;
+  flex-direction: column; /* Os itens permanecem em coluna */
+  align-items: center;
+  height: 100vh; /* Altura da tela */
+  overflow: hidden; /* Evita scroll inesperado */
 }
 
 .map-container {
@@ -70,4 +78,28 @@ body {
 
 .details-item {
   font-size: 1rem;
+}
+
+@media (max-width: 480px) {
+  .container{
+    height: auto;
+  }
+  .map-container {
+    flex-grow: 1;
+    margin-bottom: 10px;  
+    width: 80%;
+    height: 30vh;
+  }
+}
+
+@media (max-width: 1010px) {
+  .container{
+    height: auto;
+  }
+  .map-container {
+    flex-grow: 1;
+    margin-bottom: 10px;  
+    width: 80%;
+    height: 50vh;
+  }
 }

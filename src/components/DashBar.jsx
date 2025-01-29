@@ -38,7 +38,7 @@ const DashBar = ({ toggleDash, isMinimized }) => {
         display: 'flex',
         flexDirection: 'column',
         borderRightWidth: '1px',
-        borderRightColor: '#000',
+        borderRightColor: '#03624C',
         borderRightStyle: 'solid',
       }}
     >
@@ -50,12 +50,12 @@ const DashBar = ({ toggleDash, isMinimized }) => {
           marginBottom: isMinimized ? '0' : '50px',
         }}
       >
-        {!isMinimized && <h2 style={{ color: 'black' }}>DashBoard</h2>}
+        {!isMinimized && <h2 style={{ color: '#03624C' }}>DashBoard</h2>}
         <div
           style={{
             fontSize: '20px',
             cursor: 'pointer',
-            color: 'black',
+            color: '#03624C',
           }}
           onClick={toggleDash}
         >
@@ -73,14 +73,14 @@ const DashBar = ({ toggleDash, isMinimized }) => {
             style={{
               fontSize: '20px',
               marginRight: isMinimized ? '0' : '10px',
-              color: 'black',
+              color: '#03624C',
             }}
           />
           {!isMinimized && (
             <span
               style={{
                 textDecoration: 'none',
-                color: 'black',
+                color: '#03624C',
                 fontWeight: 'bold',
               }}
             >
@@ -97,14 +97,14 @@ const DashBar = ({ toggleDash, isMinimized }) => {
             style={{
               fontSize: '20px',
               marginRight: isMinimized ? '0' : '10px',
-              color: 'black',
+              color: '#03624C',
             }}
           />
           {!isMinimized && (
             <span
               style={{
                 textDecoration: 'none',
-                color: 'black',
+                color: '#03624C',
                 fontWeight: 'bold',
               }}
             >
@@ -121,14 +121,14 @@ const DashBar = ({ toggleDash, isMinimized }) => {
             style={{
               fontSize: '20px',
               marginRight: isMinimized ? '0' : '10px',
-              color: 'black',
+              color: '#03624C',
             }}
           />
           {!isMinimized && (
             <span
               style={{
                 textDecoration: 'none',
-                color: 'black',
+                color: '#03624C',
                 fontWeight: 'bold',
               }}
             >
@@ -149,7 +149,7 @@ const DashBar = ({ toggleDash, isMinimized }) => {
         >
           <p
             style={{
-              color: 'black',
+              color: '#03624C',
               fontWeight: 'bold',
               margin: '0px',
             }}
